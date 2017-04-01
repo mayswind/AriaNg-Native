@@ -1,0 +1,54 @@
+{
+  "private": true,
+  "engines": {
+    "node": ">=4"
+  },
+  "name": "ariang-native",
+  "version": "0.1.0",
+  "description": "AriaNg Native App",
+  "main": "app.js",
+  "scripts": {
+    "postinstall": "install-app-deps",
+    "clean": "rimraf dist",
+    "start": "electron .",
+    "publish:win": "npm run clean && build --ia32"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mayswind/AriaNg-Native.git"
+  },
+  "keywords": [
+    "aria2",
+    "AriaNg",
+    "Native",
+    "Frontend"
+  ],
+  "author": "MaysWind <i@mayswind.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mayswind/AriaNg-Native/issues"
+  },
+  "homepage": "http://ariang.mayswind.net/",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "electron": "^1.6.2",
+    "electron-builder": "^16.6.1",
+    "rimraf": "^2.6.1"
+  },
+  "dependencies": {},
+  "build": {
+    "appId": "net.mayswind.ariang",
+    "productName": "AriaNg",
+    "copyright": "Copyright (c) 2017 MaysWind (i@mayswind.net)",
+    "files": [
+      "app/**",
+      "assets/**",
+      "app.js",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/AriaNg.ico",
+      "target": "portable"
+    }
+  }
+}
