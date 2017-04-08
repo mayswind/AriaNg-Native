@@ -11,7 +11,8 @@
     "postinstall": "install-app-deps",
     "clean": "rimraf dist",
     "start": "electron .",
-    "publish:win": "npm run clean && build --ia32"
+    "publish:win": "npm run clean && build --ia32",
+    "publish:osx": "npm run clean && build --mac"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,14 @@
     "win": {
       "icon": "assets/AriaNg.ico",
       "target": "portable"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "assets/AriaNg.icns",
+      "target": "dmg"
+    },
+    "dmg": {
+      "icon": "assets/AriaNg.icns"
     }
   }
 }
