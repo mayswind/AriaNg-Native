@@ -21,7 +21,7 @@ Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.co
     $ npm run publish:win
     
     # For macOS
-    $ npm run publish:mac
+    $ npm run publish:osx
 
 The builds will be placed in the dist directory.
 
