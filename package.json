@@ -33,7 +33,7 @@
   "devDependencies": {
     "del": "^2.2.2",
     "electron": "^1.6.2",
-    "electron-builder": "^16.6.1",
+    "electron-builder": "^19.51.0",
     "rimraf": "^2.6.1"
   },
   "dependencies": {},
