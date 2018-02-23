@@ -21,6 +21,7 @@ app.on('ready', function () {
         height: 600,
         minWidth: 400,
         minHeight: 400,
+        show: false,
         webPreferences: {
             nodeIntegration: false
         }
@@ -54,6 +55,10 @@ app.on('ready', function () {
 
     mainWindow.setMenu(null);
     mainWindow.loadURL('file://' + __dirname + '/app/index.html');
+
+    mainWindow.once('ready-to-show', function () {
+        mainWindow.show()
+    });
 
     mainWindow.on('closed', function () {
         mainWindow = null;
