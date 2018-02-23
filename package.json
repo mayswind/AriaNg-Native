@@ -1,10 +1,10 @@
 {
   "private": true,
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "name": "ariang-native",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "AriaNg Native App",
   "main": "app.js",
   "scripts": {
@@ -31,12 +31,14 @@
   },
   "homepage": "http://ariang.mayswind.net/",
   "devDependencies": {
-    "del": "^2.2.2",
+    "del": "^3.0.0",
     "electron": "^1.6.2",
-    "electron-builder": "^16.6.1",
-    "rimraf": "^2.6.1"
+    "electron-builder": "^20.0.8",
+    "rimraf": "^2.6.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "electron-localshortcut": "^3.1.0"
+  },
   "build": {
     "appId": "net.mayswind.ariang",
     "productName": "AriaNg",
