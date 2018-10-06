@@ -3,7 +3,7 @@
   "engines": {
     "node": ">=8"
   },
-  "name": "ariang-native",
+  "name": "AriaNg",
   "version": "0.5.0",
   "description": "AriaNg Native App",
   "main": "app.js",
@@ -12,7 +12,8 @@
     "clean": "rimraf dist",
     "start": "electron .",
     "publish:win": "npm run clean && build --ia32",
-    "publish:osx": "npm run clean && build --mac"
+    "publish:osx": "npm run clean && build --mac",
+    "publish:linux": "npm run clean && build --linux"
   },
   "repository": {
     "type": "git",
@@ -60,6 +61,13 @@
     },
     "dmg": {
       "icon": "assets/AriaNg.icns"
+    },
+    "linux": {
+      "icon": "assets/AriaNg.png",
+      "target": "AppImage"
+    },
+    "appImage": {
+      "systemIntegration": "doNotAsk"
     }
   }
 }
