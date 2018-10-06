@@ -23,6 +23,9 @@ Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.co
     # For macOS
     $ npm run publish:osx
 
+    # For Linux
+    # npm run publish:linux
+
 The builds will be placed in the dist directory.
 
 ## License
