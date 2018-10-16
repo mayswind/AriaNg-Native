@@ -12,6 +12,14 @@ Please visit [https://github.com/mayswind/AriaNg](https://github.com/mayswind/Ar
 #### Prebuilt release
 Latest Release: [https://github.com/mayswind/AriaNg-Native/releases](https://github.com/mayswind/AriaNg-Native/releases)
 
+#### Windows 10 UWP release
+Link to the store : [https://www.microsoft.com/en-us/p/aria2c-rpc/9n0bgcs7gj87#activetab=pivot:overviewtab}(https://www.microsoft.com/en-us/p/aria2c-rpc/9n0bgcs7gj87#activetab=pivot:overviewtab)
+Direct link: [ms-windows-store://pdp/?ProductId=9N0BGCS7GJ87](ms-windows-store://pdp/?ProductId=9N0BGCS7GJ87)
+If you want to allow this app to access localhost aria2c-rpc, run this command:
+
+    checknetisolation.exe loopbackexempt -a -n="44050trevalim.Aria2crpc_ds8qmrpgzd7fg"
+
+
 #### Building from source
 Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.com/) installed. Then download the source code, and follow these steps.
 
