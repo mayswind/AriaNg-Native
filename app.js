@@ -28,8 +28,8 @@ function runAria2() {
         } else {
             cmdPath += 'win32/';
         }
-        aria2Process = exec(cmdStr, {cwd: cmdPath});
     }
+    aria2Process = exec(cmdStr, {cwd: cmdPath});
     processes.push(aria2Process);
     aria2Process.on("exit", function () {
         processes.splice(processes.indexOf(aria2Process), 1);
