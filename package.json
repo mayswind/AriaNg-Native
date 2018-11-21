@@ -4,7 +4,7 @@
     "node": ">=8"
   },
   "name": "ariang-native",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "description": "AriaNg Native App",
   "main": "app.js",
   "scripts": {
