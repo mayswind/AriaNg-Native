@@ -1,27 +1,14 @@
 <!DOCTYPE html>
-<html ng-app="ariaNg" manifest="index.manifest">
+<html ng-app="ariaNg">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" name="viewport">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-title" content="AriaNg"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <meta name="msapplication-TileColor" content="#3c4852">
-    <meta name="msapplication-TileImage" content="tileicon.png">
     <meta name="description" content="AriaNg, a modern web frontend making aria2 easier to use.">
-    <meta name="theme-color" content="#3c4852">
     <meta name="format-detection" content="telephone=no"/>
-    <title>AriaNg</title>
-    <link rel="icon" href="favicon.png">
-    <!--[if IE]><link rel="shortcut icon" href="favicon.ico"><![endif]-->
-    <link rel="apple-touch-icon" href="touchicon.png">
-    <!-- build:css css/bootstrap-3.4.1.min.css -->
+    <title>AriaNg Native</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
-    <!-- endbuild -->
-    <!-- build:css css/plugins.min.css -->
     <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="../node_modules/admin-lte/dist/css/AdminLTE.min.css"/>
     <link rel="stylesheet" href="../node_modules/sweetalert/dist/sweetalert.css"/>
@@ -31,8 +18,6 @@
     <link rel="stylesheet" href="../node_modules/angular-busy/dist/angular-busy.min.css"/>
     <link rel="stylesheet" href="../node_modules/angular-input-dropdown/inputDropdownStyles.css"/>
     <link rel="stylesheet" href="../node_modules/angularjs-dragula/dist/dragula.min.css"/>
-    <!-- endbuild -->
-    <!-- build:css css/aria-ng.min.css -->
     <link rel="stylesheet" href="styles/core/core.css">
     <link rel="stylesheet" href="styles/core/extend.css">
     <link rel="stylesheet" href="styles/controls/global-status.css"/>
@@ -43,7 +28,6 @@
     <link rel="stylesheet" href="styles/controls/chart.css"/>
     <link rel="stylesheet" href="styles/controls/angular-promise-buttons.css"/>
     <link rel="stylesheet" href="styles/theme/default.css">
-    <!-- endbuild -->
 </head>
 <body class="hold-transition skin-aria-ng sidebar-mini fixed">
 <div class="wrapper" ng-controller="MainController" ng-swipe-left="swipeActions.leftSwipe()" ng-swipe-right="swipeActions.rightSwipe()" ng-swipe-disable-mouse>
@@ -300,10 +284,7 @@
     <ng-setting-dialog setting="quickSettingContext"></ng-setting-dialog>
 </div>
 
-<!-- build:js js/jquery-3.3.1.min.js -->
 <script src="../node_modules/jquery/dist/jquery.min.js"></script>
-<!-- endbuild -->
-<!-- build:js js/angular-packages-1.6.10.min.js -->
 <script src="../node_modules/angular/angular.min.js"></script>
 <script src="../node_modules/angular-route/angular-route.min.js"></script>
 <script src="../node_modules/angular-sanitize/angular-sanitize.min.js"></script>
@@ -311,20 +292,12 @@
 <script src="../node_modules/angular-messages/angular-messages.min.js"></script>
 <script src="../node_modules/angular-cookies/angular-cookies.min.js"></script>
 <script src="../node_modules/angular-animate/angular-animate.min.js"></script>
-<!-- endbuild -->
-<!-- build:js js/bootstrap-3.4.1.min.js -->
 <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- endbuild -->
-<!-- build:js js/moment-with-locales-2.24.0.min.js -->
 <script src="../node_modules/moment/min/moment.min.js"></script>
 <script src="../node_modules/moment/locale/zh-cn.js"></script>
 <script src="../node_modules/moment/locale/zh-tw.js"></script>
 <script src="../node_modules/moment-timezone/builds/moment-timezone-with-data-2012-2022.min.js"></script>
-<!-- endbuild -->
-<!-- build:js js/echarts-common-3.8.5.min.js -->
 <script src="../node_modules/echarts/dist/echarts.common.min.js"></script>
-<!-- endbuild -->
-<!-- build:js js/plugins.min.js -->
 <script src="../node_modules/admin-lte/dist/js/adminlte.js"></script>
 <script src="../node_modules/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
@@ -343,8 +316,6 @@
 <script src="../node_modules/angular-input-dropdown/inputDropdown.js"></script>
 <script src="../node_modules/angularjs-dragula/dist/angularjs-dragula.min.js"></script>
 <script src="../node_modules/angular-sweetalert/SweetAlert.js"></script>
-<!-- endbuild -->
-<!-- build:js js/aria-ng.min.js -->
 <script src="scripts/core/__core.js"></script>
 <script src="scripts/core/__fix.js"></script>
 <script src="scripts/core/app.js"></script>
@@ -405,8 +376,5 @@
 <script src="scripts/services/aria2RpcService.js"></script>
 <script src="scripts/services/aria2TaskService.js"></script>
 <script src="scripts/services/aria2SettingService.js"></script>
-<script src="scripts/views/templates.js"></script>
-<!-- endbuild -->
-<!-- AriaNg-Bundle:languages -->
 </body>
 </html>
