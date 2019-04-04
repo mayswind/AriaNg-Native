@@ -90,11 +90,6 @@
             }
 
             var languageKey = ariaNgConstants.languageStorageKeyPrefix + '.' + options.key;
-            var languageResource = ariaNgStorageService.get(languageKey);
-
-            if (languageResource) {
-                deferred.resolve(languageResource);
-            }
 
             if (ariaNgAssetsCacheService.getLanguageAsset(options.key)) {
                 var languageObject = getLanguageObject(ariaNgAssetsCacheService.getLanguageAsset(options.key));
