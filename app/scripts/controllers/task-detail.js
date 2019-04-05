@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('TaskDetailController', ['$rootScope', '$scope', '$routeParams', '$interval', 'clipboard', 'aria2RpcErrors', 'ariaNgFileTypes', 'ariaNgCommonService', 'ariaNgSettingService', 'ariaNgMonitorService', 'aria2TaskService', 'aria2SettingService', function ($rootScope, $scope, $routeParams, $interval, clipboard, aria2RpcErrors, ariaNgFileTypes, ariaNgCommonService, ariaNgSettingService, ariaNgMonitorService, aria2TaskService, aria2SettingService) {
+    angular.module('ariaNg').controller('TaskDetailController', ['$rootScope', '$scope', '$routeParams', '$interval', 'clipboard', 'aria2RpcErrors', 'ariaNgFileTypes', 'ariaNgCommonService', 'ariaNgSettingService', 'ariaNgMonitorService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $interval, clipboard, aria2RpcErrors, ariaNgFileTypes, ariaNgCommonService, ariaNgSettingService, ariaNgMonitorService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
         var tabOrders = ['overview', 'blocks', 'filelist', 'btpeers'];
         var downloadTaskRefreshPromise = null;
         var pauseDownloadTaskRefresh = false;
@@ -28,6 +28,10 @@
 
             if (!$scope.task || $scope.task.status !== task.status) {
                 $scope.context.availableOptions = getAvailableOptions(task.status, !!task.bittorrent);
+            }
+
+            if (angular.isUndefined($scope.nativeContext.directoryExists)) {
+                $scope.nativeContext.directoryExists = ariaNgNativeElectronService.isLocalFSExists(task.dir);
             }
 
             $scope.task = ariaNgCommonService.copyObjectTo(task, $scope.task);
@@ -202,6 +206,10 @@
             statusData: ariaNgMonitorService.getEmptyStatsData($routeParams.gid),
             availableOptions: [],
             options: []
+        };
+
+        $scope.nativeContext = {
+            directoryExists: undefined
         };
 
         $scope.changeTab = function (tabName) {
@@ -644,6 +652,10 @@
 
             var info = name + ': ' + value;
             clipboard.copyText(info);
+        };
+
+        $scope.openLocalDirectory = function (dir, filename) {
+            ariaNgNativeElectronService.openFileInDirectory(dir, filename);
         };
 
         if (ariaNgSettingService.getDownloadTaskRefreshInterval() > 0) {

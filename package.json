@@ -82,11 +82,7 @@
     "files": [
       "app/**",
       "assets/**",
-      "core.js",
-      "config.js",
-      "cmd.js",
-      "tray.js",
-      "app.js",
+      "*.js",
       "package.json"
     ],
     "win": {

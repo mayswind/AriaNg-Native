@@ -138,7 +138,8 @@
                             <span translate>Download Dir</span>
                         </div>
                         <div class="setting-value col-sm-8">
-                            <span class="allow-word-break" ng-bind="task.dir"></span>
+                            <span class="allow-word-break" ng-if="!nativeContext.directoryExists || !task.files.length || !task.files[0].fileName" ng-bind="task.dir"></span>
+                            <a class="allow-word-break pointer-cursor" ng-if="nativeContext.directoryExists && task.files.length && task.files[0].fileName" ng-bind="task.dir" ng-click="openLocalDirectory(task.dir, task.files[0].fileName)"></a>
                         </div>
                     </div>
                     <div class="row" ng-if="task && task.bittorrent && task.bittorrent.announceList && task.bittorrent.announceList.length > 0">

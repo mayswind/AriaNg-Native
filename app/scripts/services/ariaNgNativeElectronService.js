@@ -22,6 +22,7 @@
         };
         var cmd = remote.require('./cmd');
         var tray = remote.require('./tray');
+        var localfs = remote.require('./localfs');
 
         return {
             remote: remote,
@@ -59,8 +60,15 @@
             getCurrentWindow: function () {
                 return remote.getCurrentWindow();
             },
+            isLocalFSExists: function (fullpath) {
+                return localfs.isExists(fullpath);
+            },
             openExternalLink: function (url) {
                 return shell.openExternal(url);
+            },
+            openFileInDirectory: function (dir, filename) {
+                var fullpath = localfs.getFullPath(dir, filename);
+                return shell.showItemInFolder(fullpath);
             },
             registerEvent: function (event, callback) {
                 this.getCurrentWindow().on && this.getCurrentWindow().on(event, callback);
