@@ -72,7 +72,8 @@
     "angular-input-dropdown": "git://github.com/mayswind/angular-input-dropdown.git#68670e39816698b3eb98c0e740a0efe77d5fbdd1",
     "angularjs-dragula": "^2.0.0",
     "electron-localshortcut": "^3.1.0",
-    "electron-store": "^3.1.0"
+    "electron-store": "^3.1.0",
+    "yargs": "^13.2.2"
   },
   "build": {
     "appId": "net.mayswind.ariang",
@@ -125,6 +126,7 @@
       "assets/**",
       "core.js",
       "config.js",
+      "cmd.js",
       "tray.js",
       "app.js",
       "package.json"

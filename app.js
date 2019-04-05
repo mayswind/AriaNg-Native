@@ -5,6 +5,7 @@ const electronLocalshortcut = require('electron-localshortcut');
 const package = require('./package');
 const config = require('./config');
 const core = require('./core');
+const cmd = require('./cmd');
 const tray = require('./tray');
 
 const app = electron.app;
@@ -19,7 +20,7 @@ if (!singletonLock) {
 global.settings = {
     version: package.version,
     ariaNgVersion: package["ariang-version"],
-    isDevMode: false,
+    isDevMode: cmd.argv.development,
     useCustomAppTitle: false
 };
 
@@ -35,7 +36,7 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-app.on('second-instance', (event, commandLine, workingDirectory) => {
+app.on('second-instance', (event, argv, workingDirectory) => {
     if (core.mainWindow) {
         if (core.mainWindow.isMinimized()) {
             core.mainWindow.restore();
@@ -100,7 +101,7 @@ app.on('ready', () => {
     }
 
     core.mainWindow.setMenu(null);
-    core.mainWindow.loadURL('file://' + __dirname + '/app/index.html');
+    core.mainWindow.loadURL(cmd.getMainUrl());
 
     core.mainWindow.once('ready-to-show', () => {
         core.mainWindow.show();
