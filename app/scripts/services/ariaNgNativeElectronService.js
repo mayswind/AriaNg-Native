@@ -59,6 +59,9 @@
             registerEvent: function (event, callback) {
                 this.getCurrentWindow().on(event, callback);
             },
+            isMaximized: function () {
+                return this.getCurrentWindow().isMaximized && this.getCurrentWindow().isMaximized();
+            },
             minimizeWindow: function () {
                 this.getCurrentWindow().minimize();
             },

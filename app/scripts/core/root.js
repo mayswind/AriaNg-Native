@@ -205,6 +205,7 @@
         };
 
         $rootScope.useCustomAppTitle = ariaNgNativeElectronService.useCustomAppTitle();
+        $rootScope.windowContext.maximized = ariaNgNativeElectronService.isMaximized();
 
         ariaNgNativeElectronService.registerEvent('maximize', function () {
             $rootScope.windowContext.maximized = true;
