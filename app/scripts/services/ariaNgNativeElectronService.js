@@ -10,7 +10,6 @@
         };
         var ipcRenderer = electron.ipcRenderer || {};
         var shell = electron.shell || {};
-        var cmd = remote.require('./cmd') || {};
         var tray = remote.require('./tray') || {};
         var localfs = remote.require('./localfs') || {};
 
