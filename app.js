@@ -27,7 +27,12 @@ const userSettingsSchema = {
     }
 };
 
+const singletonLock = app.requestSingleInstanceLock();
 const userSettingsStore = new Store({userSettingsSchema});
+
+if (!singletonLock) {
+    app.quit();
+}
 
 let mainWindow = null;
 let tray = null;
@@ -54,6 +59,16 @@ if (os.platform() === 'win32') {
 
 app.on('window-all-closed', () => {
     app.quit();
+});
+
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if (mainWindow) {
+        if (mainWindow.isMinimized()) {
+            mainWindow.restore();
+        }
+
+        mainWindow.focus()
+    }
 });
 
 app.on('ready', () => {
