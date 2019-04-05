@@ -23,6 +23,27 @@
             getSettings: function () {
                 return remote.getGlobal('settings');
             },
+            getRuntimeEnvironment: function () {
+                if (!remote.process || !remote.process.versions) {
+                    return null;
+                }
+
+                var versions = remote.process.versions;
+                var items = [];
+
+                items.push({name: 'Electron', value: versions.electron});
+                items.push({name: 'Node.js', value: versions.node});
+                items.push({name: 'Chrome', value: versions.chrome});
+                items.push({name: 'V8', value: versions.v8});
+
+                return items;
+            },
+            version: function() {
+                return this.getSettings().version;
+            },
+            ariaNgVersion: function() {
+                return this.getSettings().ariaNgVersion;
+            },
             isDevMode: function () {
                 return !!this.getSettings().isDevMode;
             },

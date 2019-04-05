@@ -25,7 +25,20 @@
                         <div class="setting-key col-sm-4">
                             <span translate>AriaNg Version</span>
                         </div>
-                        <div class="setting-value col-sm-8" ng-bind="context.ariaNgVersion + (context.buildCommit ? ' (' + context.buildCommit + ')' : '')"></div>
+                        <div class="setting-value col-sm-8" ng-bind="'AriaNg Native ' + context.ariaNgNativeVersion + ' (AriaNg ' + context.ariaNgVersion + ')'"></div>
+                    </div>
+                    <div class="row" ng-if="context.runtimeEnvironment">
+                        <div class="setting-key col-sm-4">
+                            <span translate>Runtime Environment</span>
+                            <i class="icon-expand pointer-cursor fa" ng-if="context.runtimeEnvironment.length > 1"
+                               ng-class="{'fa-plus': context.runtimeEnvironmentCollapsed, 'fa-minus': !context.runtimeEnvironmentCollapsed}"
+                               ng-click="context.runtimeEnvironmentCollapsed = !context.runtimeEnvironmentCollapsed"
+                               title="{{(context.runtimeEnvironmentCollapsed ? 'Expand' : 'Collapse') | translate}}"></i>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <span class="multi-line auto-ellipsis" ng-bind="item.name + ': ' + item.value"
+                                  ng-repeat="item in context.runtimeEnvironment | limitTo: (context.runtimeEnvironmentCollapsed ? 1 : task.runtimeEnvironment.length)"></span>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="setting-key setting-key-without-desc col-sm-4">

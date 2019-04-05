@@ -1,3 +1,4 @@
+const package = require('./package');
 const os = require('os');
 const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
@@ -45,6 +46,8 @@ let windowConfig = {
 };
 
 global.settings = {
+    version: package.version,
+    ariaNgVersion: package["ariang-version"],
     isDevMode: false,
     useCustomAppTitle: false
 };

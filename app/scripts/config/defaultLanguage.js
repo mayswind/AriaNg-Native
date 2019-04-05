@@ -252,6 +252,7 @@
             'Minimize': 'Minimize',
             'Maximize': 'Maximize',
             'Restore Down': 'Restore Down',
+            'Runtime Environment': 'Runtime Environment',
             'error': {
                 'unknown': 'Unknown error occurred.',
                 'operation.timeout': 'Operation timed out.',

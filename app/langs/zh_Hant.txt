@@ -247,6 +247,7 @@ You cannot use AriaNg because this browser does not support data storage.=您無
 Minimize=最小化
 Maximize=最大化
 Restore Down=向下還原
+Runtime Environment=運行環境
 
 [error]
 unknown=不詳錯誤.
