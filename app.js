@@ -39,6 +39,14 @@ let windowConfig = {
     maximized: !!userSettingsStore.get('maximized')
 };
 
+global.settings = {
+    isDevMode: false
+};
+
+if (!app.isPackaged) {
+    global.settings.isDevMode = true;
+}
+
 app.on('window-all-closed', function () {
     app.quit();
 });
@@ -88,6 +96,12 @@ app.on('ready', function () {
 
         electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+A', function () {
             mainWindow.webContents.selectAll();
+        });
+    }
+
+    if (global.settings.isDevMode) {
+        electronLocalshortcut.register(mainWindow, 'F12', function () {
+            mainWindow.webContents.openDevTools();
         });
     }
 
