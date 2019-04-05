@@ -2,34 +2,13 @@ const package = require('./package');
 const os = require('os');
 const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
-const Store = require('electron-store');
+const config = require('./config');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const Tray = electron.Tray;
 
-const userSettingsSchema = {
-    width: {
-        type: 'number',
-        minimum: 800
-    },
-    height: {
-        type: 'number',
-        minimum: 400
-    },
-    maximized: {
-        type: 'boolean'
-    },
-    pos_x: {
-        type: 'number'
-    },
-    pos_y: {
-        type: 'number'
-    }
-};
-
 const singletonLock = app.requestSingleInstanceLock();
-const userSettingsStore = new Store({userSettingsSchema});
 
 if (!singletonLock) {
     app.quit();
@@ -37,13 +16,6 @@ if (!singletonLock) {
 
 let mainWindow = null;
 let tray = null;
-let windowConfig = {
-    width: userSettingsStore.get('width') || 950,
-    height: userSettingsStore.get('height') || 600,
-    x: userSettingsStore.get('pos_x'),
-    y: userSettingsStore.get('pos_y'),
-    maximized: !!userSettingsStore.get('maximized')
-};
 
 global.settings = {
     version: package.version,
@@ -70,15 +42,15 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
             mainWindow.restore();
         }
 
-        mainWindow.focus()
+        mainWindow.focus();
     }
 });
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
         title: 'AriaNg Native',
-        width: windowConfig.width,
-        height: windowConfig.height,
+        width: config.width,
+        height: config.height,
         minWidth: 800,
         minHeight: 400,
         fullscreenable: false,
@@ -86,11 +58,11 @@ app.on('ready', () => {
         show: false
     });
 
-    if (windowConfig.x || windowConfig.y) {
-        mainWindow.setPosition(windowConfig.x, windowConfig.y);
+    if (config.x || config.y) {
+        mainWindow.setPosition(config.x, config.y);
     }
 
-    if (windowConfig.maximized) {
+    if (config.maximized) {
         mainWindow.maximize();
     }
 
@@ -130,38 +102,38 @@ app.on('ready', () => {
     mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 
     mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
+        mainWindow.show();
     });
 
     mainWindow.on('resize', () => {
         var sizes = mainWindow.getSize();
-        windowConfig.width = sizes[0];
-        windowConfig.height = sizes[1];
+        config.width = sizes[0];
+        config.height = sizes[1];
     });
 
     mainWindow.on('maximize', () => {
-        windowConfig.maximized = mainWindow.isMaximized();
+        config.maximized = mainWindow.isMaximized();
     });
 
     mainWindow.on('unmaximize', () => {
-        windowConfig.maximized = mainWindow.isMaximized();
+        config.maximized = mainWindow.isMaximized();
     });
 
     mainWindow.on('move', () => {
         var positions = mainWindow.getPosition();
-        windowConfig.x = positions[0];
-        windowConfig.y = positions[1];
+        config.x = positions[0];
+        config.y = positions[1];
     });
 
     mainWindow.on('closed', () => {
-        if (!windowConfig.maximized) {
-            userSettingsStore.set('width', windowConfig.width);
-            userSettingsStore.set('height', windowConfig.height);
-            userSettingsStore.set('pos_x', windowConfig.x);
-            userSettingsStore.set('pos_y', windowConfig.y);
+        if (!config.maximized) {
+            config.save('width');
+            config.save('height');
+            config.save('x');
+            config.save('y');
         }
 
-        userSettingsStore.set('maximized', windowConfig.maximized);
+        config.save('maximized');
 
         mainWindow = null;
     });
