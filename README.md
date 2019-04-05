@@ -5,7 +5,7 @@
 ## Introduction
 AriaNg Native is a desktop application built by [Electron](https://github.com/electron/electron), containing full feature of [AriaNg](https://github.com/mayswind/AriaNg). You can run AriaNg Native on Windows or macOS without any browser. In addition, AriaNg Native also has many features that [AriaNg](https://github.com/mayswind/AriaNg) cannot implement.
 
-### Extra features
+#### Extra features
 1. More user-friendly interface
 2. Taskbar tray, supporting closing to the tray
 3. Command line arguments, supporting create new task by opening file
@@ -15,6 +15,7 @@ AriaNg Native is a desktop application built by [Electron](https://github.com/el
 Please visit [https://github.com/mayswind/AriaNg](https://github.com/mayswind/AriaNg) for more information.
 
 ## Screenshots
+#### Windows
 ![AriaNg Native](https://raw.githubusercontent.com/mayswind/AriaNg-WebSite/master/screenshots/ariang_native_windows.png)
 
 ## Installation
@@ -26,8 +27,11 @@ Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.co
 
     $ npm install
     
-    # For Windows
-    $ npm run publish:win
+    # For Windows x86
+    $ npm run publish:win32
+    
+    # For Windows x64
+    $ npm run publish:win64
     
     # For macOS
     $ npm run publish:osx
