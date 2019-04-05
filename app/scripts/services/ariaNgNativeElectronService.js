@@ -57,7 +57,7 @@
                 return shell.openExternal(url);
             },
             registerEvent: function (event, callback) {
-                this.getCurrentWindow().on(event, callback);
+                this.getCurrentWindow().on && this.getCurrentWindow().on(event, callback);
             },
             isMaximized: function () {
                 return this.getCurrentWindow().isMaximized && this.getCurrentWindow().isMaximized();
