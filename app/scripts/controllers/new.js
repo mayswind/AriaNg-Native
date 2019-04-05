@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('NewTaskController', ['$rootScope', '$scope', '$location', '$timeout', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'aria2TaskService', 'aria2SettingService', function ($rootScope, $scope, $location, $timeout, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, aria2TaskService, aria2SettingService) {
+    angular.module('ariaNg').controller('NewTaskController', ['$rootScope', '$scope', '$location', '$timeout', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $location, $timeout, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
         var tabOrders = ['links', 'options'];
         var parameters = $location.search();
 
@@ -209,6 +209,19 @@
             var urls = ariaNgCommonService.parseUrlsFromOriginInput($scope.context.urls);
             return urls ? urls.length : 0;
         };
+
+        $scope.$on('$viewContentLoaded', function () {
+            var result = ariaNgNativeElectronService.getAndClearToBeCreatedTaskFilePath();
+
+            if (result && !result.exception) {
+                $scope.context.uploadFile = result;
+                $scope.context.taskType = result.type;
+                $scope.changeTab('options');
+            } else if (result && result.exception) {
+                ariaNgLogService.error('[NewTaskController] get file via electron error', result.exception);
+                ariaNgLocalizationService.showError(result.exception);
+            }
+        });
 
         $rootScope.loadPromise = $timeout(function () {}, 100);
     }]);

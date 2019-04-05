@@ -4,6 +4,9 @@
     angular.module('ariaNg').factory('ariaNgNativeElectronService', ['ariaNgLocalizationService', function (ariaNgLocalizationService) {
         var electron = angular.isFunction(window.nodeRequire) ? nodeRequire('electron') : {};
         var remote = electron.remote || {
+            require: function () {
+                return {};
+            },
             getGlobal: function () {
                 return {};
             },
@@ -11,11 +14,13 @@
                 return {};
             }
         };
+        var ipcRenderer = electron.ipcRenderer || {};
         var shell = electron.shell || {
             openExternal: function () {
                 return false;
             }
         };
+        var cmd = remote.require('./cmd');
         var tray = remote.require('./tray');
 
         return {
@@ -60,6 +65,9 @@
             registerEvent: function (event, callback) {
                 this.getCurrentWindow().on && this.getCurrentWindow().on(event, callback);
             },
+            onMessage: function (messageType, callback) {
+                ipcRenderer.on && ipcRenderer.on(messageType, callback);
+            },
             initTray: function () {
                 tray.init({
                     labels: {
@@ -71,6 +79,9 @@
             setTrayLanguage: function () {
                 tray.destroy();
                 this.initTray();
+            },
+            getAndClearToBeCreatedTaskFilePath: function () {
+                return cmd.getAndClearToBeCreatedTaskFilePath();
             },
             isMaximized: function () {
                 return this.getCurrentWindow().isMaximized && this.getCurrentWindow().isMaximized();

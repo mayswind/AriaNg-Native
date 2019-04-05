@@ -215,6 +215,10 @@
             $rootScope.windowContext.maximized = false;
         });
 
+        ariaNgNativeElectronService.onMessage('navigate-to', function (event, routeUrl) {
+            $location.path(routeUrl);
+        });
+
         ariaNgSettingService.setDebugMode(ariaNgNativeElectronService.isDevMode());
 
         ariaNgSettingService.onFirstAccess(function () {

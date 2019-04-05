@@ -45,6 +45,11 @@ app.on('second-instance', (event, argv, workingDirectory) => {
         }
 
         core.mainWindow.focus();
+
+        if (cmd.isContainsSupportedFileArg(argv[1])) {
+            cmd.asyncNewTaskFromFile(argv[1]);
+            cmd.navigateToNewTask();
+        }
     }
 });
 
@@ -101,7 +106,13 @@ app.on('ready', () => {
     }
 
     core.mainWindow.setMenu(null);
-    core.mainWindow.loadURL(cmd.getMainUrl());
+
+    if (cmd.isContainsSupportedFileArg(process.argv[1])) {
+        cmd.asyncNewTaskFromFile(process.argv[1]);
+        cmd.loadNewTaskUrl();
+    } else {
+        cmd.loadIndexUrl();
+    }
 
     core.mainWindow.once('ready-to-show', () => {
         core.mainWindow.show();
