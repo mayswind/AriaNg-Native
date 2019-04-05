@@ -11,7 +11,8 @@
     "postinstall": "install-app-deps",
     "clean": "rimraf dist",
     "start": "electron .",
-    "publish:win": "npm run clean && build --ia32",
+    "publish:win32": "npm run clean && build --ia32",
+    "publish:win64": "npm run clean && build --x64",
     "publish:osx": "npm run clean && build --mac"
   },
   "repository": {
