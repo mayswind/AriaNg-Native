@@ -253,6 +253,10 @@
             'Maximize': 'Maximize',
             'Restore Down': 'Restore Down',
             'Runtime Environment': 'Runtime Environment',
+            'tray': {
+                'ShowAriaNgNative': '&Show AriaNg Native',
+                'Exit': 'E&xit',
+            },
             'error': {
                 'unknown': 'Unknown error occurred.',
                 'operation.timeout': 'Operation timed out.',

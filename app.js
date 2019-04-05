@@ -1,21 +1,20 @@
-const package = require('./package');
 const os = require('os');
 const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
+
+const package = require('./package');
 const config = require('./config');
+const core = require('./core');
+const tray = require('./tray');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-const Tray = electron.Tray;
 
 const singletonLock = app.requestSingleInstanceLock();
 
 if (!singletonLock) {
     app.quit();
 }
-
-let mainWindow = null;
-let tray = null;
 
 global.settings = {
     version: package.version,
@@ -37,17 +36,19 @@ app.on('window-all-closed', () => {
 });
 
 app.on('second-instance', (event, commandLine, workingDirectory) => {
-    if (mainWindow) {
-        if (mainWindow.isMinimized()) {
-            mainWindow.restore();
+    if (core.mainWindow) {
+        if (core.mainWindow.isMinimized()) {
+            core.mainWindow.restore();
+        } else if (!core.mainWindow.isVisible()) {
+            core.mainWindow.show();
         }
 
-        mainWindow.focus();
+        core.mainWindow.focus();
     }
 });
 
 app.on('ready', () => {
-    mainWindow = new BrowserWindow({
+    core.mainWindow = new BrowserWindow({
         title: 'AriaNg Native',
         width: config.width,
         height: config.height,
@@ -59,73 +60,81 @@ app.on('ready', () => {
     });
 
     if (config.x || config.y) {
-        mainWindow.setPosition(config.x, config.y);
+        core.mainWindow.setPosition(config.x, config.y);
     }
 
     if (config.maximized) {
-        mainWindow.maximize();
+        core.mainWindow.maximize();
     }
 
     if (os.platform() === 'darwin') {
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+Z', () => {
-            mainWindow.webContents.undo();
+        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+Z', () => {
+            core.mainWindow.webContents.undo();
         });
 
-        electronLocalshortcut.register(mainWindow, 'Shift+CmdOrCtrl+Z', () => {
-            mainWindow.webContents.redo();
+        electronLocalshortcut.register(core.mainWindow, 'Shift+CmdOrCtrl+Z', () => {
+            core.mainWindow.webContents.redo();
         });
 
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+X', () => {
-            mainWindow.webContents.cut();
+        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+X', () => {
+            core.mainWindow.webContents.cut();
         });
 
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+C', () => {
-            mainWindow.webContents.copy();
+        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+C', () => {
+            core.mainWindow.webContents.copy();
         });
 
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+V', () => {
-            mainWindow.webContents.paste();
+        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+V', () => {
+            core.mainWindow.webContents.paste();
         });
 
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+A', () => {
-            mainWindow.webContents.selectAll();
+        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+A', () => {
+            core.mainWindow.webContents.selectAll();
         });
     }
 
     if (global.settings.isDevMode) {
-        electronLocalshortcut.register(mainWindow, 'F12', () => {
-            mainWindow.webContents.openDevTools();
+        electronLocalshortcut.register(core.mainWindow, 'F12', () => {
+            core.mainWindow.webContents.openDevTools();
         });
     }
 
-    mainWindow.setMenu(null);
-    mainWindow.loadURL('file://' + __dirname + '/app/index.html');
+    core.mainWindow.setMenu(null);
+    core.mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show();
+    core.mainWindow.once('ready-to-show', () => {
+        core.mainWindow.show();
     });
 
-    mainWindow.on('resize', () => {
-        var sizes = mainWindow.getSize();
+    core.mainWindow.on('resize', () => {
+        var sizes = core.mainWindow.getSize();
         config.width = sizes[0];
         config.height = sizes[1];
     });
 
-    mainWindow.on('maximize', () => {
-        config.maximized = mainWindow.isMaximized();
+    core.mainWindow.on('maximize', () => {
+        config.maximized = core.mainWindow.isMaximized();
     });
 
-    mainWindow.on('unmaximize', () => {
-        config.maximized = mainWindow.isMaximized();
+    core.mainWindow.on('unmaximize', () => {
+        config.maximized = core.mainWindow.isMaximized();
     });
 
-    mainWindow.on('move', () => {
-        var positions = mainWindow.getPosition();
+    core.mainWindow.on('move', () => {
+        var positions = core.mainWindow.getPosition();
         config.x = positions[0];
         config.y = positions[1];
     });
 
-    mainWindow.on('closed', () => {
+    core.mainWindow.on('close',function (event) {
+        if (tray.isEnabled() && !core.isConfirmExit) {
+            event.preventDefault();
+            core.mainWindow.hide();
+            event.returnValue = false;
+        }
+    });
+
+    core.mainWindow.on('closed', () => {
         if (!config.maximized) {
             config.save('width');
             config.save('height');
@@ -135,6 +144,6 @@ app.on('ready', () => {
 
         config.save('maximized');
 
-        mainWindow = null;
+        core.mainWindow = null;
     });
 });

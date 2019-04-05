@@ -281,6 +281,14 @@
             $document.unbind('keypress');
         });
 
+        $rootScope.$on('$viewContentLoaded', function () {
+            ariaNgNativeElectronService.initTray();
+        });
+
+        $rootScope.$on('$translateChangeSuccess', function(event, current, previous) {
+            ariaNgNativeElectronService.setTrayLanguage();
+        });
+
         initCheck();
         initNavbar();
         initContentWrapper();

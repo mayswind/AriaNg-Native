@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgNativeElectronService', [function () {
+    angular.module('ariaNg').factory('ariaNgNativeElectronService', ['ariaNgLocalizationService', function (ariaNgLocalizationService) {
         var electron = angular.isFunction(window.nodeRequire) ? nodeRequire('electron') : {};
         var remote = electron.remote || {
             getGlobal: function () {
@@ -16,6 +16,7 @@
                 return false;
             }
         };
+        var tray = remote.require('./tray');
 
         return {
             remote: remote,
@@ -58,6 +59,18 @@
             },
             registerEvent: function (event, callback) {
                 this.getCurrentWindow().on && this.getCurrentWindow().on(event, callback);
+            },
+            initTray: function () {
+                tray.init({
+                    labels: {
+                        ShowAriaNgNative: ariaNgLocalizationService.getLocalizedText('tray.ShowAriaNgNative'),
+                        Exit: ariaNgLocalizationService.getLocalizedText('tray.Exit')
+                    }
+                });
+            },
+            setTrayLanguage: function () {
+                tray.destroy();
+                this.initTray();
             },
             isMaximized: function () {
                 return this.getCurrentWindow().isMaximized && this.getCurrentWindow().isMaximized();

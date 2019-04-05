@@ -249,6 +249,10 @@ Maximize=最大化
 Restore Down=向下還原
 Runtime Environment=運行環境
 
+[tray]
+ShowAriaNgNative=顯示 AriaNg Native (&S)
+Exit=退出 (&X)
+
 [error]
 unknown=不詳錯誤.
 operation.timeout=操作超時.

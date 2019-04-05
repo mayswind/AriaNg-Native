@@ -123,6 +123,9 @@
       "node_modules/angularjs-dragula/dist/angularjs-dragula.min.js",
       "node_modules/angular-sweetalert/SweetAlert.js",
       "assets/**",
+      "core.js",
+      "config.js",
+      "tray.js",
       "app.js",
       "package.json"
     ],
