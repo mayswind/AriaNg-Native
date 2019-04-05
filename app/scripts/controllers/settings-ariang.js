@@ -51,8 +51,8 @@
 
         $scope.context = {
             currentTab: 'global',
-            ariaNgNativeVersion: ariaNgNativeElectronService.version(),
-            ariaNgVersion: ariaNgNativeElectronService.ariaNgVersion(),
+            ariaNgNativeVersion: ariaNgNativeElectronService.getVersion(),
+            ariaNgVersion: ariaNgNativeElectronService.getAriaNgVersion(),
             runtimeEnvironment: ariaNgNativeElectronService.getRuntimeEnvironment(),
             runtimeEnvironmentCollapsed: true,
             languages: ariaNgLanguages,

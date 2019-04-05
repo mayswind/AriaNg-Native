@@ -77,9 +77,9 @@
                         </a>
                     </li>
                     <li>
-                        <a class="toolbar btn-title-maxmize" title="{{(windowContext.maximized ? 'Restore Down' : 'Maximize') | translate}}" ng-click="maximizeOrRestoreWindow()">
-                            <i class="fa fa-window-maximize" ng-if="!windowContext.maximized"></i>
-                            <i class="fa fa-window-restore ng-cloak" ng-if="windowContext.maximized"></i>
+                        <a class="toolbar btn-title-maxmize" title="{{(nativeWindowContext.maximized ? 'Restore Down' : 'Maximize') | translate}}" ng-click="maximizeOrRestoreWindow()">
+                            <i class="fa fa-window-maximize" ng-if="!nativeWindowContext.maximized"></i>
+                            <i class="fa fa-window-restore ng-cloak" ng-if="nativeWindowContext.maximized"></i>
                         </a>
                     </li>
                     <li>

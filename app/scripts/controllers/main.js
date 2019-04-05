@@ -49,7 +49,7 @@
             ariaNgNotificationService.requestBrowserPermission();
         }
 
-        $scope.ariaNgVersion = ariaNgNativeElectronService.version();
+        $scope.ariaNgVersion = ariaNgNativeElectronService.getVersion();
 
         $scope.globalStatusContext = {
             isEnabled: ariaNgSettingService.getGlobalStatRefreshInterval() > 0,

@@ -6,30 +6,37 @@
         var remote = electron.remote || {
             require: function () {
                 return {};
-            },
-            getGlobal: function () {
-                return {};
-            },
-            getCurrentWindow: function () {
-                return {};
             }
         };
         var ipcRenderer = electron.ipcRenderer || {};
-        var shell = electron.shell || {
-            openExternal: function () {
-                return false;
+        var shell = electron.shell || {};
+        var cmd = remote.require('./cmd') || {};
+        var tray = remote.require('./tray') || {};
+        var localfs = remote.require('./localfs') || {};
+
+        var getSetting = function (item) {
+            if (!remote || !remote.getGlobal) {
+                return null;
             }
+
+            var settings = remote.getGlobal('settings');
+
+            if (!settings) {
+                return null;
+            }
+
+            return settings[item];
         };
-        var cmd = remote.require('./cmd');
-        var tray = remote.require('./tray');
-        var localfs = remote.require('./localfs');
+
+        var getCurrentWindow = function () {
+            if (!remote || !remote.getCurrentWindow) {
+                return {};
+            }
+
+            return remote.getCurrentWindow();
+        };
 
         return {
-            remote: remote,
-            shell: shell,
-            getSettings: function () {
-                return remote.getGlobal('settings');
-            },
             getRuntimeEnvironment: function () {
                 if (!remote.process || !remote.process.versions) {
                     return null;
@@ -45,35 +52,32 @@
 
                 return items;
             },
-            version: function() {
-                return this.getSettings().version;
+            getVersion: function() {
+                return getSetting('version');
             },
-            ariaNgVersion: function() {
-                return this.getSettings().ariaNgVersion;
+            getAriaNgVersion: function() {
+                return getSetting('ariaNgVersion');
             },
             isDevMode: function () {
-                return !!this.getSettings().isDevMode;
+                return !!getSetting('isDevMode');
             },
             useCustomAppTitle: function () {
-                return !!this.getSettings().useCustomAppTitle;
-            },
-            getCurrentWindow: function () {
-                return remote.getCurrentWindow();
+                return !!getSetting('useCustomAppTitle');
             },
             isLocalFSExists: function (fullpath) {
                 return localfs.isExists(fullpath);
             },
             openExternalLink: function (url) {
-                return shell.openExternal(url);
+                return shell.openExternal && shell.openExternal(url);
             },
             openFileInDirectory: function (dir, filename) {
                 var fullpath = localfs.getFullPath(dir, filename);
-                return shell.showItemInFolder(fullpath);
+                return shell.showItemInFolder && shell.showItemInFolder(fullpath);
             },
-            registerEvent: function (event, callback) {
-                this.getCurrentWindow().on && this.getCurrentWindow().on(event, callback);
+            onMainWindowEvent: function (event, callback) {
+                getCurrentWindow().on && getCurrentWindow().on(event, callback);
             },
-            onMessage: function (messageType, callback) {
+            onMainProcessMessage: function (messageType, callback) {
                 ipcRenderer.on && ipcRenderer.on(messageType, callback);
             },
             initTray: function () {
@@ -92,20 +96,20 @@
                 return cmd.getAndClearToBeCreatedTaskFilePath();
             },
             isMaximized: function () {
-                return this.getCurrentWindow().isMaximized && this.getCurrentWindow().isMaximized();
+                return getCurrentWindow().isMaximized && getCurrentWindow().isMaximized();
             },
             minimizeWindow: function () {
-                this.getCurrentWindow().minimize();
+                getCurrentWindow().minimize && getCurrentWindow().minimize();
             },
             maximizeOrRestoreWindow: function () {
-                if (!this.getCurrentWindow().isMaximized()) {
-                    this.getCurrentWindow().maximize();
+                if (!this.isMaximized()) {
+                    getCurrentWindow().maximize && getCurrentWindow().maximize();
                 } else {
-                    this.getCurrentWindow().unmaximize();
+                    getCurrentWindow().unmaximize && getCurrentWindow().unmaximize();
                 }
             },
             exitApp: function () {
-                this.getCurrentWindow().close();
+                getCurrentWindow().close && getCurrentWindow().close();
             }
         };
     }]);

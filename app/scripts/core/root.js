@@ -200,22 +200,22 @@
             }
         };
 
-        $rootScope.windowContext = {
+        $rootScope.nativeWindowContext = {
             maximized: false
         };
 
         $rootScope.useCustomAppTitle = ariaNgNativeElectronService.useCustomAppTitle();
-        $rootScope.windowContext.maximized = ariaNgNativeElectronService.isMaximized();
+        $rootScope.nativeWindowContext.maximized = ariaNgNativeElectronService.isMaximized();
 
-        ariaNgNativeElectronService.registerEvent('maximize', function () {
-            $rootScope.windowContext.maximized = true;
+        ariaNgNativeElectronService.onMainWindowEvent('maximize', function () {
+            $rootScope.nativeWindowContext.maximized = true;
         });
 
-        ariaNgNativeElectronService.registerEvent('unmaximize', function () {
-            $rootScope.windowContext.maximized = false;
+        ariaNgNativeElectronService.onMainWindowEvent('unmaximize', function () {
+            $rootScope.nativeWindowContext.maximized = false;
         });
 
-        ariaNgNativeElectronService.onMessage('navigate-to', function (event, routeUrl) {
+        ariaNgNativeElectronService.onMainProcessMessage('navigate-to', function (event, routeUrl) {
             $location.path(routeUrl);
         });
 
@@ -283,10 +283,6 @@
 
             setNavbarSelected(location);
             $document.unbind('keypress');
-        });
-
-        $rootScope.$on('$viewContentLoaded', function () {
-            ariaNgNativeElectronService.initTray();
         });
 
         $rootScope.$on('$translateChangeSuccess', function(event, current, previous) {
