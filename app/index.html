@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="../node_modules/angularjs-dragula/dist/dragula.min.css"/>
     <link rel="stylesheet" href="styles/core/core.css">
     <link rel="stylesheet" href="styles/core/extend.css">
+    <link rel="stylesheet" href="styles/core/app-title.css">
     <link rel="stylesheet" href="styles/controls/global-status.css"/>
     <link rel="stylesheet" href="styles/controls/task-table.css"/>
     <link rel="stylesheet" href="styles/controls/settings-table.css"/>
@@ -28,8 +29,9 @@
     <link rel="stylesheet" href="styles/controls/chart.css"/>
     <link rel="stylesheet" href="styles/controls/angular-promise-buttons.css"/>
     <link rel="stylesheet" href="styles/theme/default.css">
+    <link rel="stylesheet" href="styles/theme/default-app-title.css">
 </head>
-<body class="hold-transition skin-aria-ng sidebar-mini fixed">
+<body class="hold-transition skin-aria-ng sidebar-mini fixed ng-cloak" ng-class="{'custom-app-title': useCustomAppTitle}">
 <div class="wrapper" ng-controller="MainController" ng-swipe-left="swipeActions.leftSwipe()" ng-swipe-right="swipeActions.rightSwipe()" ng-swipe-disable-mouse>
     <header class="main-header">
         <div class="logo">
@@ -49,9 +51,44 @@
                     </ul>
                 </div>
             </div>
+            <div class="current-rpc pointer-cursor">
+                <div class="dropdown">
+                    <span class="dropdown-toggle" data-toggle="dropdown">
+                        <span ng-bind="(currentRpcProfile.rpcAlias ? currentRpcProfile.rpcAlias : currentRpcProfile.rpcHost + ':' + currentRpcProfile.rpcPort)">RPC</span><i class="fa fa-caret-right fa-right-bottom fa-rotate-45 fa-half" aria-hidden="true"></i>
+                    </span>
+                    <ul class="dropdown-menu dropdown-menu-right rpcselect-dropdown" role="menu">
+                        <li ng-repeat="setting in rpcSettings" ng-class="{'active': setting.isDefault}">
+                            <a class="pointer-cursor" ng-click="switchRpcSetting(setting)">
+                                <span ng-bind="(setting.rpcAlias ? setting.rpcAlias : setting.rpcHost + ':' + setting.rpcPort)">RPC</span>
+                                <i class="fa" ng-class="{'fa-check': setting.isDefault}"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <nav class="navbar navbar-static-top" role="navigation">
+            <div class="navbar-app-title pull-right">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="toolbar btn-title-minimize" title="{{'Minimize' | translate}}" ng-click="minimizeWindow()">
+                            <i class="fa fa-window-minimize"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="toolbar btn-title-maxmize" title="{{(windowContext.maximized ? 'Restore Down' : 'Maximize') | translate}}" ng-click="maximizeOrRestoreWindow()">
+                            <i class="fa fa-window-maximize" ng-if="!windowContext.maximized"></i>
+                            <i class="fa fa-window-restore ng-cloak" ng-if="windowContext.maximized"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="toolbar btn-title-close" title="{{'Close' | translate}}" ng-click="exitApp()">
+                            <i class="fa fa-lg fa-close"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <div class="navbar-toolbar">
                 <ul class="nav navbar-nav">
                     <li>
@@ -147,7 +184,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a class="toolbar" title="{{'Help' | translate}}" href="http://github.com/mayswind/AriaNg" target="_blank">
+                        <a class="toolbar" title="{{'Help' | translate}}" ng-click="openExternalLink('http://github.com/mayswind/AriaNg-Native')" target="_blank">
                             <i class="fa fa-question-circle-o"></i>
                         </a>
                     </li>
@@ -242,12 +279,6 @@
         <nav class="navbar" role="navigation">
             <div class="navbar-toolbar">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a data-toggle="push-menu" role="button" title="{{'Toggle Navigation' | translate}}">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
                     <li class="dropup">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" title="{{'Quick Setting' | translate}}">
                             <i class="fa fa-wrench"></i>
@@ -284,6 +315,12 @@
     <ng-setting-dialog setting="quickSettingContext"></ng-setting-dialog>
 </div>
 
+<script>
+    window.nodeRequire = require;
+    delete window.require;
+    delete window.exports;
+    delete window.module;
+</script>
 <script src="../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="../node_modules/angular/angular.min.js"></script>
 <script src="../node_modules/angular-route/angular-route.min.js"></script>
@@ -376,5 +413,6 @@
 <script src="scripts/services/aria2RpcService.js"></script>
 <script src="scripts/services/aria2TaskService.js"></script>
 <script src="scripts/services/aria2SettingService.js"></script>
+<script src="scripts/services/ariaNgNativeElectronService.js"></script>
 </body>
 </html>

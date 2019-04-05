@@ -249,6 +249,9 @@
             'Cannot initialize WebSocket!': 'Cannot initialize WebSocket!',
             'Access Denied!': 'Access Denied!',
             'You cannot use AriaNg because this browser does not support data storage.': 'You cannot use AriaNg because this browser does not support data storage.',
+            'Minimize': 'Minimize',
+            'Maximize': 'Maximize',
+            'Restore Down': 'Restore Down',
             'error': {
                 'unknown': 'Unknown error occurred.',
                 'operation.timeout': 'Operation timed out.',

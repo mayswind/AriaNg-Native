@@ -40,11 +40,16 @@ let windowConfig = {
 };
 
 global.settings = {
-    isDevMode: false
+    isDevMode: false,
+    useCustomAppTitle: false
 };
 
 if (!app.isPackaged) {
     global.settings.isDevMode = true;
+}
+
+if (os.platform() === 'win32') {
+    global.settings.useCustomAppTitle = true;
 }
 
 app.on('window-all-closed', function () {
@@ -59,10 +64,8 @@ app.on('ready', function () {
         minWidth: 800,
         minHeight: 400,
         fullscreenable: false,
-        show: false,
-        webPreferences: {
-            nodeIntegration: false
-        }
+        frame: !global.settings.useCustomAppTitle,
+        show: false
     });
 
     if (windowConfig.x || windowConfig.y) {

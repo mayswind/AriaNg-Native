@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('MainController', ['$rootScope', '$scope', '$route', '$window', '$location', '$document', '$interval', 'clipboard', 'ariaNgBuildConfiguration', 'aria2RpcErrors', 'ariaNgCommonService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2TaskService', 'aria2SettingService', function ($rootScope, $scope, $route, $window, $location, $document, $interval, clipboard, ariaNgBuildConfiguration, aria2RpcErrors, ariaNgCommonService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2TaskService, aria2SettingService) {
+    angular.module('ariaNg').controller('MainController', ['$rootScope', '$scope', '$route', '$window', '$location', '$document', '$interval', 'clipboard', 'ariaNgBuildConfiguration', 'aria2RpcErrors', 'ariaNgCommonService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $route, $window, $location, $document, $interval, clipboard, ariaNgBuildConfiguration, aria2RpcErrors, ariaNgCommonService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
         var pageTitleRefreshPromise = null;
         var globalStatRefreshPromise = null;
 
@@ -63,6 +63,7 @@
         $scope.quickSettingContext = null;
 
         $scope.rpcSettings = ariaNgSettingService.getAllRpcSettings();
+        $scope.currentRpcProfile = getCurrentRPCProfile();
 
         $scope.isTaskSelected = function () {
             return $rootScope.taskContext.getSelectedTaskIds().length > 0;
@@ -370,6 +371,22 @@
 
             ariaNgSettingService.setDefaultRpcSetting(setting);
             $window.location.reload();
+        };
+
+        $scope.minimizeWindow = function () {
+            ariaNgNativeElectronService.minimizeWindow();
+        };
+
+        $scope.maximizeOrRestoreWindow = function () {
+            ariaNgNativeElectronService.maximizeOrRestoreWindow();
+        };
+
+        $scope.exitApp = function () {
+            ariaNgNativeElectronService.exitApp();
+        };
+
+        $scope.openExternalLink = function (url) {
+            ariaNgNativeElectronService.openExternalLink(url);
         };
 
         if (ariaNgSettingService.getTitleRefreshInterval() > 0) {

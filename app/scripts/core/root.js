@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').run(['$rootScope', '$location', '$document', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgSettingService', 'aria2TaskService', function ($rootScope, $location, $document, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgSettingService, aria2TaskService) {
+    angular.module('ariaNg').run(['$rootScope', '$location', '$document', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', function ($rootScope, $location, $document, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService) {
         var isUrlMatchUrl2 = function (url, url2) {
             if (url === url2) {
                 return true;
@@ -76,6 +76,21 @@
                     angular.element(element).addClass('active').parent().parent().addClass('active');
                 }
             });
+        };
+
+        var initContentWrapper = function () {
+            //copy from AdminLTE app.js
+            var defaultNavbarWithAppTitleHeight = 74; // defined in "min-height" of ".custom-app-title .main-header .navbar" in app-title.css
+            var defaultNavbarHeight = 50; // defined in "min-height" of ".main-header .navbar" in AdminLTE.css
+            var defaultFooterHeight = 1 + 15 + 15 + 17; // defined in "border-top" of ".main-footer" in AdminLTE.css, "padding" of ".main-footer" in AdminLTE.css and "line-height" of ".skin-aria-ng .main-footer > .navbar > .navbar-toolbar > .nav > li > a" in default.css;
+
+            var windowHeight = $(window).height();
+            var headerHeight  = $('.main-header').outerHeight() || (ariaNgNativeElectronService.useCustomAppTitle() ? defaultNavbarWithAppTitleHeight : defaultNavbarHeight);
+            var footerHeight = $('.main-footer').outerHeight() || defaultFooterHeight;
+            var neg = headerHeight + footerHeight;
+
+            $('.content-wrapper').css('min-height', windowHeight - footerHeight);
+            $('.content-body').css('height', windowHeight - neg);
         };
 
         var showSidebar = function () {
@@ -185,6 +200,22 @@
             }
         };
 
+        $rootScope.windowContext = {
+            maximized: false
+        };
+
+        $rootScope.useCustomAppTitle = ariaNgNativeElectronService.useCustomAppTitle();
+
+        ariaNgNativeElectronService.registerEvent('maximize', function () {
+            $rootScope.windowContext.maximized = true;
+        });
+
+        ariaNgNativeElectronService.registerEvent('unmaximize', function () {
+            $rootScope.windowContext.maximized = false;
+        });
+
+        ariaNgSettingService.setDebugMode(ariaNgNativeElectronService.isDevMode());
+
         ariaNgSettingService.onFirstAccess(function () {
             ariaNgLocalizationService.notifyInPage('', 'Tap to configure and get started with AriaNg.', {
                 delay: false,
@@ -251,5 +282,6 @@
 
         initCheck();
         initNavbar();
+        initContentWrapper();
     }]);
 }());

@@ -1,0 +1,98 @@
+.main-header .navbar-app-title, .main-header .current-rpc {
+    display: none;
+}
+
+.custom-app-title .main-header .logo {
+    height: 74px;
+}
+
+.custom-app-title .main-header .logo .logo-lg i.fa-caret-right {
+    display: none;
+}
+
+.custom-app-title .main-header .current-rpc {
+    font-size: 14px;
+    line-height: 2px;
+    color: #efefef;
+    display: block;
+}
+
+.custom-app-title .main-header .current-rpc .dropdown .dropdown-menu {
+    margin-top: 6px;
+}
+
+.custom-app-title .main-header .navbar {
+    min-height: 74px;
+}
+
+.custom-app-title .main-sidebar, .custom-app-title.fixed .content-wrapper, .custom-app-title.fixed .right-side {
+    padding-top: 74px;
+}
+
+.custom-app-title .main-header {
+    -webkit-app-region: drag;
+}
+
+.custom-app-title .main-header .current-rpc span, .custom-app-title .main-header .navbar-nav {
+    -webkit-app-region: no-drag;
+}
+
+.custom-app-title .main-header .navbar-app-title {
+    height: 24px;
+    padding-top: 4px;
+    display: inline-block;
+}
+
+.custom-app-title .main-header .navbar-app-title li {
+    -webkit-app-region: no-drag;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a {
+    font-size: 12px !important;
+    padding: 0 8px 0 8px;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maxmize {
+    padding: 0 6px 0 8px;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-close {
+    padding: 0 8px 0 6px;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a:active {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-minimize:hover,
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-minimize:focus,
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maxmize:hover,
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maxmize:focus{
+    color: #0080ff !important;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-minimize:active,
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maxmize:active{
+    color: #0069c3 !important;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-close:hover,
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-close:focus {
+    color: #f94e41 !important;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-close:active {
+    color: #bf1c00 !important;
+}
+
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a > i.fa {
+    width: 1.1em;
+    text-align: center;
+}
+
+.custom-app-title .main-header .navbar-toolbar {
+    margin-top: 24px;
+}
+
