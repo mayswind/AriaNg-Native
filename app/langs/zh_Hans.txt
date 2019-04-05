@@ -248,6 +248,7 @@ Minimize=最小化
 Maximize=最大化
 Restore Down=向下还原
 Runtime Environment=运行环境
+Reload AriaNg Native=重新加载 AriaNg Native
 
 [tray]
 ShowAriaNgNative=显示 AriaNg Native (&S)

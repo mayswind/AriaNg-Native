@@ -253,6 +253,7 @@
             'Maximize': 'Maximize',
             'Restore Down': 'Restore Down',
             'Runtime Environment': 'Runtime Environment',
+            'Reload AriaNg Native': 'Reload AriaNg Native',
             'tray': {
                 'ShowAriaNgNative': '&Show AriaNg Native',
                 'Exit': 'E&xit',

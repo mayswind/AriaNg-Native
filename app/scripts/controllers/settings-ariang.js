@@ -324,6 +324,10 @@
             });
         };
 
+        $scope.reloadApp = function () {
+            ariaNgNativeElectronService.reload();
+        };
+
         angular.element('[data-toggle="popover"]').popover();
 
         $rootScope.loadPromise = $timeout(function () {}, 100);

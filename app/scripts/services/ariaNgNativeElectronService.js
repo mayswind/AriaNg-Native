@@ -98,6 +98,9 @@
                 tray.destroy();
                 this.initTray();
             },
+            reload: function () {
+                getCurrentWindow().reload && getCurrentWindow().reload();
+            },
             isMaximized: function () {
                 return getCurrentWindow().isMaximized && getCurrentWindow().isMaximized();
             },
