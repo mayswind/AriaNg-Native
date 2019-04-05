@@ -52,11 +52,11 @@ if (os.platform() === 'win32') {
     global.settings.useCustomAppTitle = true;
 }
 
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
     app.quit();
 });
 
-app.on('ready', function () {
+app.on('ready', () => {
     mainWindow = new BrowserWindow({
         title: 'AriaNg Native',
         width: windowConfig.width,
@@ -77,33 +77,33 @@ app.on('ready', function () {
     }
 
     if (os.platform() === 'darwin') {
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+Z', function () {
+        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+Z', () => {
             mainWindow.webContents.undo();
         });
 
-        electronLocalshortcut.register(mainWindow, 'Shift+CmdOrCtrl+Z', function () {
+        electronLocalshortcut.register(mainWindow, 'Shift+CmdOrCtrl+Z', () => {
             mainWindow.webContents.redo();
         });
 
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+X', function () {
+        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+X', () => {
             mainWindow.webContents.cut();
         });
 
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+C', function () {
+        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+C', () => {
             mainWindow.webContents.copy();
         });
 
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+V', function () {
+        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+V', () => {
             mainWindow.webContents.paste();
         });
 
-        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+A', function () {
+        electronLocalshortcut.register(mainWindow, 'CmdOrCtrl+A', () => {
             mainWindow.webContents.selectAll();
         });
     }
 
     if (global.settings.isDevMode) {
-        electronLocalshortcut.register(mainWindow, 'F12', function () {
+        electronLocalshortcut.register(mainWindow, 'F12', () => {
             mainWindow.webContents.openDevTools();
         });
     }
@@ -111,31 +111,31 @@ app.on('ready', function () {
     mainWindow.setMenu(null);
     mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 
-    mainWindow.once('ready-to-show', function () {
+    mainWindow.once('ready-to-show', () => {
         mainWindow.show()
     });
 
-    mainWindow.on('resize', function () {
+    mainWindow.on('resize', () => {
         var sizes = mainWindow.getSize();
         windowConfig.width = sizes[0];
         windowConfig.height = sizes[1];
     });
 
-    mainWindow.on('maximize', function () {
+    mainWindow.on('maximize', () => {
         windowConfig.maximized = mainWindow.isMaximized();
     });
 
-    mainWindow.on('unmaximize', function () {
+    mainWindow.on('unmaximize', () => {
         windowConfig.maximized = mainWindow.isMaximized();
     });
 
-    mainWindow.on('move', function () {
+    mainWindow.on('move', () => {
         var positions = mainWindow.getPosition();
         windowConfig.x = positions[0];
         windowConfig.y = positions[1];
     });
 
-    mainWindow.on('closed', function () {
+    mainWindow.on('closed', () => {
         if (!windowConfig.maximized) {
             userSettingsStore.set('width', windowConfig.width);
             userSettingsStore.set('height', windowConfig.height);
