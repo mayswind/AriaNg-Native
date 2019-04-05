@@ -100,6 +100,10 @@
                     options.type = 'primary';
                 }
 
+                if (!options.positionY) {
+                    options.positionY = 'bottom';
+                }
+
                 return Notification[options.type](options);
             },
             clearNotificationInPage: function () {
