@@ -74,11 +74,17 @@
                 var fullpath = localfs.getFullPath(dir, filename);
                 return shell.showItemInFolder && shell.showItemInFolder(fullpath);
             },
+            sendMessageToMainProcess: function (channel, message) {
+                ipcRenderer.send && ipcRenderer.send(channel, message);
+            },
             onMainWindowEvent: function (event, callback) {
                 getCurrentWindow().on && getCurrentWindow().on(event, callback);
             },
-            onMainProcessMessage: function (messageType, callback) {
-                ipcRenderer.on && ipcRenderer.on(messageType, callback);
+            onMainProcessMessage: function (channel, callback) {
+                ipcRenderer.on && ipcRenderer.on(channel, callback);
+            },
+            removeMainProcessCallback: function (channel, callback) {
+                ipcRenderer.removeListener && ipcRenderer.removeListener(channel, callback);
             },
             initTray: function () {
                 tray.init({
@@ -91,9 +97,6 @@
             setTrayLanguage: function () {
                 tray.destroy();
                 this.initTray();
-            },
-            getAndClearToBeCreatedTaskFilePath: function () {
-                return cmd.getAndClearToBeCreatedTaskFilePath();
             },
             isMaximized: function () {
                 return getCurrentWindow().isMaximized && getCurrentWindow().isMaximized();

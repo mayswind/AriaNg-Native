@@ -303,6 +303,9 @@ settings.file-count=({{count}} 个文件)
 settings.total-count=(共计: {{count}}个)
 debug.latest-logs=最近 {{count}} 条日志
 
+[native.error]
+file-not-found=文件 {{filepath}} 没有找到!
+
 [rpc.error]
 unauthorized=认证失败!
 

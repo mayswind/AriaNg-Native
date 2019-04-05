@@ -3,8 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const electron = require('electron');
 
 const core = require('./core');
+
+const ipcMain = electron.ipcMain;
 
 const supportedFileExtensions = {
     '.torrent': 'torrent',
@@ -24,14 +27,12 @@ const argv = require('yargs')
     .parse(process.argv.slice(1));
 
 let cmd = (function () {
-    let toBeCreatedTaskFilePath = null;
-
     let isContainsSupportedFileArg = function (arg) {
         if (!arg) {
             return false;
         }
 
-        var fileExtension = path.extname(arg);
+        let fileExtension = path.extname(arg);
 
         if (!supportedFileExtensions[fileExtension]) {
             return false;
@@ -65,35 +66,35 @@ let cmd = (function () {
     };
 
     let asyncNewTaskFromFile = function (filePath) {
-        toBeCreatedTaskFilePath = filePath;
-    };
-
-    let getAndClearToBeCreatedTaskFilePath = function () {
-        let result = null;
-        let filePath = toBeCreatedTaskFilePath;
-
         if (!filePath) {
-            return result;
+            return;
         }
 
-        toBeCreatedTaskFilePath = null;
+        let fileExtension = path.extname(filePath);
 
-        try {
-            let fileExtension = path.extname(filePath);
-            let fileContent = fs.readFileSync(filePath);
+        if (!supportedFileExtensions[fileExtension]) {
+            return;
+        }
 
-            result = {
-                type: supportedFileExtensions[fileExtension],
-                fileName: path.basename(filePath),
-                base64Content: Buffer.from(fileContent).toString('base64')
-            };
-        } catch (e) {
-            result = {
-                exception: e
+        ipcMain.once('view-content-loaded', (event, arg) => {
+            let result = null;
+
+            try {
+                let fileContent = fs.readFileSync(filePath);
+
+                result = {
+                    type: supportedFileExtensions[fileExtension],
+                    fileName: path.basename(filePath),
+                    base64Content: Buffer.from(fileContent).toString('base64')
+                };
+            } catch (e) {
+                result = {
+                    exception: e
+                }
             }
-        }
 
-        return result;
+            event.sender.send('new-task-from-file', result)
+        });
     };
 
     return {
@@ -103,8 +104,7 @@ let cmd = (function () {
         loadNewTaskUrl: loadNewTaskUrl,
         navigateTo: navigateTo,
         navigateToNewTask: navigateToNewTask,
-        asyncNewTaskFromFile: asyncNewTaskFromFile,
-        getAndClearToBeCreatedTaskFilePath: getAndClearToBeCreatedTaskFilePath
+        asyncNewTaskFromFile: asyncNewTaskFromFile
     }
 })();
 

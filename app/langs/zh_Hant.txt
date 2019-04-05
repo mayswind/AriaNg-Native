@@ -303,6 +303,9 @@ settings.file-count=({{count}} 個檔案)
 settings.total-count=(共計: {{count}}個)
 debug.latest-logs=最近 {{count}} 條記錄
 
+[native.error]
+file-not-found=檔案 {{filepath}} 沒有找到!
+
 [rpc.error]
 unauthorized=認證失敗!
 

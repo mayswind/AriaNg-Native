@@ -307,6 +307,11 @@
                 'settings.total-count': '(Total Count: {{count}})',
                 'debug.latest-logs': 'Latest {{count}} Logs'
             },
+            'native': {
+                'error': {
+                    'file-not-found': 'File {{filepath}} not found!'
+                }
+            },
             'rpc': {
                 'error': {
                     'unauthorized': 'Authorization Failed!'

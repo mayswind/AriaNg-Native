@@ -285,6 +285,10 @@
             $document.unbind('keypress');
         });
 
+        $rootScope.$on('$viewContentLoaded', function () {
+            ariaNgNativeElectronService.sendMessageToMainProcess('view-content-loaded', true);
+        });
+
         $rootScope.$on('$translateChangeSuccess', function(event, current, previous) {
             ariaNgNativeElectronService.setTrayLanguage();
         });

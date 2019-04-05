@@ -56,6 +56,26 @@
             return aria2TaskService.newMetalinkTask(task, pauseOnAdded, responseCallback);
         };
 
+        var openFileViaElectron = function (event, result) {
+            if (result && !result.exception) {
+                $scope.context.uploadFile = result;
+                $scope.context.taskType = result.type;
+                $scope.changeTab('options');
+            } else if (result && result.exception) {
+                ariaNgLogService.error('[NewTaskController] get file via electron error', result.exception);
+
+                if (result.exception.code === 'ENOENT') {
+                    ariaNgLocalizationService.showError('native.error.file-not-found', null, {
+                        textParams: {
+                            filepath: result.exception.path
+                        }
+                    });
+                } else {
+                    ariaNgLocalizationService.showError(result.exception.code);
+                }
+            }
+        };
+
         $scope.context = {
             currentTab: 'links',
             taskType: 'urls',
@@ -210,17 +230,10 @@
             return urls ? urls.length : 0;
         };
 
-        $scope.$on('$viewContentLoaded', function () {
-            var result = ariaNgNativeElectronService.getAndClearToBeCreatedTaskFilePath();
+        ariaNgNativeElectronService.onMainProcessMessage('new-task-from-file', openFileViaElectron);
 
-            if (result && !result.exception) {
-                $scope.context.uploadFile = result;
-                $scope.context.taskType = result.type;
-                $scope.changeTab('options');
-            } else if (result && result.exception) {
-                ariaNgLogService.error('[NewTaskController] get file via electron error', result.exception);
-                ariaNgLocalizationService.showError(result.exception);
-            }
+        $scope.$on('$destroy', function () {
+            ariaNgNativeElectronService.removeMainProcessCallback('new-task-from-file', openFileViaElectron);
         });
 
         $rootScope.loadPromise = $timeout(function () {}, 100);
