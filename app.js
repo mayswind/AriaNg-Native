@@ -1,8 +1,10 @@
+'use strict';
+
 const os = require('os');
 const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 
-const package = require('./package');
+const pkgfile = require('./package');
 const config = require('./config');
 const core = require('./core');
 const cmd = require('./cmd');
@@ -18,8 +20,8 @@ if (!singletonLock) {
 }
 
 global.settings = {
-    version: package.version,
-    ariaNgVersion: package["ariang-version"],
+    version: pkgfile.version,
+    ariaNgVersion: pkgfile["ariang-version"],
     isDevMode: cmd.argv.development,
     useCustomAppTitle: false
 };

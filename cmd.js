@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
@@ -97,7 +99,6 @@ let cmd = (function () {
     return {
         argv: argv,
         isContainsSupportedFileArg: isContainsSupportedFileArg,
-        getIndexUrl: getIndexUrl,
         loadIndexUrl: loadIndexUrl,
         loadNewTaskUrl: loadNewTaskUrl,
         navigateTo: navigateTo,

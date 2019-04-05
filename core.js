@@ -1,3 +1,5 @@
+'use strict';
+
 let core = {
     mainWindow: null,
     isConfirmExit: false
