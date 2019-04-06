@@ -10,7 +10,7 @@ AriaNg Native is a desktop application built by [Electron](https://github.com/el
 2. Taskbar tray, supporting closing to the tray
 3. Command line arguments, supporting create new task by opening file
 4. Local file system support
-5. File Drag support
+5. File & Url Drag support
 
 ## Introduction of AriaNg
 Please visit [https://github.com/mayswind/AriaNg](https://github.com/mayswind/AriaNg) for more information.
