@@ -89,7 +89,7 @@
     ],
     "win": {
       "icon": "assets/AriaNg.ico",
-      "target": "portable"
+      "target": "7z"
     },
     "mac": {
       "category": "public.app-category.utilities",
