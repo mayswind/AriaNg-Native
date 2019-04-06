@@ -35,6 +35,8 @@ if (os.platform() === 'win32') {
     global.settings.useCustomAppTitle = true;
 }
 
+app.setAppUserModelId(pkgfile.appId);
+
 app.on('window-all-closed', () => {
     app.quit();
 });
