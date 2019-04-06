@@ -1,3 +1,8 @@
+a {
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+}
+
 .dropzone {
     background: rgba(255, 255, 255, 0.85);
     display: none;
