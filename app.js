@@ -177,4 +177,20 @@ app.on('ready', () => {
             cmd.navigateToNewTask();
         }
     });
+
+    ipcMain.on('new-drop-text', (event, arg) => {
+        if (!arg) {
+            return;
+        }
+
+        let text = arg.text;
+        let location = arg.location;
+
+        if (location.indexOf('/new') === 0) {
+            cmd.newTaskFromText(text);
+        } else {
+            cmd.asyncNewTaskFromText(text);
+            cmd.navigateToNewTask();
+        }
+    });
 });

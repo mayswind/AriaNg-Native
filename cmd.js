@@ -94,7 +94,7 @@ let cmd = (function () {
             }
         }
 
-        core.mainWindow.webContents.send('new-task-from-file', result)
+        core.mainWindow.webContents.send('new-task-from-file', result);
     };
 
     let asyncNewTaskFromFile = function (filePath) {
@@ -107,6 +107,25 @@ let cmd = (function () {
         });
     };
 
+    let newTaskFromText = function (text, async) {
+        let result = {
+            text: text,
+            async: !!async
+        };
+
+        core.mainWindow.webContents.send('new-task-from-text', result);
+    };
+
+    let asyncNewTaskFromText = function (text) {
+        if (!text) {
+            return;
+        }
+
+        ipcMain.once('view-content-loaded', (event, arg) => {
+            newTaskFromText(text, true);
+        });
+    };
+
     return {
         argv: argv,
         isContainsSupportedFileArg: isContainsSupportedFileArg,
@@ -116,7 +135,9 @@ let cmd = (function () {
         navigateToNewTask: navigateToNewTask,
         showErrorMessage: showErrorMessage,
         newTaskFromFile: newTaskFromFile,
-        asyncNewTaskFromFile: asyncNewTaskFromFile
+        asyncNewTaskFromFile: asyncNewTaskFromFile,
+        newTaskFromText: newTaskFromText,
+        asyncNewTaskFromText: asyncNewTaskFromText
     }
 })();
 

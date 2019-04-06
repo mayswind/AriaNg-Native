@@ -81,6 +81,18 @@
             });
         };
 
+        var openUrlViaElectron = function (event, result) {
+            $scope.$apply(function () {
+                $scope.context.taskType = 'urls';
+                $scope.context.urls = result.text;
+                $scope.context.uploadFile = null;
+
+                if (!result.async) {
+                    $rootScope.loadPromise = $timeout(function () {}, 200);
+                }
+            });
+        };
+
         $scope.context = {
             currentTab: 'links',
             taskType: 'urls',
@@ -236,9 +248,11 @@
         };
 
         ariaNgNativeElectronService.onMainProcessMessage('new-task-from-file', openFileViaElectron);
+        ariaNgNativeElectronService.onMainProcessMessage('new-task-from-text', openUrlViaElectron);
 
         $scope.$on('$destroy', function () {
             ariaNgNativeElectronService.removeMainProcessCallback('new-task-from-file', openFileViaElectron);
+            ariaNgNativeElectronService.removeMainProcessCallback('new-task-from-text', openUrlViaElectron);
         });
 
         $rootScope.loadPromise = $timeout(function () {}, 100);

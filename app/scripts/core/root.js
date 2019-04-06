@@ -108,6 +108,14 @@
                 }
             };
 
+            var getDropText = function (e) {
+                if (!e || !e.dataTransfer) {
+                    return null;
+                }
+
+                return e.dataTransfer.getData('text');
+            };
+
             var dropzone = angular.element('#dropzone');
             var dropzoneFileZone = angular.element('#dropzone-filezone');
 
@@ -127,6 +135,16 @@
                 if (file) {
                     ariaNgNativeElectronService.sendMessageToMainProcess('new-drop-file', {
                         filePath: file.path,
+                        location: $location.url()
+                    });
+                    return;
+                }
+
+                var text = getDropText(e.originalEvent);
+
+                if (text) {
+                    ariaNgNativeElectronService.sendMessageToMainProcess('new-drop-text', {
+                        text: text,
                         location: $location.url()
                     });
                 }
