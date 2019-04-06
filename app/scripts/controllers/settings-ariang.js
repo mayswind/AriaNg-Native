@@ -258,7 +258,9 @@
         });
 
         $scope.copyExportSettings = function () {
-            clipboard.copyText($scope.context.exportSettings);
+            clipboard.copyText($scope.context.exportSettings, {
+                container: angular.element('#export-settings-modal')[0]
+            });
             $scope.context.exportSettingsCopied = true;
         };
 
