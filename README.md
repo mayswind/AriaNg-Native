@@ -28,11 +28,8 @@ Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.co
 
     $ npm install
     
-    # For Windows x86
-    $ npm run publish:win32
-    
-    # For Windows x64
-    $ npm run publish:win64
+    # For Windows
+    $ npm run publish:win
     
     # For macOS
     $ npm run publish:osx
