@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').run(['$rootScope', '$location', '$document', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', function ($rootScope, $location, $document, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').run(['$rootScope', '$location', '$window', '$document', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', function ($rootScope, $location, $window, $document, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService) {
         var isUrlMatchUrl2 = function (url, url2) {
             if (url === url2) {
                 return true;
@@ -91,6 +91,46 @@
 
             $('.content-wrapper').css('min-height', windowHeight - footerHeight);
             $('.content-body').css('height', windowHeight - neg);
+        };
+
+        var initFileDragSupport = function () {
+            var getDropFile = function (e) {
+                if (!e || !e.dataTransfer) {
+                    return null;
+                }
+
+                if (e.dataTransfer.items && e.dataTransfer.items[0] && e.dataTransfer.items[0].kind === 'file') {
+                    return e.dataTransfer.items[0].getAsFile();
+                } else if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    return  e.dataTransfer.files[0];
+                } else {
+                    return null;
+                }
+            };
+
+            var dropzone = angular.element('#dropzone');
+            var dropzoneFileZone = angular.element('#dropzone-filezone');
+
+            angular.element($window).on('dragenter', function (e) {
+                dropzone.show();
+                e.preventDefault();
+            });
+
+            dropzoneFileZone.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }).on('dragleave dragend drop', function() {
+                dropzone.hide();
+            }).on('drop', function(e) {
+                var file = getDropFile(e.originalEvent);
+
+                if (file) {
+                    ariaNgNativeElectronService.sendMessageToMainProcess('new-drop-file', {
+                        filePath: file.path,
+                        location: $location.url()
+                    });
+                }
+            });
         };
 
         var showSidebar = function () {
@@ -219,6 +259,10 @@
             $location.path(routeUrl);
         });
 
+        ariaNgNativeElectronService.onMainProcessMessage('show-error', function (event, message) {
+            ariaNgLocalizationService.showError(message);
+        });
+
         ariaNgSettingService.setDebugMode(ariaNgNativeElectronService.isDevMode());
 
         ariaNgSettingService.onFirstAccess(function () {
@@ -296,5 +340,6 @@
         initCheck();
         initNavbar();
         initContentWrapper();
+        initFileDragSupport();
     }]);
 }());

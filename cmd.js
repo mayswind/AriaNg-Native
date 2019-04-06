@@ -65,35 +65,45 @@ let cmd = (function () {
         navigateTo('/new');
     };
 
+    let showErrorMessage = function (message) {
+        core.mainWindow.webContents.send('show-error', message);
+    };
+
+    let newTaskFromFile = function (filePath, async) {
+        let fileExtension = path.extname(filePath);
+
+        if (!supportedFileExtensions[fileExtension]) {
+            cmd.showErrorMessage('The selected file type is invalid!');
+            return;
+        }
+
+        let result = null;
+
+        try {
+            let fileContent = fs.readFileSync(filePath);
+
+            result = {
+                type: supportedFileExtensions[fileExtension],
+                fileName: path.basename(filePath),
+                base64Content: Buffer.from(fileContent).toString('base64'),
+                async: !!async
+            };
+        } catch (e) {
+            result = {
+                exception: e
+            }
+        }
+
+        core.mainWindow.webContents.send('new-task-from-file', result)
+    };
+
     let asyncNewTaskFromFile = function (filePath) {
         if (!filePath) {
             return;
         }
 
-        let fileExtension = path.extname(filePath);
-
-        if (!supportedFileExtensions[fileExtension]) {
-            return;
-        }
-
         ipcMain.once('view-content-loaded', (event, arg) => {
-            let result = null;
-
-            try {
-                let fileContent = fs.readFileSync(filePath);
-
-                result = {
-                    type: supportedFileExtensions[fileExtension],
-                    fileName: path.basename(filePath),
-                    base64Content: Buffer.from(fileContent).toString('base64')
-                };
-            } catch (e) {
-                result = {
-                    exception: e
-                }
-            }
-
-            event.sender.send('new-task-from-file', result)
+            newTaskFromFile(filePath, true);
         });
     };
 
@@ -104,6 +114,8 @@ let cmd = (function () {
         loadNewTaskUrl: loadNewTaskUrl,
         navigateTo: navigateTo,
         navigateToNewTask: navigateToNewTask,
+        showErrorMessage: showErrorMessage,
+        newTaskFromFile: newTaskFromFile,
         asyncNewTaskFromFile: asyncNewTaskFromFile
     }
 })();

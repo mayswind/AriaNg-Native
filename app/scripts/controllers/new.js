@@ -57,23 +57,28 @@
         };
 
         var openFileViaElectron = function (event, result) {
-            if (result && !result.exception) {
-                $scope.context.uploadFile = result;
-                $scope.context.taskType = result.type;
-                $scope.changeTab('options');
-            } else if (result && result.exception) {
-                ariaNgLogService.error('[NewTaskController] get file via electron error', result.exception);
+            $scope.$apply(function () {
+                if (result && !result.exception) {
+                    $scope.context.uploadFile = result;
+                    $scope.context.taskType = result.type;
 
-                if (result.exception.code === 'ENOENT') {
-                    ariaNgLocalizationService.showError('native.error.file-not-found', null, {
-                        textParams: {
-                            filepath: result.exception.path
-                        }
-                    });
-                } else {
-                    ariaNgLocalizationService.showError(result.exception.code);
+                    if (!result.async) {
+                        $rootScope.loadPromise = $timeout(function () {}, 200);
+                    }
+                } else if (result && result.exception) {
+                    ariaNgLogService.error('[NewTaskController] get file via electron error', result.exception);
+
+                    if (result.exception.code === 'ENOENT') {
+                        ariaNgLocalizationService.showError('native.error.file-not-found', null, {
+                            textParams: {
+                                filepath: result.exception.path
+                            }
+                        });
+                    } else {
+                        ariaNgLocalizationService.showError(result.exception.code);
+                    }
                 }
-            }
+            });
         };
 
         $scope.context = {

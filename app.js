@@ -11,6 +11,7 @@ const cmd = require('./cmd');
 const tray = require('./tray');
 
 const app = electron.app;
+const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
 
 const singletonLock = app.requestSingleInstanceLock();
@@ -159,5 +160,21 @@ app.on('ready', () => {
         config.save('maximized');
 
         core.mainWindow = null;
+    });
+
+    ipcMain.on('new-drop-file', (event, arg) => {
+        if (!arg) {
+            return;
+        }
+
+        let filePath = arg.filePath;
+        let location = arg.location;
+
+        if (location.indexOf('/new') === 0) {
+            cmd.newTaskFromFile(filePath);
+        } else {
+            cmd.asyncNewTaskFromFile(filePath);
+            cmd.navigateToNewTask();
+        }
     });
 });

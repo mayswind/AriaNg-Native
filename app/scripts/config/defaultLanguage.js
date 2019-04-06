@@ -254,6 +254,7 @@
             'Restore Down': 'Restore Down',
             'Runtime Environment': 'Runtime Environment',
             'Reload AriaNg Native': 'Reload AriaNg Native',
+            'Create New Task': 'Create New Task',
             'tray': {
                 'ShowAriaNgNative': '&Show AriaNg Native',
                 'Exit': 'E&xit',

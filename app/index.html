@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="../node_modules/angularjs-dragula/dist/dragula.min.css"/>
     <link rel="stylesheet" href="styles/core/core.css">
     <link rel="stylesheet" href="styles/core/extend.css">
+    <link rel="stylesheet" href="styles/core/native-core.css">
     <link rel="stylesheet" href="styles/core/app-title.css">
     <link rel="stylesheet" href="styles/controls/global-status.css"/>
     <link rel="stylesheet" href="styles/controls/task-table.css"/>
@@ -32,6 +33,17 @@
     <link rel="stylesheet" href="styles/theme/default-app-title.css">
 </head>
 <body class="hold-transition skin-aria-ng sidebar-mini fixed ng-cloak" ng-class="{'custom-app-title': useCustomAppTitle}">
+<div id="dropzone" class="dropzone">
+    <div id="dropzone-filezone" class="dropzone-filezone"></div>
+    <div class="dropzone-tip-container">
+        <div class="dropzone-tip-wrapper">
+            <div class="dropzone-tip">
+                <i class="fa fa-file-o"></i>
+                <h3 translate>Create New Task</h3>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="wrapper" ng-controller="MainController" ng-swipe-left="swipeActions.leftSwipe()" ng-swipe-right="swipeActions.rightSwipe()" ng-swipe-disable-mouse>
     <header class="main-header">
         <div class="logo">
