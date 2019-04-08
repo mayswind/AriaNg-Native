@@ -20,6 +20,8 @@ if (!singletonLock) {
     app.quit();
 }
 
+let filePathInCommandLine = process.argv.length > 1 && process.argv[1];
+
 function isEnableCloseToHide() {
     return tray.isEnabled() || os.platform() === 'darwin';
 }
@@ -35,13 +37,21 @@ if (!app.isPackaged) {
     global.settings.isDevMode = true;
 }
 
+app.setAppUserModelId(pkgfile.appId);
+
 if (os.platform() === 'win32') {
     global.settings.useCustomAppTitle = true;
 }
 
-app.setAppUserModelId(pkgfile.appId);
-
 if (os.platform() === 'darwin') {
+    app.on('will-finish-launching', () => {
+        app.on('open-file', (event, filePath) => {
+            if (filePath) {
+                filePathInCommandLine = filePath;
+            }
+        });
+    });
+
     app.on('before-quit', () => {
         core.isConfirmExit = true;
     });
@@ -126,8 +136,8 @@ app.on('ready', () => {
 
     core.mainWindow.setMenu(null);
 
-    if (ipc.isContainsSupportedFileArg(process.argv[1])) {
-        ipc.asyncNewTaskFromFile(process.argv[1]);
+    if (ipc.isContainsSupportedFileArg(filePathInCommandLine)) {
+        ipc.asyncNewTaskFromFile(filePathInCommandLine);
         ipc.loadNewTaskUrl();
     } else {
         ipc.loadIndexUrl();
