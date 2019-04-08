@@ -113,6 +113,20 @@
     },
     "dmg": {
       "icon": "assets/AriaNg.icns"
-    }
+    },
+    "fileAssociations": [
+      {
+        "ext": "torrent",
+        "description": "Bittorrent File"
+      },
+      {
+        "ext": "metalink",
+        "description": "Metadata File"
+      },
+      {
+        "ext": "meta4",
+        "description": "Metadata File"
+      }
+    ]
   }
 }
