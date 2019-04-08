@@ -20,6 +20,10 @@ if (!singletonLock) {
     app.quit();
 }
 
+function isEnableCloseToHide() {
+    return tray.isEnabled() || os.platform() === 'darwin';
+}
+
 global.settings = {
     version: pkgfile.version,
     ariaNgVersion: pkgfile["ariang-version"],
@@ -36,6 +40,16 @@ if (os.platform() === 'win32') {
 }
 
 app.setAppUserModelId(pkgfile.appId);
+
+if (os.platform() === 'darwin') {
+    app.on('before-quit', () => {
+        core.isConfirmExit = true;
+    });
+
+    app.on('activate', () => {
+        core.mainWindow.show();
+    });
+}
 
 app.on('window-all-closed', () => {
     app.quit();
@@ -143,8 +157,8 @@ app.on('ready', () => {
         config.y = positions[1];
     });
 
-    core.mainWindow.on('close',function (event) {
-        if (tray.isEnabled() && !core.isConfirmExit) {
+    core.mainWindow.on('close', (event) => {
+        if (isEnableCloseToHide() && !core.isConfirmExit) {
             event.preventDefault();
             core.mainWindow.hide();
             event.returnValue = false;
