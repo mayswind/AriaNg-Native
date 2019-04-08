@@ -6,10 +6,13 @@
         var globalStatRefreshPromise = null;
 
         var refreshPageTitle = function () {
-            $document[0].title = ariaNgTitleService.getFinalTitleByGlobalStat({
+            var title = ariaNgTitleService.getFinalTitleByGlobalStat({
                 globalStat: $scope.globalStat,
                 currentRpcProfile: getCurrentRPCProfile()
             });
+
+            $document[0].title = title;
+            ariaNgNativeElectronService.setTrayToolTip(title);
         };
 
         var refreshGlobalStat = function (silent, callback) {

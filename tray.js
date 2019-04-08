@@ -14,7 +14,7 @@ let instance = null;
 let iconPath = path.join(__dirname, 'assets', 'AriaNg.ico');
 
 let init = function (context) {
-    if (instance == null && os.platform() === 'win32') {
+    if (instance === null && os.platform() === 'win32') {
         instance = new Tray(iconPath);
         instance.setToolTip('AriaNg Native');
         instance.setContextMenu(Menu.buildFromTemplate([
@@ -45,9 +45,15 @@ let init = function (context) {
 };
 
 let destroy = function () {
-    if (instance != null) {
+    if (instance !== null) {
         instance.destroy();
         instance = null;
+    }
+};
+
+let setToolTip = function (value) {
+    if (instance !== null) {
+        instance.setToolTip(value);
     }
 };
 
@@ -56,5 +62,6 @@ module.exports = {
         return !!instance;
     },
     init: init,
-    destroy: destroy
+    destroy: destroy,
+    setToolTip: setToolTip
 };

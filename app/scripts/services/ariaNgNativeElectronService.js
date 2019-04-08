@@ -138,6 +138,11 @@
                 }
                 this.initTray();
             },
+            setTrayToolTip: function (value) {
+                if (tray.setToolTip) {
+                    tray.setToolTip(value);
+                }
+            },
             reload: function () {
                 getCurrentWindow().reload && getCurrentWindow().reload();
             },
