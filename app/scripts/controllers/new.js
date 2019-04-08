@@ -247,12 +247,12 @@
             return urls ? urls.length : 0;
         };
 
-        ariaNgNativeElectronService.onMainProcessMessage('new-task-from-file', openFileViaElectron);
-        ariaNgNativeElectronService.onMainProcessMessage('new-task-from-text', openUrlViaElectron);
+        ariaNgNativeElectronService.onMainProcessNewTaskFromFile(openFileViaElectron);
+        ariaNgNativeElectronService.onMainProcessNewTaskFromText(openUrlViaElectron);
 
         $scope.$on('$destroy', function () {
-            ariaNgNativeElectronService.removeMainProcessCallback('new-task-from-file', openFileViaElectron);
-            ariaNgNativeElectronService.removeMainProcessCallback('new-task-from-text', openUrlViaElectron);
+            ariaNgNativeElectronService.removeMainProcessNewTaskFromFileCallback(openFileViaElectron);
+            ariaNgNativeElectronService.removeMainProcessNewTaskFromTextCallback(openUrlViaElectron);
         });
 
         $rootScope.loadPromise = $timeout(function () {}, 100);

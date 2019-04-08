@@ -133,7 +133,7 @@
                 var file = getDropFile(e.originalEvent);
 
                 if (file) {
-                    ariaNgNativeElectronService.sendMessageToMainProcess('new-drop-file', {
+                    ariaNgNativeElectronService.sendNewDropFileMessageToMainProcess({
                         filePath: file.path,
                         location: $location.url()
                     });
@@ -143,7 +143,7 @@
                 var text = getDropText(e.originalEvent);
 
                 if (text) {
-                    ariaNgNativeElectronService.sendMessageToMainProcess('new-drop-text', {
+                    ariaNgNativeElectronService.sendNewDropTextMessageToMainProcess({
                         text: text,
                         location: $location.url()
                     });
@@ -265,19 +265,19 @@
         $rootScope.useCustomAppTitle = ariaNgNativeElectronService.useCustomAppTitle();
         $rootScope.nativeWindowContext.maximized = ariaNgNativeElectronService.isMaximized();
 
-        ariaNgNativeElectronService.onMainWindowEvent('maximize', function () {
+        ariaNgNativeElectronService.onMainWindowMaximize(function () {
             $rootScope.nativeWindowContext.maximized = true;
         });
 
-        ariaNgNativeElectronService.onMainWindowEvent('unmaximize', function () {
+        ariaNgNativeElectronService.onMainWindowUnmaximize(function () {
             $rootScope.nativeWindowContext.maximized = false;
         });
 
-        ariaNgNativeElectronService.onMainProcessMessage('navigate-to', function (event, routeUrl) {
+        ariaNgNativeElectronService.onMainProcessNavigateTo(function (event, routeUrl) {
             $location.path(routeUrl);
         });
 
-        ariaNgNativeElectronService.onMainProcessMessage('show-error', function (event, message) {
+        ariaNgNativeElectronService.onMainProcessShowError(function (event, message) {
             ariaNgLocalizationService.showError(message);
         });
 
@@ -348,7 +348,7 @@
         });
 
         $rootScope.$on('$viewContentLoaded', function () {
-            ariaNgNativeElectronService.sendMessageToMainProcess('view-content-loaded', true);
+            ariaNgNativeElectronService.sendViewLoadedMessageToMainProcess($location.path());
         });
 
         $rootScope.$on('$translateChangeSuccess', function(event, current, previous) {

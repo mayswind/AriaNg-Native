@@ -8,10 +8,10 @@ const pkgfile = require('./package');
 const config = require('./config');
 const core = require('./core');
 const cmd = require('./cmd');
+const ipc = require('./ipc');
 const tray = require('./tray');
 
 const app = electron.app;
-const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
 
 const singletonLock = app.requestSingleInstanceLock();
@@ -51,9 +51,9 @@ app.on('second-instance', (event, argv, workingDirectory) => {
 
         core.mainWindow.focus();
 
-        if (cmd.isContainsSupportedFileArg(argv[1])) {
-            cmd.asyncNewTaskFromFile(argv[1]);
-            cmd.navigateToNewTask();
+        if (ipc.isContainsSupportedFileArg(argv[1])) {
+            ipc.asyncNewTaskFromFile(argv[1]);
+            ipc.navigateToNewTask();
         }
     }
 });
@@ -112,11 +112,11 @@ app.on('ready', () => {
 
     core.mainWindow.setMenu(null);
 
-    if (cmd.isContainsSupportedFileArg(process.argv[1])) {
-        cmd.asyncNewTaskFromFile(process.argv[1]);
-        cmd.loadNewTaskUrl();
+    if (ipc.isContainsSupportedFileArg(process.argv[1])) {
+        ipc.asyncNewTaskFromFile(process.argv[1]);
+        ipc.loadNewTaskUrl();
     } else {
-        cmd.loadIndexUrl();
+        ipc.loadIndexUrl();
     }
 
     core.mainWindow.once('ready-to-show', () => {
@@ -164,7 +164,7 @@ app.on('ready', () => {
         core.mainWindow = null;
     });
 
-    ipcMain.on('new-drop-file', (event, arg) => {
+    ipc.onNewDropFile((event, arg) => {
         if (!arg) {
             return;
         }
@@ -173,14 +173,14 @@ app.on('ready', () => {
         let location = arg.location;
 
         if (location.indexOf('/new') === 0) {
-            cmd.newTaskFromFile(filePath);
+            ipc.newTaskFromFile(filePath);
         } else {
-            cmd.asyncNewTaskFromFile(filePath);
-            cmd.navigateToNewTask();
+            ipc.asyncNewTaskFromFile(filePath);
+            ipc.navigateToNewTask();
         }
     });
 
-    ipcMain.on('new-drop-text', (event, arg) => {
+    ipc.onNewDropText((event, arg) => {
         if (!arg) {
             return;
         }
@@ -189,10 +189,10 @@ app.on('ready', () => {
         let location = arg.location;
 
         if (location.indexOf('/new') === 0) {
-            cmd.newTaskFromText(text);
+            ipc.newTaskFromText(text);
         } else {
-            cmd.asyncNewTaskFromText(text);
-            cmd.navigateToNewTask();
+            ipc.asyncNewTaskFromText(text);
+            ipc.navigateToNewTask();
         }
     });
 });

@@ -3,19 +3,15 @@
 const fs = require('fs');
 const path = require('path');
 
-let localfs = (function () {
-    let getFullPath = function (dir, filename) {
-        return path.join(dir, filename);
-    };
+let getFullPath = function (dir, fileName) {
+    return path.join(dir, fileName);
+};
 
-    let isExists = function (fullpath) {
-        return fs.existsSync(fullpath);
-    };
+let isExists = function (fullPath) {
+    return fs.existsSync(fullPath);
+};
 
-    return {
-        getFullPath: getFullPath,
-        isExists: isExists
-    }
-})();
-
-module.exports = localfs;
+module.exports = {
+    getFullPath: getFullPath,
+    isExists: isExists
+};

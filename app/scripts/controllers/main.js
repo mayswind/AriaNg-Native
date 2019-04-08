@@ -385,8 +385,8 @@
             ariaNgNativeElectronService.exitApp();
         };
 
-        $scope.openExternalLink = function (url) {
-            ariaNgNativeElectronService.openExternalLink(url);
+        $scope.openProjectLink = function () {
+            ariaNgNativeElectronService.openProjectLink();
         };
 
         if (ariaNgSettingService.getTitleRefreshInterval() > 0) {

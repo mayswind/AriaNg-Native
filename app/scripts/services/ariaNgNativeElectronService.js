@@ -35,6 +35,22 @@
             return remote.getCurrentWindow();
         };
 
+        var onMainWindowEvent = function (event, callback) {
+            getCurrentWindow().on && getCurrentWindow().on(event, callback);
+        };
+
+        var onMainProcessMessage = function (channel, callback) {
+            ipcRenderer.on && ipcRenderer.on(channel, callback);
+        };
+
+        var removeMainProcessCallback = function (channel, callback) {
+            ipcRenderer.removeListener && ipcRenderer.removeListener(channel, callback);
+        };
+
+        var sendMessageToMainProcess = function (channel, message) {
+            ipcRenderer.send && ipcRenderer.send(channel, message);
+        };
+
         return {
             getRuntimeEnvironment: function () {
                 if (!remote.process || !remote.process.versions) {
@@ -66,35 +82,60 @@
             isLocalFSExists: function (fullpath) {
                 return localfs.isExists(fullpath);
             },
-            openExternalLink: function (url) {
-                return shell.openExternal && shell.openExternal(url);
+            openProjectLink: function () {
+                return shell.openExternal && shell.openExternal('http://github.com/mayswind/AriaNg-Native');
             },
             openFileInDirectory: function (dir, filename) {
                 var fullpath = localfs.getFullPath(dir, filename);
                 return shell.showItemInFolder && shell.showItemInFolder(fullpath);
             },
-            sendMessageToMainProcess: function (channel, message) {
-                ipcRenderer.send && ipcRenderer.send(channel, message);
+            onMainWindowMaximize: function (callback) {
+                onMainWindowEvent('maximize', callback);
             },
-            onMainWindowEvent: function (event, callback) {
-                getCurrentWindow().on && getCurrentWindow().on(event, callback);
+            onMainWindowUnmaximize: function (callback) {
+                onMainWindowEvent('unmaximize', callback);
             },
-            onMainProcessMessage: function (channel, callback) {
-                ipcRenderer.on && ipcRenderer.on(channel, callback);
+            onMainProcessNavigateTo: function (callback) {
+                onMainProcessMessage('navigate-to', callback);
             },
-            removeMainProcessCallback: function (channel, callback) {
-                ipcRenderer.removeListener && ipcRenderer.removeListener(channel, callback);
+            onMainProcessShowError: function (callback) {
+                onMainProcessMessage('show-error', callback);
+            },
+            onMainProcessNewTaskFromFile: function (callback) {
+                onMainProcessMessage('new-task-from-file', callback);
+            },
+            onMainProcessNewTaskFromText: function (callback) {
+                onMainProcessMessage('new-task-from-text', callback);
+            },
+            removeMainProcessNewTaskFromFileCallback: function (callback) {
+                removeMainProcessCallback('new-task-from-file', callback);
+            },
+            removeMainProcessNewTaskFromTextCallback: function (callback) {
+                removeMainProcessCallback('new-task-from-text',  callback);
+            },
+            sendViewLoadedMessageToMainProcess: function (message) {
+                sendMessageToMainProcess('view-content-loaded', message);
+            },
+            sendNewDropFileMessageToMainProcess: function (message) {
+                sendMessageToMainProcess('new-drop-file', message);
+            },
+            sendNewDropTextMessageToMainProcess: function (message) {
+                sendMessageToMainProcess('new-drop-text', message);
             },
             initTray: function () {
-                tray.init({
-                    labels: {
-                        ShowAriaNgNative: ariaNgLocalizationService.getLocalizedText('tray.ShowAriaNgNative'),
-                        Exit: ariaNgLocalizationService.getLocalizedText('tray.Exit')
-                    }
-                });
+                if (tray.init) {
+                    tray.init({
+                        labels: {
+                            ShowAriaNgNative: ariaNgLocalizationService.getLocalizedText('tray.ShowAriaNgNative'),
+                            Exit: ariaNgLocalizationService.getLocalizedText('tray.Exit')
+                        }
+                    });
+                }
             },
             setTrayLanguage: function () {
-                tray.destroy();
+                if (tray.destroy) {
+                    tray.destroy();
+                }
                 this.initTray();
             },
             reload: function () {

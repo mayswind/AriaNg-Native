@@ -196,7 +196,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a class="toolbar" title="{{'Help' | translate}}" ng-click="openExternalLink('http://github.com/mayswind/AriaNg-Native')" target="_blank">
+                        <a class="toolbar" title="{{'Help' | translate}}" ng-click="openProjectLink()" target="_blank">
                             <i class="fa fa-question-circle-o"></i>
                         </a>
                     </li>
@@ -328,10 +328,12 @@
 </div>
 
 <script>
-    window.nodeRequire = require;
-    delete window.require;
-    delete window.exports;
-    delete window.module;
+    if (window.require) {
+        window.nodeRequire = require;
+        delete window.require;
+        delete window.exports;
+        delete window.module;
+    }
 </script>
 <script src="../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="../node_modules/angular/angular.min.js"></script>
