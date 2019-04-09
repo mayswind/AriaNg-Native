@@ -201,8 +201,8 @@
             });
         };
 
-        $scope.isTaskRetryable = function (task) {
-            return task && task.status === 'error' && task.errorDescription && !task.bittorrent;
+        $scope.hasRetryableTask = function () {
+            return $rootScope.taskContext.hasRetryableTask();
         };
 
         $scope.isSelectedTaskRetryable = function () {
@@ -213,7 +213,7 @@
             }
 
             for (var i = 0; i < selectedTasks.length; i++) {
-                if (!$scope.isTaskRetryable(selectedTasks[i])) {
+                if (!$rootScope.isTaskRetryable(selectedTasks[i])) {
                     return false;
                 }
             }
@@ -234,7 +234,7 @@
             var skipCount = 0;
 
             for (var i = 0; i < tasks.length; i++) {
-                if ($scope.isTaskRetryable(tasks[i])) {
+                if ($rootScope.isTaskRetryable(tasks[i])) {
                     retryableTasks.push(tasks[i]);
                 } else {
                     skipCount++;
@@ -324,6 +324,10 @@
 
         $scope.selectAllTasks = function () {
             $rootScope.taskContext.selectAll();
+        };
+
+        $scope.selectAllFailedTasks = function () {
+            $rootScope.taskContext.selectAllFailed();
         };
 
         $scope.copySelectedOneTaskDownloadLink = function () {

@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="task-table-body" ng-class="{'draggable': isSupportDragTask()}" dragula="'task-list'" dragula-model="taskContext.list">
-            <div class="row pointer-cursor" ng-repeat="task in taskContext.list | filter: filterByTaskName | taskOrderBy: getOrderType()"
+            <div class="row pointer-cursor" ng-repeat="task in taskContext.list | filter: filterTask | taskOrderBy: getOrderType()"
                  data-gid="{{task.gid}}" data-selected="{{!!taskContext.selected[task.gid]}}" data-toggle="context" data-target="#task-table-contextmenu"
                  ng-click="taskContext.selected[task.gid] = !taskContext.selected[task.gid]">
                 <div class="col-md-8 col-sm-7 col-xs-12">
@@ -70,7 +70,8 @@
                     </div>
                 </div>
                 <div class="col-md-2 col-sm-2 hidden-xs">
-                    <span class="task-download-speed" ng-bind="task.status === 'waiting' ? ('Waiting' | translate) : (task.status === 'paused' ? ('Paused' | translate) : (task.status === 'active' ? (!task.seeder || task.downloadSpeed > 0 ? (task.downloadSpeed | readableVolume) + '/s' : '-') : ''))"></span>
+                    <span class="task-download-speed" title="{{task.status === 'active' ? (('Download Speed' | translate) + ': ' + (task.downloadSpeed | readableVolume) + '/s') + (task.bittorrent ? ', ' + ('Upload Speed' | translate) + ': ' + (task.uploadSpeed | readableVolume) + '/s' : '') : ''}}"
+                          ng-bind="task.status === 'waiting' ? ('Waiting' | translate) : (task.status === 'paused' ? ('Paused' | translate) : (task.status === 'active' ? (!task.seeder || task.downloadSpeed > 0 ? (task.downloadSpeed | readableVolume) + '/s' : '-') : ''))"></span>
                 </div>
                 <div class="task-right-arrow visible-md visible-lg">
                     <a ng-href="#!/task/detail/{{task.gid}}" title="{{'Click to view task detail' | translate}}">
@@ -161,6 +162,12 @@
                     <a tabindex="-1" class="pointer-cursor" title="{{'Select All' | translate}}" ng-click="selectAllTasks()">
                         <i class="fa fa-th-large fa-fw"></i>
                         <span translate>Select All</span>
+                    </a>
+                </li>
+                <li ng-if="hasRetryableTask()">
+                    <a tabindex="-1" class="pointer-cursor" title="{{'Select All Failed Task' | translate}}" ng-click="selectAllFailedTasks()">
+                        <i class="fa fa-fw"></i>
+                        <span translate>Select All Failed Task</span>
                     </a>
                 </li>
                 <li class="divider" ng-if="isSingleUrlTaskSelected() || isSingleBittorrentHasInfoHashTaskSelected()"></li>
