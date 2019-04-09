@@ -18,7 +18,7 @@ let getIndexUrl = function () {
     return url.format({
         protocol: 'file',
         slashes: true,
-        pathname: path.join(__dirname, 'app', 'index.html')
+        pathname: path.join(__dirname, '..', 'app', 'index.html')
     });
 };
 

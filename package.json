@@ -8,7 +8,7 @@
   "version": "1.0.3",
   "ariang-version": "1.0.3",
   "description": "A better aria2 desktop frontend than AriaNg, containing full feature of AriaNg and also has many features that AriaNg cannot implement.",
-  "main": "main.js",
+  "main": "main/main.js",
   "scripts": {
     "postinstall": "install-app-deps",
     "clean": "rimraf dist",
@@ -83,7 +83,7 @@
     "files": [
       "app/**",
       "assets/**",
-      "*.js",
+      "main/**",
       "package.json"
     ],
     "win": {
@@ -106,12 +106,17 @@
       ],
       "fileAssociations": [
         {
-          "ext": ["torrent"],
+          "ext": [
+            "torrent"
+          ],
           "description": "Bittorrent File",
           "icon": "assets/AriaNg_Torrent.ico"
         },
         {
-          "ext": ["metalink", "meta4"],
+          "ext": [
+            "metalink",
+            "meta4"
+          ],
           "description": "Metadata File",
           "icon": "assets/AriaNg_Metalink.ico"
         }
@@ -123,11 +128,16 @@
       "target": "dmg",
       "fileAssociations": [
         {
-          "ext": ["torrent"],
+          "ext": [
+            "torrent"
+          ],
           "icon": "assets/AriaNg_Torrent.icns"
         },
         {
-          "ext": ["metalink", "meta4"],
+          "ext": [
+            "metalink",
+            "meta4"
+          ],
           "icon": "assets/AriaNg_Metalink.icns"
         }
       ]

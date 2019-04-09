@@ -4,7 +4,7 @@ const os = require('os');
 const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 
-const pkgfile = require('./package');
+const pkgfile = require('../package');
 const config = require('./config');
 const core = require('./core');
 const cmd = require('./cmd');
