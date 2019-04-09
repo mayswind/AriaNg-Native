@@ -20,7 +20,7 @@ if (!singletonLock) {
     app.quit();
 }
 
-let filePathInCommandLine = process.argv.length > 1 && process.argv[1];
+let filePathInCommandLine = cmd.argv.file;
 
 function isEnableCloseToHide() {
     return tray.isEnabled() || os.platform() === 'darwin';
