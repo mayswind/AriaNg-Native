@@ -103,29 +103,37 @@
             "ia32"
           ]
         }
+      ],
+      "fileAssociations": [
+        {
+          "ext": ["torrent"],
+          "description": "Bittorrent File",
+          "icon": "assets/AriaNg_Torrent.ico"
+        },
+        {
+          "ext": ["metalink", "meta4"],
+          "description": "Metadata File",
+          "icon": "assets/AriaNg_Metalink.ico"
+        }
       ]
     },
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "assets/AriaNg.icns",
-      "target": "dmg"
+      "target": "dmg",
+      "fileAssociations": [
+        {
+          "ext": ["torrent"],
+          "icon": "assets/AriaNg_Torrent.icns"
+        },
+        {
+          "ext": ["metalink", "meta4"],
+          "icon": "assets/AriaNg_Metalink.icns"
+        }
+      ]
     },
     "dmg": {
       "icon": "assets/AriaNg.icns"
-    },
-    "fileAssociations": [
-      {
-        "ext": "torrent",
-        "description": "Bittorrent File"
-      },
-      {
-        "ext": "metalink",
-        "description": "Metadata File"
-      },
-      {
-        "ext": "meta4",
-        "description": "Metadata File"
-      }
-    ]
+    }
   }
 }
