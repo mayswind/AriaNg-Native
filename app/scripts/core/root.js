@@ -434,7 +434,7 @@
         });
 
         $rootScope.$on('$translateChangeSuccess', function(event, current, previous) {
-            ariaNgNativeElectronService.setTrayLanguage();
+            ariaNgNativeElectronService.setMainWindowLanguage();
         });
 
         initCheck();

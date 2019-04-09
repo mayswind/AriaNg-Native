@@ -135,6 +135,7 @@ app.on('ready', () => {
     }
 
     core.mainWindow.setMenu(null);
+    tray.init();
 
     if (ipc.isContainsSupportedFileArg(filePathInCommandLine)) {
         ipc.asyncNewTaskFromFile(filePathInCommandLine);

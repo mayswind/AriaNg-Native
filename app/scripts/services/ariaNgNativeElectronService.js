@@ -79,6 +79,9 @@
             useCustomAppTitle: function () {
                 return !!getSetting('useCustomAppTitle');
             },
+            setMainWindowLanguage: function () {
+                this.setTrayMenu();
+            },
             isLocalFSExists: function (fullpath) {
                 return localfs.isExists(fullpath);
             },
@@ -122,21 +125,15 @@
             sendNewDropTextMessageToMainProcess: function (message) {
                 sendMessageToMainProcess('new-drop-text', message);
             },
-            initTray: function () {
-                if (tray.init) {
-                    tray.init({
+            setTrayMenu: function () {
+                if (tray.setContextMenu) {
+                    tray.setContextMenu({
                         labels: {
                             ShowAriaNgNative: ariaNgLocalizationService.getLocalizedText('tray.ShowAriaNgNative'),
                             Exit: ariaNgLocalizationService.getLocalizedText('tray.Exit')
                         }
                     });
                 }
-            },
-            setTrayLanguage: function () {
-                if (tray.destroy) {
-                    tray.destroy();
-                }
-                this.initTray();
             },
             setTrayToolTip: function (value) {
                 if (tray.setToolTip) {
