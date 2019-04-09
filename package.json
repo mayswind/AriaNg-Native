@@ -7,7 +7,7 @@
   "appId": "net.mayswind.ariang",
   "version": "1.0.3",
   "ariang-version": "1.0.3",
-  "description": "AriaNg Native is a desktop application containing full feature of AriaNg, and also has many features that AriaNg cannot implement.",
+  "description": "A better aria2 desktop frontend than AriaNg, containing full feature of AriaNg and also has many features that AriaNg cannot implement.",
   "main": "main.js",
   "scripts": {
     "postinstall": "install-app-deps",
