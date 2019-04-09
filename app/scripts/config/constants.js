@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('ariaNg').constant('ariaNgConstants', {
-        title: 'AriaNg',
+        title: 'AriaNg Native',
         appPrefix: 'AriaNg',
         optionStorageKey: 'Options',
         languageStorageKeyPrefix: 'Language',
