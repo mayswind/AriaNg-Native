@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
+
+const pkgfile = require('../package');
 const core = require('./core');
 
 const ipcMain = electron.ipcMain;
@@ -18,7 +20,7 @@ let getIndexUrl = function () {
     return url.format({
         protocol: 'file',
         slashes: true,
-        pathname: path.join(__dirname, '..', 'app', 'index.html')
+        pathname: path.join(__dirname, '..', pkgfile.entry)
     });
 };
 

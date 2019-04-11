@@ -9,6 +9,7 @@
   "ariang-version": "1.0.3",
   "description": "A better aria2 desktop frontend than AriaNg, containing full feature of AriaNg and also has many features that AriaNg cannot implement.",
   "main": "main/main.js",
+  "entry": "app/index.html",
   "scripts": {
     "postinstall": "install-app-deps",
     "clean": "rimraf dist",
