@@ -14,8 +14,10 @@
     "postinstall": "install-app-deps",
     "clean": "rimraf dist",
     "start": "electron .",
-    "publish:win": "npm run clean && build --win",
-    "publish:osx": "npm run clean && build --mac"
+    "copy-main-dependencies": "node copy-main-modules.js -s node_modules -d dist -v",
+    "copy-app-dependencies": "node copy-app-modules.js -d dist -v",
+    "publish:win": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && build --win",
+    "publish:osx": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && build --mac"
   },
   "repository": {
     "type": "git",
@@ -38,6 +40,8 @@
   "devDependencies": {
     "electron": "^4.1.4",
     "electron-builder": "^20.39.0",
+    "fs-extra": "^7.0.1",
+    "jsonfile": "^5.0.0",
     "rimraf": "^2.6.2"
   },
   "dependencies": {
@@ -77,11 +81,31 @@
     "electron-store": "^3.1.0",
     "yargs": "^13.2.2"
   },
+  "mainDependencies": [
+    "electron-localshortcut",
+    "electron-store",
+    "yargs"
+  ],
   "build": {
     "appId": "net.mayswind.ariang",
     "productName": "AriaNg Native",
     "copyright": "Copyright (c) 2017-2019 MaysWind (i@mayswind.net)",
     "files": [
+      "!node_modules",
+      {
+        "from": "dist/node_modules",
+        "to": "node_modules",
+        "filter": [
+          "**/*.js",
+          "**/*.json",
+          "**/*.css",
+          "**/*.woff",
+          "**/*.woff2",
+          "**/*.svg",
+          "**/*.eot",
+          "**/*.ttf"
+        ]
+      },
       "app/**",
       "assets/**",
       "main/**",
