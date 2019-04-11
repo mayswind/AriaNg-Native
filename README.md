@@ -19,6 +19,9 @@ Please visit [https://github.com/mayswind/AriaNg](https://github.com/mayswind/Ar
 #### Windows
 ![AriaNg Native](https://raw.githubusercontent.com/mayswind/AriaNg-WebSite/master/screenshots/ariang_native_windows.png)
 
+#### macOS
+![AriaNg Native](https://raw.githubusercontent.com/mayswind/AriaNg-WebSite/master/screenshots/ariang_native_macos.png)
+
 ## Installation
 #### Prebuilt release
 Latest Release: [https://github.com/mayswind/AriaNg-Native/releases](https://github.com/mayswind/AriaNg-Native/releases)
