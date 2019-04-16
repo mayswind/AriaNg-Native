@@ -91,7 +91,10 @@ app.on('ready', () => {
         minHeight: 400,
         fullscreenable: false,
         frame: !global.settings.useCustomAppTitle,
-        show: false
+        show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     if (config.x || config.y) {
