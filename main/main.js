@@ -39,7 +39,7 @@ if (!app.isPackaged) {
 
 app.setAppUserModelId(pkgfile.appId);
 
-if (os.platform() === 'win32') {
+if (os.platform() === 'win32' && !cmd.argv.classic) {
     global.settings.useCustomAppTitle = true;
 }
 

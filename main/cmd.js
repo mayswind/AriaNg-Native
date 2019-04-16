@@ -10,6 +10,11 @@ const argv = yargs
         type: 'boolean',
         describe: 'Enable Development Mode (press F12 to open DevTools)',
     })
+    .option('c', {
+        alias: 'classic',
+        type: 'boolean',
+        describe: 'Use classic window title bar (for Windows only)',
+    })
     .help('h')
     .alias('h', 'help')
     .parse(process.argv.slice(1));
