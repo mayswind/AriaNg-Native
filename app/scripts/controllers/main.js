@@ -67,6 +67,7 @@
 
         $scope.rpcSettings = ariaNgSettingService.getAllRpcSettings();
         $scope.currentRpcProfile = getCurrentRPCProfile();
+        $scope.isCurrentRpcUseWebSocket = ariaNgSettingService.isCurrentRpcUseWebSocket();
 
         $scope.isTaskSelected = function () {
             return $rootScope.taskContext.getSelectedTaskIds().length > 0;
