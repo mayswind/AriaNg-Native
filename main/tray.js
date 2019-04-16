@@ -17,6 +17,14 @@ let init = function () {
     if (instance === null && os.platform() === 'win32') {
         instance = new Tray(iconPath);
         instance.setToolTip('AriaNg Native');
+        instance.setContextMenu(Menu.buildFromTemplate([
+            {
+                label: 'Quit', click: function () {
+                    core.isConfirmExit = true;
+                    app.quit();
+                }
+            }
+        ]));
         instance.on('double-click', () => {
             if (!core.mainWindow.isVisible()) {
                 core.mainWindow.show();
