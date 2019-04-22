@@ -206,6 +206,10 @@
             return $rootScope.taskContext.hasRetryableTask();
         };
 
+        $scope.hasCompletedTask = function () {
+            return $rootScope.taskContext.hasCompletedTask();
+        };
+
         $scope.isSelectedTaskRetryable = function () {
             var selectedTasks = $rootScope.taskContext.getSelectedTasks();
 
@@ -329,6 +333,10 @@
 
         $scope.selectAllFailedTasks = function () {
             $rootScope.taskContext.selectAllFailed();
+        };
+
+        $scope.selectAllCompletedTasks = function () {
+            $rootScope.taskContext.selectAllCompleted();
         };
 
         $scope.copySelectedOneTaskDownloadLink = function () {
