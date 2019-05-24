@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('AriaNgSettingsController', ['$rootScope', '$scope', '$routeParams', '$window', '$interval', '$timeout', '$filter', 'clipboard', 'ariaNgLanguages', 'ariaNgCommonService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $window, $interval, $timeout, $filter, clipboard, ariaNgLanguages, ariaNgCommonService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2SettingService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').controller('AriaNgSettingsController', ['$rootScope', '$scope', '$routeParams', '$window', '$interval', '$timeout', '$filter', 'clipboard', 'ariaNgLanguages', 'ariaNgCommonService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2SettingService', 'ariaNgVersionService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $window, $interval, $timeout, $filter, clipboard, ariaNgLanguages, ariaNgCommonService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2SettingService, ariaNgVersionService, ariaNgNativeElectronService) {
         var extendType = $routeParams.extendType;
         var lastRefreshPageNotification = null;
 
@@ -53,6 +53,7 @@
             currentTab: 'global',
             ariaNgNativeVersion: ariaNgNativeElectronService.getVersion(),
             ariaNgVersion: ariaNgNativeElectronService.getAriaNgVersion(),
+            isCurrentLatestVersion: false,
             runtimeEnvironment: ariaNgNativeElectronService.getRuntimeEnvironment(),
             runtimeEnvironmentCollapsed: true,
             languages: ariaNgLanguages,
@@ -95,6 +96,29 @@
             }
 
             return parseInt($scope.context.currentTab.substring(3));
+        };
+
+        $scope.checkUpdate = function () {
+            return ariaNgVersionService.getTheLatestVersion()
+                .then(function onSuccess(response) {
+                    if (!response || !response.data || !response.data.tag_name) {
+                        ariaNgLogService.warn('[AriaNgSettingsController.checkUpdate] data format of latest version is invalid', response);
+                        ariaNgLocalizationService.showError('Failed to get latest version!');
+                        return;
+                    }
+
+                    var latestVersion = response.data.tag_name;
+
+                    if (ariaNgVersionService.compareVersion($scope.context.ariaNgNativeVersion, latestVersion) >= 0) {
+                        ariaNgLocalizationService.showInfo('Check Update', 'You have installed the latest version!');
+                        $scope.context.isCurrentLatestVersion = true;
+                    } else {
+                        ariaNgNativeElectronService.openProjectReleaseLink();
+                    }
+                }).catch(function onError(response) {
+                    ariaNgLogService.error('[AriaNgSettingsController.checkUpdate] failed to get latest version', response);
+                    ariaNgLocalizationService.showError('Failed to get latest version!');
+                });
         };
 
         $scope.updateTitlePreview = function () {

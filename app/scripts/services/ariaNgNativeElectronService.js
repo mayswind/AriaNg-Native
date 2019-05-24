@@ -88,6 +88,9 @@
             openProjectLink: function () {
                 return shell.openExternal && shell.openExternal('http://github.com/mayswind/AriaNg-Native');
             },
+            openProjectReleaseLink: function () {
+                return shell.openExternal && shell.openExternal('https://github.com/mayswind/AriaNg-Native/releases');
+            },
             openFileInDirectory: function (dir, filename) {
                 var fullpath = localfs.getFullPath(dir, filename);
                 return shell.showItemInFolder && shell.showItemInFolder(fullpath);

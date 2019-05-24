@@ -25,7 +25,12 @@
                         <div class="setting-key col-sm-4">
                             <span translate>AriaNg Version</span>
                         </div>
-                        <div class="setting-value col-sm-8" ng-bind="'AriaNg Native ' + context.ariaNgNativeVersion + ' (AriaNg ' + context.ariaNgVersion + ')'"></div>
+                        <div class="setting-value col-sm-8">
+                            <span ng-bind="'AriaNg Native ' + context.ariaNgNativeVersion + ' (AriaNg ' + context.ariaNgVersion + ')'"></span>
+                            <button class="btn btn-xs btn-default" ng-click="checkUpdate()" ng-disabled="context.isCurrentLatestVersion" promise-btn>
+                                <span ng-bind="(context.isCurrentLatestVersion ? 'Latest Version' : 'Check Update') | translate" translate>Check Update</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="row" ng-if="context.runtimeEnvironment">
                         <div class="setting-key col-sm-4">
