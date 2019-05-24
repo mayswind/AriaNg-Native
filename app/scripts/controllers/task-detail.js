@@ -34,6 +34,11 @@
                 $scope.nativeContext.directoryExists = ariaNgNativeElectronService.isLocalFSExists(task.dir);
             }
 
+            if ($scope.task) {
+                delete $scope.task.verifiedLength;
+                delete $scope.task.verifyIntegrityPending;
+            }
+
             $scope.task = ariaNgCommonService.copyObjectTo(task, $scope.task);
 
             $rootScope.taskContext.list = [$scope.task];
@@ -78,6 +83,7 @@
                     }
 
                     var task = response.data;
+                    
                     processTask(task);
 
                     if (requireBtPeers(task)) {
