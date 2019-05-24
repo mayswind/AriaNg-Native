@@ -86,7 +86,7 @@
                 return localfs.isExists(fullpath);
             },
             openProjectLink: function () {
-                return shell.openExternal && shell.openExternal('http://github.com/mayswind/AriaNg-Native');
+                return shell.openExternal && shell.openExternal('https://github.com/mayswind/AriaNg-Native');
             },
             openProjectReleaseLink: function () {
                 return shell.openExternal && shell.openExternal('https://github.com/mayswind/AriaNg-Native/releases');
