@@ -169,7 +169,7 @@ app.on('ready', () => {
     });
 
     core.mainWindow.on('resize', () => {
-        var sizes = core.mainWindow.getSize();
+        let sizes = core.mainWindow.getSize();
         config.width = sizes[0];
         config.height = sizes[1];
     });
@@ -183,7 +183,7 @@ app.on('ready', () => {
     });
 
     core.mainWindow.on('move', () => {
-        var positions = core.mainWindow.getPosition();
+        let positions = core.mainWindow.getPosition();
         config.x = positions[0];
         config.y = positions[1];
     });
