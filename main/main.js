@@ -97,7 +97,24 @@ app.on('ready', () => {
         }
     });
 
-    if (config.x || config.y) {
+    let displays = electron.screen.getAllDisplays();
+    let isLastPositionInScreen = false;
+
+    if (config.x >= 0 && config.y >= 0) {
+        for (let i = 0; i < displays.length; i++) {
+            let x1 = displays[i].bounds.x;
+            let x2 = x1 + displays[i].workAreaSize.width;
+            let y1 = displays[i].bounds.y;
+            let y2 = y1 + displays[i].workAreaSize.height;
+
+            if (config.x >= x1 && config.x <= x2 && config.y >= y1 && config.y <= y2) {
+                isLastPositionInScreen = true;
+                break;
+            }
+        }
+    }
+
+    if (isLastPositionInScreen) {
         core.mainWindow.setPosition(config.x, config.y);
     }
 
