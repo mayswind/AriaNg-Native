@@ -10,6 +10,7 @@
         };
         var ipcRenderer = electron.ipcRenderer || {};
         var shell = electron.shell || {};
+        var menu = remote.require('./menu') || {};
         var tray = remote.require('./tray') || {};
         var localfs = remote.require('./localfs') || {};
 
@@ -80,6 +81,7 @@
                 return !!getSetting('useCustomAppTitle');
             },
             setMainWindowLanguage: function () {
+                this.setApplicationMenu();
                 this.setTrayMenu();
             },
             isLocalFSExists: function (fullpath) {
@@ -127,6 +129,15 @@
             },
             sendNewDropTextMessageToMainProcess: function (message) {
                 sendMessageToMainProcess('new-drop-text', message);
+            },
+            setApplicationMenu: function () {
+                if (menu.setApplicationMenu) {
+                    menu.setApplicationMenu({
+                        labels: {
+                            Quit: ariaNgLocalizationService.getLocalizedText('menu.Quit')
+                        }
+                    });
+                }
             },
             setTrayMenu: function () {
                 if (tray.setContextMenu) {

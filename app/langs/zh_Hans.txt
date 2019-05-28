@@ -260,6 +260,9 @@ Runtime Environment=运行环境
 Reload AriaNg Native=重新加载 AriaNg Native
 Create New Task=创建新任务
 
+[menu]
+Quit=退出 AriaNg Native
+
 [tray]
 ShowAriaNgNative=显示 AriaNg Native (&S)
 Exit=退出 (&X)

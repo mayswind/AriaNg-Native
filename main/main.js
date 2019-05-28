@@ -9,6 +9,7 @@ const config = require('./config');
 const core = require('./core');
 const cmd = require('./cmd');
 const ipc = require('./ipc');
+const menu = require('./menu');
 const tray = require('./tray');
 
 const app = electron.app;
@@ -57,7 +58,9 @@ if (os.platform() === 'darwin') {
     });
 
     app.on('activate', () => {
-        core.mainWindow.show();
+        if (core.mainWindow) {
+            core.mainWindow.show();
+        }
     });
 }
 
@@ -154,7 +157,7 @@ app.on('ready', () => {
         });
     }
 
-    core.mainWindow.setMenu(null);
+    menu.init();
     tray.init();
 
     if (ipc.isContainsSupportedFileArg(filePathInCommandLine)) {

@@ -264,6 +264,9 @@
             'Runtime Environment': 'Runtime Environment',
             'Reload AriaNg Native': 'Reload AriaNg Native',
             'Create New Task': 'Create New Task',
+            'menu': {
+                'Quit': 'Quit AriaNg Native',
+            },
             'tray': {
                 'ShowAriaNgNative': '&Show AriaNg Native',
                 'Exit': 'E&xit',
