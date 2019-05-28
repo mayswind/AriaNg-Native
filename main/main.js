@@ -200,14 +200,18 @@ app.on('ready', () => {
     });
 
     core.mainWindow.on('closed', () => {
-        if (!config.maximized) {
-            config.save('width');
-            config.save('height');
-            config.save('x');
-            config.save('y');
-        }
+        try {
+            if (!config.maximized) {
+                config.save('width');
+                config.save('height');
+                config.save('x');
+                config.save('y');
+            }
 
-        config.save('maximized');
+            config.save('maximized');
+        } catch (ex) {
+            ; // Do Nothing
+        }
 
         core.mainWindow = null;
     });
