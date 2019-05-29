@@ -5,7 +5,7 @@
   },
   "name": "ariang-native",
   "appId": "net.mayswind.ariang",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "ariang-version": "1.1.1",
   "description": "A better aria2 desktop frontend than AriaNg, containing full feature of AriaNg and also has many features that AriaNg cannot implement.",
   "main": "main/main.js",
