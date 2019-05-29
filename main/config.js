@@ -35,7 +35,9 @@ let config = {
     y: userSettingsStore.get('y'),
     maximized: !!userSettingsStore.get('maximized'),
     save: function (item) {
-        userSettingsStore.set(item, this[item]);
+        if (item && this[item] != undefined) {
+            userSettingsStore.set(item, this[item]);
+        }
     }
 };
 

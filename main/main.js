@@ -202,10 +202,18 @@ app.on('ready', () => {
     core.mainWindow.on('closed', () => {
         try {
             if (!config.maximized) {
-                config.save('width');
-                config.save('height');
-                config.save('x');
-                config.save('y');
+                if (config.width > 0) {
+                    config.save('width');
+                }
+
+                if (config.height > 0) {
+                    config.save('height');
+                }
+
+                if (config.x > 0 && config.y > 0) {
+                    config.save('x');
+                    config.save('y');
+                }
             }
 
             config.save('maximized');
