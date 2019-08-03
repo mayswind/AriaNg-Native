@@ -6,7 +6,7 @@
   "name": "ariang-native",
   "appId": "net.mayswind.ariang",
   "version": "1.1.2",
-  "ariang-version": "1.1.1",
+  "ariang-version": "1.1.2",
   "description": "A better aria2 desktop frontend than AriaNg, containing full feature of AriaNg and also has many features that AriaNg cannot implement.",
   "main": "main/main.js",
   "entry": "app/index.html",
@@ -38,9 +38,9 @@
   },
   "homepage": "http://ariang.mayswind.net/",
   "devDependencies": {
-    "electron": "^5.0.2",
-    "electron-builder": "^20.39.0",
-    "fs-extra": "^8.0.1",
+    "electron": "^5.0.8",
+    "electron-builder": "^21.2.0",
+    "fs-extra": "^8.1.0",
     "jsonfile": "^5.0.0",
     "rimraf": "^2.6.3"
   },
