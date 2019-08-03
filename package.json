@@ -16,8 +16,8 @@
     "start": "electron .",
     "copy-main-dependencies": "node copy-main-modules.js -s node_modules -d dist -v",
     "copy-app-dependencies": "node copy-app-modules.js -d dist -v",
-    "publish:win": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && build --win",
-    "publish:osx": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && build --mac"
+    "publish:win": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --win",
+    "publish:osx": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --mac"
   },
   "repository": {
     "type": "git",
