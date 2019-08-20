@@ -117,6 +117,7 @@
             }
 
             var languageKey = ariaNgConstants.languageStorageKeyPrefix + '.' + options.key;
+            var languageResource = null; // AriaNg Native DO NOT cache language resource
 
             if (ariaNgAssetsCacheService.getLanguageAsset(options.key)) {
                 var languageObject = getLanguageObject(ariaNgAssetsCacheService.getLanguageAsset(options.key));
