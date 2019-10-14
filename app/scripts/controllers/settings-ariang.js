@@ -27,6 +27,19 @@
             return null;
         };
 
+        var getNativeSettings = function () {
+            var originalConfig = ariaNgNativeElectronService.getNativeConfig();
+            var config = {};
+
+            if (!originalConfig.minimizedToTray) {
+                config.afterMainWindowClosed = 'exit-application';
+            } else {
+                config.afterMainWindowClosed = 'minimize-to-tray';
+            }
+
+            return config;
+        };
+
         var setNeedRefreshPage = function () {
             if (lastRefreshPageNotification) {
                 return;
@@ -56,6 +69,7 @@
             showRpcSecret: false,
             isInsecureProtocolDisabled: ariaNgSettingService.isInsecureProtocolDisabled(),
             settings: ariaNgSettingService.getAllOptions(),
+            nativeSettings: getNativeSettings(),
             sessionSettings: ariaNgSettingService.getAllSessionOptions(),
             rpcSettings: ariaNgSettingService.getAllRpcSettings(),
             isSupportBlob: ariaNgFileService.isSupportBlob(),
@@ -219,6 +233,14 @@
 
         $scope.setAfterRetryingTask = function (value) {
             ariaNgSettingService.setAfterRetryingTask(value);
+        };
+
+        $scope.setAfterMainWindowClosed = function (value) {
+            if (value === 'minimize-to-tray') {
+                ariaNgNativeElectronService.setMinimizedToTray(true);
+            } else if (value === 'exit-application') {
+                ariaNgNativeElectronService.setMinimizedToTray(false);
+            }
         };
 
         $scope.showImportSettingsModal = function () {

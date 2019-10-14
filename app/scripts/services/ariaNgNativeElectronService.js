@@ -10,6 +10,7 @@
         };
         var ipcRenderer = electron.ipcRenderer || {};
         var shell = electron.shell || {};
+        var config = remote.require('./config') || {};
         var menu = remote.require('./menu') || {};
         var tray = remote.require('./tray') || {};
         var localfs = remote.require('./localfs') || {};
@@ -79,6 +80,27 @@
             },
             useCustomAppTitle: function () {
                 return !!getSetting('useCustomAppTitle');
+            },
+            getNativeConfig: function () {
+                var cfg = {};
+
+                for (var key in config) {
+                    if (!config.hasOwnProperty(key)) {
+                        continue;
+                    }
+
+                    if (angular.isFunction(config[key])) {
+                        continue;
+                    }
+
+                    cfg[key] = angular.copy(config[key]);
+                }
+
+                return cfg;
+            },
+            setMinimizedToTray: function (value) {
+                config.minimizedToTray = !!value;
+                config.save('minimizedToTray');
             },
             setMainWindowLanguage: function () {
                 this.setApplicationMenu();

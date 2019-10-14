@@ -17,6 +17,9 @@ const userSettingsSchema = {
     maximized: {
         type: 'boolean'
     },
+    minimizedToTray: {
+        type: 'boolean'
+    },
     pos_x: {
         type: 'number'
     },
@@ -34,6 +37,7 @@ let config = {
     x: userSettingsStore.get('x'),
     y: userSettingsStore.get('y'),
     maximized: !!userSettingsStore.get('maximized'),
+    minimizedToTray: userSettingsStore.get('minimizedToTray', true),
     save: function (item) {
         if (item && this[item] != undefined) {
             userSettingsStore.set(item, this[item]);

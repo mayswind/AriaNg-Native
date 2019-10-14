@@ -24,7 +24,7 @@ if (!singletonLock) {
 let filePathInCommandLine = process.argv.length > 1 && process.argv[1];
 
 function isEnableCloseToHide() {
-    return tray.isEnabled() || os.platform() === 'darwin';
+    return (tray.isEnabled() || os.platform() === 'darwin') && config.minimizedToTray;
 }
 
 global.settings = {
