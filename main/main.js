@@ -117,8 +117,10 @@ app.on('ready', () => {
         }
     }
 
-    if (isLastPositionInScreen) {
+    if (config.defaultPosition === 'last-position' && isLastPositionInScreen) {
         core.mainWindow.setPosition(config.x, config.y);
+    } else if (config.defaultPosition === 'screen-center') {
+        core.mainWindow.center();
     }
 
     if (config.maximized) {

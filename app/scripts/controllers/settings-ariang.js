@@ -31,6 +31,8 @@
             var originalConfig = ariaNgNativeElectronService.getNativeConfig();
             var config = {};
 
+            config.defaultPosition = originalConfig.defaultPosition || 'last-position';
+
             if (!originalConfig.minimizedToTray) {
                 config.afterMainWindowClosed = 'exit-application';
             } else {
@@ -234,6 +236,10 @@
         $scope.setAfterRetryingTask = function (value) {
             ariaNgSettingService.setAfterRetryingTask(value);
         };
+
+        $scope.setDefaultPosition = function (value) {
+            ariaNgNativeElectronService.setDefaultPosition(value);
+        }
 
         $scope.setAfterMainWindowClosed = function (value) {
             if (value === 'minimize-to-tray') {

@@ -98,6 +98,10 @@
 
                 return cfg;
             },
+            setDefaultPosition: function (value) {
+                config.defaultPosition = value;
+                config.save('defaultPosition');
+            },
             setMinimizedToTray: function (value) {
                 config.minimizedToTray = !!value;
                 config.save('minimizedToTray');

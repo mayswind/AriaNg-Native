@@ -191,6 +191,18 @@
                     </div>
                     <div class="row">
                         <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Default Window Position</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <select class="form-control" style="width: 100%;" ng-model="context.nativeSettings.defaultPosition"
+                                    ng-change="setDefaultPosition(context.nativeSettings.defaultPosition)">
+                                <option value="last-position" translate>Last Position</option>
+                                <option value="screen-center" translate>Screen Center</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
                             <span translate>Action After Main Window Closed</span>
                         </div>
                         <div class="setting-value col-sm-8">

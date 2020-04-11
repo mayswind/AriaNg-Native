@@ -37,6 +37,7 @@ let config = {
     x: userSettingsStore.get('x'),
     y: userSettingsStore.get('y'),
     maximized: !!userSettingsStore.get('maximized'),
+    defaultPosition: userSettingsStore.get('defaultPosition') || 'last-position',
     minimizedToTray: userSettingsStore.get('minimizedToTray', true),
     save: function (item) {
         if (item && this[item] != undefined) {
