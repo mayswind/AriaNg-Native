@@ -191,6 +191,17 @@
                     </div>
                     <div class="row">
                         <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Include Prefix When Copying From Task Details</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <select class="form-control" style="width: 100%;" ng-model="context.settings.includePrefixWhenCopyingFromTaskDetails"
+                                    ng-change="setIncludePrefixWhenCopyingFromTaskDetails(context.settings.includePrefixWhenCopyingFromTaskDetails)"
+                                    ng-options="option.value as (option.name | translate) for option in context.trueFalseOptions">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
                             <span translate>Default Window Position</span>
                         </div>
                         <div class="setting-value col-sm-8">

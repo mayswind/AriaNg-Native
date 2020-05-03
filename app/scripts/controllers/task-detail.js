@@ -656,8 +656,12 @@
                 value += angular.element(element).text().trim();
             });
 
-            var info = name + ': ' + value;
-            clipboard.copyText(info);
+            if (ariaNgSettingService.getIncludePrefixWhenCopyingFromTaskDetails()) {
+                var info = name + ': ' + value;
+                clipboard.copyText(info);
+            } else {
+                clipboard.copyText(value);
+            };
         };
 
         $scope.openLocalDirectory = function (dir, filename) {

@@ -187,6 +187,7 @@
             'Stay on Current Page': 'Stay on Current Page',
             'Remove Old Tasks After Retrying': 'Remove Old Tasks After Retrying',
             'Confirm Task Removal': 'Confirm Task Removal',
+            'Include Prefix When Copying From Task Details': 'Include Prefix When Copying From Task Details',
             'Default Window Position': 'Default Window Position',
             'Last Position': 'Last Position',
             'Screen Center': 'Screen Center',

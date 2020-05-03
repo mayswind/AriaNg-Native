@@ -183,6 +183,7 @@ Navigate to Downloading Tasks Page=轉到正在下載工作頁面
 Stay on Current Page=留在目前頁面
 Remove Old Tasks After Retrying=重試工作後刪除原工作
 Confirm Task Removal=工作刪除前確認
+Include Prefix When Copying From Task Details=工作詳情頁複製時包括前綴
 Default Window Position=預設窗口位置
 Last Position=上次使用的位置
 Screen Center=螢幕中央
