@@ -5,9 +5,9 @@
   },
   "name": "ariang-native",
   "appId": "net.mayswind.ariang",
-  "version": "1.1.5",
-  "ariang-version": "1.1.5",
-  "description": "A better aria2 desktop frontend than AriaNg, containing all features of AriaNg and has more features for desktop.",
+  "version": "1.1.6",
+  "ariang-version": "1.1.6",
+  "description": "A better aria2 desktop frontend than AriaNg, containing all features of AriaNg and more features for desktop.",
   "main": "main/main.js",
   "entry": "app/index.html",
   "scripts": {
@@ -89,7 +89,7 @@
   "build": {
     "appId": "net.mayswind.ariang",
     "productName": "AriaNg Native",
-    "copyright": "Copyright (c) 2017-2019 MaysWind (i@mayswind.net)",
+    "copyright": "Copyright (c) 2017-2020 MaysWind (i@mayswind.net)",
     "files": [
       "!node_modules",
       {
