@@ -121,7 +121,12 @@
             },
             openFileInDirectory: function (dir, filename) {
                 var fullpath = localfs.getFullPath(dir, filename);
-                return shell.showItemInFolder && shell.showItemInFolder(fullpath);
+
+                if (localfs.isExists(fullpath)) {
+                    return shell.showItemInFolder && shell.showItemInFolder(fullpath);
+                } else {
+                    return shell.openItem && shell.openItem(dir);
+                }
             },
             onMainWindowMaximize: function (callback) {
                 onMainWindowEvent('maximize', callback);
