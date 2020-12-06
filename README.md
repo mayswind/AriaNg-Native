@@ -3,7 +3,7 @@
 [![Lastest Release](https://img.shields.io/github/release/mayswind/AriaNg-Native.svg?style=flat)](https://github.com/mayswind/AriaNg-Native/releases)
 
 ## Introduction
-AriaNg Native is a desktop application built by [Electron](https://github.com/electron/electron), containing full feature of [AriaNg](https://github.com/mayswind/AriaNg). You can run AriaNg Native on Windows or macOS without any browser. In addition, AriaNg Native also has many features that [AriaNg](https://github.com/mayswind/AriaNg) cannot implement.
+AriaNg Native is a desktop application built by [Electron](https://github.com/electron/electron), containing full feature of [AriaNg](https://github.com/mayswind/AriaNg). You can run AriaNg Native on Windows, macOS or GNU/Linux without any browser. In addition, AriaNg Native also has many features that [AriaNg](https://github.com/mayswind/AriaNg) cannot implement.
 
 #### Extra features
 1. More user-friendly interface
@@ -36,6 +36,9 @@ Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.co
     
     # For macOS
     $ npm run publish:osx
+
+    # For GNU/Linux
+    $ npm run publish:linux
 
 The builds will be placed in the dist directory.
 

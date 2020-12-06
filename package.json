@@ -17,7 +17,8 @@
     "copy-main-dependencies": "node copy-main-modules.js -s node_modules -d dist -v",
     "copy-app-dependencies": "node copy-app-modules.js -d dist -v",
     "publish:win": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --win",
-    "publish:osx": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --mac"
+    "publish:osx": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --mac",
+    "publish:linux": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --linux"
   },
   "repository": {
     "type": "git",
@@ -169,6 +170,48 @@
     },
     "dmg": {
       "icon": "assets/AriaNg.icns"
+    },
+    "linux": {
+      "executableName": "ariang",
+      "icon": "assets/AriaNg.png",
+      "category": "FileTransfer",
+      "packageCategory": "FileTransfer",
+      "executableArgs": [
+        "--no-sandbox"
+      ],
+      "mimeTypes": [
+        "application/x-bittorrent",
+        "application/metalink4+xml",
+        "application/metalink+xml",
+        "x-scheme-handler/magnet"
+      ],
+      "desktop": {
+        "StartupWMClass": "ariang",
+        "Categories": "Network;FileTransfer;",
+        "Keywords": "downloader;filetransfer;download files;download manager;aria2;ariang;",
+        "X-KDE-Protocols": "ftp,http,https",
+        "Terminal": "false"
+      },
+      "target": [
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
     }
   }
 }
