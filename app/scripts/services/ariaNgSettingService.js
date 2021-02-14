@@ -13,6 +13,8 @@
         })();
         var browserSupportStorage = browserFeatures.localStroage || browserFeatures.cookies;
         var browserSupportAppCache = !!$window.applicationCache;
+        var browserSupportMatchMedia = !!$window.matchMedia;
+        var browserSupportDarkMode = browserSupportMatchMedia && $window.matchMedia('(prefers-color-scheme: dark)') && $window.matchMedia('(prefers-color-scheme: dark)').media !== 'not all';
 
         var onAppCacheUpdatedCallbacks = [];
         var onFirstVisitCallbacks = [];
@@ -60,6 +62,10 @@
                     continue;
                 }
 
+                if (langName.toLowerCase() === alias.toLowerCase()) {
+                    return langName;
+                }
+
                 var language = ariaNgLanguages[langName];
                 var aliases = language.aliases;
 
@@ -68,7 +74,7 @@
                 }
 
                 for (var i = 0; i < aliases.length; i++) {
-                    if (aliases[i] === alias) {
+                    if (aliases[i].toLowerCase() === alias.toLowerCase()) {
                         return langName;
                     }
                 }
@@ -81,6 +87,7 @@
             var browserLang = $window.navigator.browserLanguage ? $window.navigator.browserLanguage : $window.navigator.language;
 
             if (!browserLang) {
+                ariaNgLogService.info('[ariaNgSettingService] cannot get browser language, use default language');
                 return ariaNgDefaultOptions.language;
             }
 
@@ -94,10 +101,25 @@
                 }
             }
 
+            if (!ariaNgLanguages[browserLang] && browserLang.split('-').length > 1) { // maybe language-script-region
+                var langParts = browserLang.split('-');
+                browserLang = langParts[0] + '-' + langParts[1];
+
+                if (!ariaNgLanguages[browserLang]) {
+                    var languageName = getLanguageNameFromAlias(browserLang);
+
+                    if (languageName) {
+                        browserLang = languageName;
+                    }
+                }
+            }
+
             if (!ariaNgLanguages[browserLang]) {
+                ariaNgLogService.info('[ariaNgSettingService] browser language \"' + browserLang + '\" not support, use default language');
                 return ariaNgDefaultOptions.language;
             }
 
+            ariaNgLogService.info('[ariaNgSettingService] use browser language \"' + browserLang + '\" as current language');
             return browserLang;
         };
 
@@ -215,6 +237,9 @@
             isBrowserSupportApplicationCache: function () {
                 return browserSupportAppCache;
             },
+            isBrowserSupportDarkMode: function () {
+                return browserSupportDarkMode;
+            },
             getBrowserFeatures: function () {
                 return browserFeatures;
             },
@@ -326,6 +351,13 @@
                 setOption('language', value);
                 return true;
             },
+            getTheme: function () {
+                return getOption('theme');
+            },
+            setTheme: function (value) {
+                setOption('theme', value);
+                return true;
+            },
             isEnableDebugMode: function () {
                 return sessionSettings.debugMode;
             },
@@ -362,6 +394,18 @@
             },
             setDownloadTaskRefreshInterval: function (value) {
                 setOption('downloadTaskRefreshInterval', Math.max(parseInt(value), 0));
+            },
+            getSwipeGesture: function () {
+                return getOption('swipeGesture');
+            },
+            setSwipeGesture: function (value) {
+                setOption('swipeGesture', value);
+            },
+            getDragAndDropTasks: function () {
+                return getOption('dragAndDropTasks');
+            },
+            setDragAndDropTasks: function (value) {
+                setOption('dragAndDropTasks', value);
             },
             getRPCListDisplayOrder: function () {
                 return getOption('rpcListDisplayOrder');

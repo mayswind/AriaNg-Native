@@ -58,6 +58,19 @@
                     </div>
                     <div class="row">
                         <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Theme</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <select class="form-control" style="width: 100%;" ng-model="context.settings.theme"
+                                    ng-change="setTheme(context.settings.theme)">
+                                <option value="light" translate>Light</option>
+                                <option value="dark" translate>Dark</option>
+                                <option ng-if="context.isSupportDarkMode" value="system" translate>Follow system settings</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
                             <span translate>Page Title</span>
                             <i class="icon-primary fa fa-question-circle" data-toggle="popover"
                                data-trigger="hover" data-placement="auto right" data-container="body" data-html="true"
@@ -126,6 +139,28 @@
                                     ng-model="context.settings.downloadTaskRefreshInterval"
                                     ng-change="setDownloadTaskRefreshInterval(context.settings.downloadTaskRefreshInterval)"
                                     ng-options="time.optionValue as (time.name | translate: {value: time.value}) for time in context.availableTime">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Swipe Gesture</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <select class="form-control" style="width: 100%;" ng-model="context.settings.swipeGesture"
+                                    ng-change="setSwipeGesture(context.settings.swipeGesture)"
+                                    ng-options="option.value as (option.name | translate) for option in context.trueFalseOptions">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Change Tasks Order by Drag-and-drop</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <select class="form-control" style="width: 100%;" ng-model="context.settings.dragAndDropTasks"
+                                    ng-change="setDragAndDropTasks(context.settings.dragAndDropTasks)"
+                                    ng-options="option.value as (option.name | translate) for option in context.trueFalseOptions">
                             </select>
                         </div>
                     </div>

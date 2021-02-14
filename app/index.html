@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
     <meta name="description" content="AriaNg, a modern web frontend making aria2 easier to use.">
     <meta name="format-detection" content="telephone=no"/>
     <title>AriaNg Native</title>
@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="styles/controls/chart.css"/>
     <link rel="stylesheet" href="styles/controls/angular-promise-buttons.css"/>
     <link rel="stylesheet" href="styles/theme/default.css">
+    <link rel="stylesheet" href="styles/theme/default-dark.css">
     <link rel="stylesheet" href="styles/theme/default-app-title.css">
 </head>
 <body class="hold-transition skin-aria-ng sidebar-mini fixed ng-cloak" ng-class="{'custom-app-title': useCustomAppTitle}">
@@ -309,7 +310,8 @@
             </div>
 
             <div class="pull-right ng-cloak" ng-if="globalStatusContext.isEnabled">
-                <a class="global-status" title="{{('Click to pin' | translate)}}" ng-pop-chart ng-data="globalStatusContext.data"
+                <a class="global-status" title="{{('Click to pin' | translate)}}"
+                   ng-pop-chart ng-data="globalStatusContext.data" ng-theme="currentTheme"
                    ng-container="body" ng-placement="top" ng-trigger="click hover" ng-popover-class="global-status-chart">
                 <span class="realtime-speed">
                     <i class="icon-download fa fa-arrow-down"></i>

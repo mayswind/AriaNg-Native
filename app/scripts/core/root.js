@@ -22,6 +22,43 @@
             return false;
         };
 
+        var setLightTheme = function () {
+            $rootScope.currentTheme = 'light';
+            angular.element('body').removeClass('theme-dark');
+        };
+
+        var setDarkTheme = function () {
+            $rootScope.currentTheme = 'dark';
+            angular.element('body').addClass('theme-dark');
+        };
+
+        var setThemeBySystemSettings = function () {
+            if (!ariaNgSettingService.isBrowserSupportDarkMode()) {
+                setLightTheme();
+                return;
+            }
+
+            var matchPreferColorScheme = $window.matchMedia('(prefers-color-scheme: dark)');
+
+            ariaNgLogService.info('[root.setThemeBySystemSettings] system uses ' + (matchPreferColorScheme.matches ? 'dark' : 'light') + ' theme');
+
+            if (matchPreferColorScheme.matches) {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        };
+
+        var initTheme = function () {
+            if (ariaNgSettingService.getTheme() === 'system') {
+                setThemeBySystemSettings();
+            } else if (ariaNgSettingService.getTheme() === 'dark') {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        };
+
         var initCheck = function () {
             var browserFeatures = ariaNgSettingService.getBrowserFeatures();
 
@@ -162,6 +199,8 @@
         var isSidebarShowInSmallScreen = function () {
             return angular.element('body').hasClass('sidebar-open');
         };
+
+        $rootScope.currentTheme = 'light';
 
         $rootScope.searchContext = {
             text: ''
@@ -379,19 +418,27 @@
 
         $rootScope.swipeActions = {
             leftSwipe: function () {
+                if (!ariaNgSettingService.getSwipeGesture()) {
+                    return;
+                }
+
                 if (isSidebarShowInSmallScreen()) {
                     hideSidebar();
                     return;
                 }
 
-                if (!this.extentLeftSwipe ||
-                    (angular.isFunction(this.extentLeftSwipe) && !this.extentLeftSwipe())) {
+                if (!this.extendLeftSwipe ||
+                    (angular.isFunction(this.extendLeftSwipe) && !this.extendLeftSwipe())) {
                     hideSidebar();
                 }
             },
             rightSwipe: function () {
-                if (!this.extentRightSwipe ||
-                    (angular.isFunction(this.extentRightSwipe) && !this.extentRightSwipe())) {
+                if (!ariaNgSettingService.getSwipeGesture()) {
+                    return;
+                }
+
+                if (!this.extendRightSwipe ||
+                    (angular.isFunction(this.extendRightSwipe) && !this.extendRightSwipe())) {
                     showSidebar();
                 }
             }
@@ -399,6 +446,16 @@
 
         $rootScope.refreshPage = function () {
             $window.location.reload();
+        };
+
+        $rootScope.setTheme = function (theme) {
+            if (theme === 'system') {
+                setThemeBySystemSettings();
+            } else if (theme === 'dark') {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
         };
 
         $rootScope.nativeWindowContext = {
@@ -479,8 +536,8 @@
 
             $rootScope.loadPromise = null;
 
-            delete $rootScope.swipeActions.extentLeftSwipe;
-            delete $rootScope.swipeActions.extentRightSwipe;
+            delete $rootScope.swipeActions.extendLeftSwipe;
+            delete $rootScope.swipeActions.extendRightSwipe;
 
             if (angular.isArray($rootScope.taskContext.list) && $rootScope.taskContext.list.length > 0) {
                 $rootScope.taskContext.list.length = 0;
@@ -508,6 +565,22 @@
             ariaNgNativeElectronService.setMainWindowLanguage();
         });
 
+        if (ariaNgSettingService.isBrowserSupportDarkMode()) {
+            var matchPreferColorScheme = $window.matchMedia('(prefers-color-scheme: dark)');
+            matchPreferColorScheme.addEventListener('change', function (e) {
+                ariaNgLogService.info('[root] system switches to ' + (e.matches ? 'dark' : 'light') + ' theme');
+
+                if (ariaNgSettingService.getTheme() === 'system') {
+                    if (e.matches) {
+                        setDarkTheme();
+                    } else {
+                        setLightTheme();
+                    }
+                }
+            });
+        }
+
+        initTheme();
         initCheck();
         initNavbar();
         initContentWrapper();

@@ -23,6 +23,7 @@
         cachedDebugLogsLimit: 100
     }).constant('ariaNgDefaultOptions', {
         language: 'en',
+        theme: 'light',
         title: '${downspeed}, ${upspeed} - ${title}',
         titleRefreshInterval: 5000,
         browserNotification: false,
@@ -36,6 +37,8 @@
         extendRpcServers: [],
         globalStatRefreshInterval: 1000,
         downloadTaskRefreshInterval: 1000,
+        swipeGesture: true,
+        dragAndDropTasks: true,
         rpcListDisplayOrder: 'recentlyUsed',
         afterCreatingNewTask: 'task-list',
         removeOldTaskAfterRetrying: false,
