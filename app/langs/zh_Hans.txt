@@ -278,7 +278,24 @@ Reload AriaNg Native=重新加载 AriaNg Native
 Create New Task=创建新任务
 
 [menu]
-Quit=退出 AriaNg Native
+AboutAriaNgNative=关于 AriaNg Native
+Services=服务
+HideAriaNgNative=隐藏 AriaNg Native
+HideOthers=隐藏其他应用
+ShowAll=显示全部
+QuitAriaNgNative=退出 AriaNg Native
+Edit=编辑
+Undo=撤销
+Redo=重做
+Cut=剪切
+Copy=复制
+Paste=粘贴
+Delete=删除
+SelectAll=全选
+Window=窗口
+Minimize=最小化
+Zoom=缩放
+BringAllToFront=前置全部窗口
 
 [tray]
 ShowAriaNgNative=显示 AriaNg Native (&S)

@@ -165,7 +165,24 @@
                 if (menu.setApplicationMenu) {
                     menu.setApplicationMenu({
                         labels: {
-                            Quit: ariaNgLocalizationService.getLocalizedText('menu.Quit')
+                            AboutAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.AboutAriaNgNative'),
+                            Services: ariaNgLocalizationService.getLocalizedText('menu.Services'),
+                            HideAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.HideAriaNgNative'),
+                            HideOthers: ariaNgLocalizationService.getLocalizedText('menu.HideOthers'),
+                            ShowAll: ariaNgLocalizationService.getLocalizedText('menu.ShowAll'),
+                            QuitAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.QuitAriaNgNative'),
+                            Edit: ariaNgLocalizationService.getLocalizedText('menu.Edit'),
+                            Undo: ariaNgLocalizationService.getLocalizedText('menu.Undo'),
+                            Redo: ariaNgLocalizationService.getLocalizedText('menu.Redo'),
+                            Cut: ariaNgLocalizationService.getLocalizedText('menu.Cut'),
+                            Copy: ariaNgLocalizationService.getLocalizedText('menu.Copy'),
+                            Paste: ariaNgLocalizationService.getLocalizedText('menu.Paste'),
+                            Delete: ariaNgLocalizationService.getLocalizedText('menu.Delete'),
+                            SelectAll: ariaNgLocalizationService.getLocalizedText('menu.SelectAll'),
+                            Window: ariaNgLocalizationService.getLocalizedText('menu.Window'),
+                            Minimize: ariaNgLocalizationService.getLocalizedText('menu.Minimize'),
+                            Zoom: ariaNgLocalizationService.getLocalizedText('menu.Zoom'),
+                            BringAllToFront: ariaNgLocalizationService.getLocalizedText('menu.BringAllToFront')
                         }
                     });
                 }

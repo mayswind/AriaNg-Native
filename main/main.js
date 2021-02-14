@@ -127,32 +127,6 @@ app.on('ready', () => {
         core.mainWindow.maximize();
     }
 
-    if (os.platform() === 'darwin') {
-        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+Z', () => {
-            core.mainWindow.webContents.undo();
-        });
-
-        electronLocalshortcut.register(core.mainWindow, 'Shift+CmdOrCtrl+Z', () => {
-            core.mainWindow.webContents.redo();
-        });
-
-        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+X', () => {
-            core.mainWindow.webContents.cut();
-        });
-
-        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+C', () => {
-            core.mainWindow.webContents.copy();
-        });
-
-        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+V', () => {
-            core.mainWindow.webContents.paste();
-        });
-
-        electronLocalshortcut.register(core.mainWindow, 'CmdOrCtrl+A', () => {
-            core.mainWindow.webContents.selectAll();
-        });
-    }
-
     if (global.settings.isDevMode) {
         electronLocalshortcut.register(core.mainWindow, 'F12', () => {
             core.mainWindow.webContents.openDevTools();

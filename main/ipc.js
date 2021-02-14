@@ -40,6 +40,10 @@ let navigateToNewTask = function () {
     navigateTo('/new');
 };
 
+let navigateToAriaNgSettings = function () {
+    navigateTo('/settings/ariang');
+};
+
 let showErrorMessage = function (message) {
     core.mainWindow.webContents.send('show-error', message);
 };
@@ -127,6 +131,7 @@ module.exports = {
     loadIndexUrl: loadIndexUrl,
     loadNewTaskUrl: loadNewTaskUrl,
     navigateToNewTask: navigateToNewTask,
+    navigateToAriaNgSettings: navigateToAriaNgSettings,
     showErrorMessage: showErrorMessage,
     onNewDropFile: onNewDropFile,
     onNewDropText: onNewDropText,
