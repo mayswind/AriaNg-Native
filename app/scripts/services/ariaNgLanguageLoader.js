@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgLanguageLoader', ['$http', '$q', 'ariaNgConstants', 'ariaNgLanguages', 'ariaNgAssetsCacheService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgStorageService', function ($http, $q, ariaNgConstants, ariaNgLanguages, ariaNgAssetsCacheService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgStorageService) {
+    angular.module('ariaNg').factory('ariaNgLanguageLoader', ['$http', '$q', 'ariaNgConstants', 'ariaNgLanguages', 'ariaNgAssetsCacheService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgStorageService', 'ariaNgNativeElectronService', function ($http, $q, ariaNgConstants, ariaNgLanguages, ariaNgAssetsCacheService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgStorageService, ariaNgNativeElectronService) {
         var getKeyValuePair = function (line) {
             for (var i = 0; i < line.length; i++) {
                 if (i > 0 && line.charAt(i - 1) !== '\\' && line.charAt(i) === '=') {
@@ -128,6 +128,18 @@
             }
 
             var languagePath = ariaNgConstants.languagePath + '/' + options.key + ariaNgConstants.languageFileExtension;
+
+            try {
+                var languageContent = ariaNgNativeElectronService.readPackageFile(languagePath);
+                ariaNgLogService.info('[ariaNgLanguageLoader] sync load language resource successfully, path=' + languagePath);
+
+                var languageObject = getLanguageObject(languageContent);
+                deferred.resolve(languageObject);
+
+                return deferred.promise;
+            } catch (ex) {
+                ariaNgLogService.error('[ariaNgLanguageLoader] cannot load language resource synchronously, path=' + languagePath, ex);
+            }
 
             $http({
                 url: languagePath,

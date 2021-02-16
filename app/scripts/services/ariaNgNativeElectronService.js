@@ -113,6 +113,9 @@
             isLocalFSExists: function (fullpath) {
                 return localfs.isExists(fullpath);
             },
+            readPackageFile: function (path) {
+                return localfs.readPackageFile(path);
+            },
             openProjectLink: function () {
                 return shell.openExternal && shell.openExternal('https://github.com/mayswind/AriaNg-Native');
             },
