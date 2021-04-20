@@ -38,7 +38,7 @@
   },
   "homepage": "http://ariang.mayswind.net/",
   "devDependencies": {
-    "electron": "^9.4.2",
+    "electron": "^11.0.0",
     "electron-builder": "^22.9.1",
     "fs-extra": "^8.1.0",
     "jsonfile": "^6.0.1",
@@ -150,7 +150,13 @@
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "assets/AriaNg.icns",
-      "target": "dmg",
+      "target": {
+        "target": "dmg",
+        "arch": [
+          "arm64",
+          "x64"
+        ]
+      },
       "fileAssociations": [
         {
           "ext": [

@@ -34,8 +34,10 @@ Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.co
     # For Windows
     $ npm run publish:win
     
-    # For macOS
-    $ npm run publish:osx
+    # For macOS on x64
+    $ npm run publish:osx --arch=x64
+    # For macOS on arm64
+    $ npm run publish:osx --arch=arm64
 
 The builds will be placed in the dist directory.
 
