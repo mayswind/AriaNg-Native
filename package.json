@@ -165,7 +165,8 @@
           ],
           "icon": "assets/AriaNg_Metalink.icns"
         }
-      ]
+      ],
+      "darkModeSupport": true
     },
     "dmg": {
       "icon": "assets/AriaNg.icns"
