@@ -150,7 +150,15 @@
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "assets/AriaNg.icns",
-      "target": "dmg",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
       "fileAssociations": [
         {
           "ext": [
