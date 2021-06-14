@@ -422,7 +422,13 @@
             }
 
             ariaNgSettingService.setDefaultRpcSetting(setting);
-            $window.location.reload();
+
+            if ($location.path().indexOf('/task/detail/') === 0) {
+                $rootScope.setAutoRefreshAfterPageLoad();
+                $location.path('/downloading');
+            } else {
+                $window.location.reload();
+            }
         };
 
         $scope.minimizeWindow = function () {
