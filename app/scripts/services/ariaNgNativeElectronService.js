@@ -14,6 +14,7 @@
         var menu = remote.require('./menu') || {};
         var tray = remote.require('./tray') || {};
         var localfs = remote.require('./localfs') || {};
+        var bittorrent = remote.require('./bittorrent') || {};
 
         var getSetting = function (item) {
             if (!remote || !remote.getGlobal) {
@@ -115,6 +116,9 @@
             },
             readPackageFile: function (path) {
                 return localfs.readPackageFile(path);
+            },
+            parseBittorrentInfo: function (path) {
+                return bittorrent.parseBittorrentInfo(path);
             },
             openProjectLink: function () {
                 return shell.openExternal && shell.openExternal('https://github.com/mayswind/AriaNg-Native');

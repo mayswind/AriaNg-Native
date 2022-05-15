@@ -1,0 +1,24 @@
+/* native-info-table */
+.skin-aria-ng .native-info-table {
+    background-color: #fff;
+}
+
+.skin-aria-ng .native-info-table.striped > div.row:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.skin-aria-ng .native-info-table.striped > div.row.no-background {
+    background-color: inherit;
+}
+
+.skin-aria-ng .native-info-table.hoverable > div.row:hover {
+    background-color: #f5f5f5;
+}
+
+.skin-aria-ng .native-info-table.hoverable > div.row.no-hover:hover {
+    background-color: inherit;
+}
+
+.skin-aria-ng .native-info-table.hoverable > div.row:nth-of-type(odd).no-hover:hover {
+    background-color: #f9f9f9;
+}
