@@ -5,6 +5,9 @@
                 <li ng-class="{'active': context.currentTab === 'links'}">
                     <a class="pointer-cursor" ng-click="changeTab('links')" ng-bind="(context.taskType === 'torrent' ? 'Torrent File' : (context.taskType === 'metalink' ? 'Metalink File' : 'Links') | translate)">Links</a>
                 </li>
+                <li ng-class="{'active': context.currentTab === 'filelist'}" ng-if="context.newTaskInfo && context.newTaskInfo.files && context.newTaskInfo.files.length">
+                    <a class="pointer-cursor" ng-click="changeTab('filelist')" translate>Files</a>
+                </li>
                 <li ng-class="{'active': context.currentTab === 'options'}">
                     <a class="pointer-cursor" ng-click="changeTab('options')" translate>Options</a>
                 </li>
@@ -21,12 +24,12 @@
                     </div>
                     <div class="btn-group">
                         <button type="submit" class="btn btn-sm"
-                                ng-class="{'btn-default': !context.uploadFile && newTaskForm.$invalid, 'btn-success': context.uploadFile || !newTaskForm.$invalid}"
-                                ng-disabled="!context.uploadFile && newTaskForm.$invalid" translate>Download Now
+                                ng-class="{'btn-default': !isNewTaskValid(), 'btn-success': isNewTaskValid()}"
+                                ng-disabled="!isNewTaskValid()" translate>Download Now
                         </button>&nbsp;
                         <button type="button" class="btn btn-sm dropdown-toggle"
-                                ng-class="{'btn-default': !context.uploadFile && newTaskForm.$invalid, 'btn-success': context.uploadFile || !newTaskForm.$invalid}"
-                                ng-disabled="!context.uploadFile && newTaskForm.$invalid" data-toggle="dropdown">
+                                ng-class="{'btn-default': !isNewTaskValid(), 'btn-success': isNewTaskValid()}"
+                                ng-disabled="!isNewTaskValid()" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu right-align">
@@ -60,48 +63,48 @@
                                 <input class="form-control" ng-value="context.uploadFile ? context.uploadFile.fileName : ''" readonly="readonly"/>
                             </div>
                         </div>
-                        <div class="row" ng-if="context.uploadBittorrentInfo">
+                        <div class="row" ng-if="context.newTaskInfo">
                             <div class="col-sm-12">
                                 <p translate>Torrent Info:</p>
                                 <div class="native-info-table striped table-bordered">
-                                    <div class="row" ng-if="context.uploadBittorrentInfo.name">
+                                    <div class="row" ng-if="context.newTaskInfo.name">
                                         <div class="setting-key col-sm-4">
                                             <span translate>Name</span>
                                         </div>
                                         <div class="setting-value col-sm-8">
-                                            <span ng-bind="context.uploadBittorrentInfo.name"></span>
+                                            <span ng-bind="context.newTaskInfo.name"></span>
                                         </div>
                                     </div>
-                                    <div class="row" ng-if="context.uploadBittorrentInfo.length">
+                                    <div class="row" ng-if="context.newTaskInfo.length">
                                         <div class="setting-key col-sm-4">
                                             <span translate>File Size</span>
                                         </div>
                                         <div class="setting-value col-sm-8">
-                                            <span ng-bind="context.uploadBittorrentInfo.length | readableVolume"></span>
+                                            <span ng-bind="context.newTaskInfo.length | readableVolume"></span>
                                         </div>
                                     </div>
-                                    <div class="row" ng-if="context.uploadBittorrentInfo.created">
+                                    <div class="row" ng-if="context.newTaskInfo.created">
                                         <div class="setting-key col-sm-4">
                                             <span translate>Seed Creation Time</span>
                                         </div>
                                         <div class="setting-value col-sm-8">
-                                            <span ng-bind="context.uploadBittorrentInfo.created | longDate"></span>
+                                            <span ng-bind="context.newTaskInfo.created | longDate"></span>
                                         </div>
                                     </div>
-                                    <div class="row" ng-if="context.uploadBittorrentInfo.infoHash">
+                                    <div class="row" ng-if="context.newTaskInfo.infoHash">
                                         <div class="setting-key col-sm-4">
                                             <span translate>Info Hash</span>
                                         </div>
                                         <div class="setting-value col-sm-8">
-                                            <span ng-bind="context.uploadBittorrentInfo.infoHash"></span>
+                                            <span ng-bind="context.newTaskInfo.infoHash"></span>
                                         </div>
                                     </div>
-                                    <div class="row" ng-if="context.uploadBittorrentInfo.comment">
+                                    <div class="row" ng-if="context.newTaskInfo.comment">
                                         <div class="setting-key col-sm-4">
                                             <span translate>Comment</span>
                                         </div>
                                         <div class="setting-value col-sm-8">
-                                            <span ng-bind="context.uploadBittorrentInfo.comment"></span>
+                                            <span ng-bind="context.newTaskInfo.comment"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -109,6 +112,95 @@
                         </div>
                     </div>
                     <input id="file-holder" type="file" style="display: none"/>
+                </div>
+                <div class="tab-pane" ng-class="{'active': context.currentTab === 'filelist'}">
+                    <div class="task-table">
+                        <div class="task-table-title">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <a ng-click="changeFileListDisplayOrder('name:asc', true)" ng-class="{true: 'default-cursor'}[context.newTaskInfo.multiDir]" translate>File Name</a>
+                                    <i ng-if="!context.newTaskInfo.multiDir" class="fa" ng-class="{'fa-sort-asc fa-order-asc': isSetFileListDisplayOrder('name:asc'), 'fa-sort-desc fa-order-desc': isSetFileListDisplayOrder('name:desc')}"></i>
+                                    <a ng-click="showChooseFilesToolbar()" ng-if="context.newTaskInfo && context.newTaskInfo.files && context.newTaskInfo.files.length > 1" translate>(Choose Files)</a>
+                                </div>
+                                <div class="col-sm-2">
+                                    <a ng-click="changeFileListDisplayOrder('size:asc', true)" ng-class="{true: 'default-cursor'}[context.newTaskInfo.multiDir]" translate>File Size</a>
+                                    <i ng-if="!context.newTaskInfo.multiDir" class="fa" ng-class="{'fa-sort-asc fa-order-asc': isSetFileListDisplayOrder('size:asc'), 'fa-sort-desc fa-order-desc': isSetFileListDisplayOrder('size:desc')}"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-table-title" ng-if="context.showChooseFilesToolbar">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary btn-xs" ng-click="selectFiles('auto')"
+                                                ng-bind="(isAllFileSelected() ? 'Select None' : 'Select All') | translate">Select All</button>
+                                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="javascript:void(0);" ng-click="selectFiles('all')" translate>Select All</a></li>
+                                            <li><a href="javascript:void(0);" ng-click="selectFiles('none')" translate>Select None</a></li>
+                                            <li><a href="javascript:void(0);" ng-click="selectFiles('reverse')" translate>Select Invert</a></li>
+                                        </ul>
+                                    </div><button type="button" class="btn btn-xs btn-default" ng-click="chooseSpecifiedFiles('video')">
+                                        <i class="fa fa-file-video-o"></i>
+                                        <span translate>Videos</span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-default" ng-click="chooseSpecifiedFiles('audio')">
+                                        <i class="fa fa-file-audio-o"></i>
+                                        <span translate>Audios</span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-default" ng-click="chooseSpecifiedFiles('picture')">
+                                        <i class="fa fa-file-picture-o"></i>
+                                        <span translate>Pictures</span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-default" ng-click="chooseSpecifiedFiles('document')">
+                                        <i class="fa fa-file-text-o"></i>
+                                        <span translate>Documents</span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-default" ng-click="chooseSpecifiedFiles('application')">
+                                        <i class="fa fa-file-o"></i>
+                                        <span translate>Applications</span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-default" ng-click="chooseSpecifiedFiles('archive')">
+                                        <i class="fa fa-file-archive-o"></i>
+                                        <span translate>Archives</span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-default" ng-click="showCustomChooseFileModal()">
+                                        <i class="fa fa-filter"></i>
+                                        <span translate>Custom</span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-default" ng-click="hideChoosedFiles()" translate>Close</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-table-body">
+                            <div class="row" ng-repeat="file in context.newTaskInfo.files | fileOrderBy: getFileListOrderType()"
+                                 data-toggle="context" data-target="#filelist-contextmenu"
+                                 ng-if="!context.collapsedDirs[file.relativePath]" data-file-index="{{file.index}}">
+                                <div class="col-sm-10" ng-if="file.isDir" style="{{(context.newTaskInfo.multiDir ? ('padding-left: ' + (file.level * 16) + 'px') : '')}}">
+                                    <i class="icon-dir-expand pointer-cursor fa" ng-click="collapseDir(file)"
+                                       ng-class="{true: 'fa-plus', false: 'fa-minus'}[!!context.collapsedDirs[file.nodePath]]"
+                                       title="{{(context.collapsedDirs[file.nodePath] ? 'Expand' : 'Collapse') | translate}}">
+                                    </i><div class="checkbox checkbox-primary checkbox-inline">
+                                        <input id="{{'node_' + file.nodePath}}" type="checkbox" ng-disabled="!context.newTaskInfo || !context.newTaskInfo.files || context.newTaskInfo.files.length <= 1"
+                                               ng-model="file.selected" ng-indeterminate="file.partialSelected" ng-change="setSelectedNode(file)"/>
+                                        <label for="{{'node_' + file.nodePath}}" class="allow-word-break" ng-bind="file.nodeName" title="{{file.nodeName}}"></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-10" ng-if="!file.isDir" style="{{(context.newTaskInfo.multiDir ? ('padding-left: ' + (11 + 6 + file.level * 16) + 'px') : '')}}">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="{{'file_' + file.index}}" type="checkbox" ng-disabled="!context.newTaskInfo || !context.newTaskInfo.files || context.newTaskInfo.files.length <= 1"
+                                               ng-model="file.selected" ng-change="setSelectedFile()"/>
+                                        <label for="{{'file_' + file.index}}" class="allow-word-break" ng-bind="file.fileName" title="{{file.fileName}}"></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <span class="task-size" ng-bind="file.length | readableVolume"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane" ng-class="{'active': context.currentTab === 'options'}">
                     <div class="settings-table striped hoverable">
@@ -134,6 +226,82 @@
                         <ng-setting ng-repeat="option in context.availableOptions" ng-if="context.optionFilter[option.category]"
                                     option="option" lazy-save-timeout="0" default-value="context.globalOptions[option.key]"
                                     on-change-value="setOption(key, value, optionStatus)"></ng-setting>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="filelist-contextmenu">
+            <ul class="dropdown-menu" role="menu">
+                <li ng-if="context.newTaskInfo.multiDir">
+                    <a tabindex="-1" class="pointer-cursor" title="{{'Expand All' | translate}}" ng-click="collapseAllDirs(false)">
+                        <i class="fa fa-plus fa-fw"></i>
+                        <span translate>Expand All</span>
+                    </a>
+                </li>
+                <li ng-if="context.newTaskInfo.multiDir">
+                    <a tabindex="-1" class="pointer-cursor" title="{{'Collapse All' | translate}}" ng-click="collapseAllDirs(true)">
+                        <i class="fa fa-minus fa-fw"></i>
+                        <span translate>Collapse All</span>
+                    </a>
+                </li>
+                <li class="dropdown dropdown-submenu" ng-if="!context.newTaskInfo.multiDir">
+                    <a tabindex="-1" title="{{'Display Order' | translate}}" href="javascript:void(0);">
+                        <i class="fa fa-sort-alpha-asc fa-fw"></i>
+                        <span translate>Display Order</span>
+                    </a>
+                    <ul class="dropdown-menu" style="right: 160px;">
+                        <li>
+                            <a class="pointer-cursor" ng-click="changeFileListDisplayOrder('default:asc')">
+                                <span translate>Default</span>
+                                <i class="fa fa-fw" ng-class="{'fa-check': isSetFileListDisplayOrder('default')}"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="pointer-cursor" ng-click="changeFileListDisplayOrder('name:asc')">
+                                <span translate>By File Name</span>
+                                <i class="fa fa-fw" ng-class="{'fa-check': isSetFileListDisplayOrder('name')}"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="pointer-cursor" ng-click="changeFileListDisplayOrder('size:asc')">
+                                <span translate>By File Size</span>
+                                <i class="fa fa-fw" ng-class="{'fa-check': isSetFileListDisplayOrder('size')}"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="pointer-cursor" ng-click="changeFileListDisplayOrder('selected:desc')">
+                                <span translate>By Selected Status</span>
+                                <i class="fa fa-fw" ng-class="{'fa-check': isSetFileListDisplayOrder('selected')}"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="custom-choose-file-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" translate>Custom Choose File</h4>
+                    </div>
+                    <div class="modal-body no-padding">
+                        <div class="settings-table striped hoverable">
+                            <div class="row" ng-repeat="(extensionTypeName, extensionTypeInfo) in context.fileExtensions">
+                                <div class="setting-key setting-key-without-desc col-sm-4" ng-bind="extensionTypeInfo.name | translate"></div>
+                                <div class="setting-value col-sm-8">
+                                    <div class="checkbox checkbox-primary checkbox-inline" ng-repeat="info in extensionTypeInfo.extensions">
+                                        <input id="{{info.extension}}" type="checkbox" ng-model="info.selected"
+                                               ng-indeterminate="info.selectedCount > 0 && info.unSelectedCount > 0"
+                                               ng-change="setSelectedExtension(info.extension, info.selected)">
+                                        <label for="{{info.extension}}" ng-bind="info.extension"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" translate>Close</button>
                     </div>
                 </div>
             </div>

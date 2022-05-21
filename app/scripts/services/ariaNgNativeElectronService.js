@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgNativeElectronService', ['ariaNgLocalizationService', function (ariaNgLocalizationService) {
+    angular.module('ariaNg').factory('ariaNgNativeElectronService', ['ariaNgLogService', 'ariaNgLocalizationService', function (ariaNgLogService, ariaNgLocalizationService) {
         var electron = angular.isFunction(window.nodeRequire) ? nodeRequire('electron') : {};
         var remote = electron.remote || {
             require: function () {
@@ -118,7 +118,12 @@
                 return localfs.readPackageFile(path);
             },
             parseBittorrentInfo: function (path) {
-                return bittorrent.parseBittorrentInfo(path);
+                var info = angular.copy(bittorrent.parseBittorrentInfo(path));
+                info.type = 'bittorrent';
+
+                ariaNgLogService.debug('[ariaNgNativeElectronService.parseBittorrentInfo] bittorrent info', info);
+
+                return info;
             },
             openProjectLink: function () {
                 return shell.openExternal && shell.openExternal('https://github.com/mayswind/AriaNg-Native');

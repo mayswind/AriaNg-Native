@@ -433,6 +433,45 @@
             return peers;
         };
 
+        var processNewTaskFileList = function (newTaskInfo) {
+            if (!newTaskInfo.files) {
+                return newTaskInfo;
+            }
+
+            var allDirectories = [];
+            var allDirectoryMap = {};
+
+            for (var i = 0; i < newTaskInfo.files.length; i++) {
+                var file = newTaskInfo.files[i];
+
+                if (file.path) {
+                    file.path = file.path.replace(/\\/g, ariaNgConstants.defaultPathSeparator);
+                }
+
+                file.index = i + 1;
+                file.fileName = getFileName(file);
+                file.length = parseInt(file.length);
+                file.selected = true;
+
+                file.relativePath = getRelativePath(newTaskInfo, file);
+                var dirNode = pushFileToDirectoryNode(file, allDirectories, allDirectoryMap);
+                file.level = dirNode.level + 1;
+            }
+
+            if (allDirectories.length > 1) {
+                var allNodes = [];
+                var rootNode = allDirectoryMap[''];
+                fillAllNodes(rootNode, allDirectoryMap, allNodes);
+
+                newTaskInfo.files = allNodes;
+                newTaskInfo.multiDir = true;
+            }
+
+            ariaNgLogService.debug('[aria2TaskService.processNewTaskFileList] new task info', newTaskInfo);
+
+            return newTaskInfo;
+        };
+
         var createTaskEventCallback = function (getTaskStatusFunc, callback, type) {
             return function (event) {
                 var context = {
@@ -964,6 +1003,9 @@
                 for (var i = 0; i < tasks.length; i++) {
                     processDownloadTask(tasks[i], addVirtualFileNode);
                 }
+            },
+            processNewTaskFileList: function (newTaskInfo) {
+                return processNewTaskFileList(newTaskInfo);
             },
             getPieceStatus: function (bitField, pieceCount) {
                 return getPieceStatus(bitField, pieceCount);
