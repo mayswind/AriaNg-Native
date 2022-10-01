@@ -40,7 +40,7 @@ let config = {
     defaultPosition: userSettingsStore.get('defaultPosition') || 'last-position',
     minimizedToTray: userSettingsStore.get('minimizedToTray', true),
     save: function (item) {
-        if (item && this[item] != undefined) {
+        if (item && this[item] !== undefined) {
             userSettingsStore.set(item, this[item]);
         }
     }
