@@ -27,6 +27,29 @@ const argv = yargs(process.argv.slice(1))
     })
     .argv;
 
+function parseFilePath(argv) {
+    if (!argv || argv.length < 2) {
+        return undefined;
+    }
+
+    const actualArgv = [];
+
+    for (let i = 1; i < argv.length; i++) {
+        if (argv[i][0] !== '-') {
+            actualArgv.push(argv[i]);
+        }
+    }
+
+    const ret = yargs(actualArgv)
+        .command({
+            command: '$0 <file>'
+        })
+        .argv;
+
+    return ret ? ret.file : undefined;
+}
+
 module.exports = {
-    argv: argv
+    argv: argv,
+    parseFilePath: parseFilePath
 };

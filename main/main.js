@@ -16,10 +16,13 @@ const tray = require('./tray');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
-const singletonLock = app.requestSingleInstanceLock();
+const singletonLock = app.requestSingleInstanceLock({
+    argv: cmd.argv
+});
 
 if (!singletonLock) {
     app.quit();
+    return;
 }
 
 let filePathInCommandLine = cmd.argv.file;
@@ -70,7 +73,7 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-app.on('second-instance', (event, argv, workingDirectory) => {
+app.on('second-instance', (event, argv, workingDirectory, additionalData) => {
     if (core.mainWindow) {
         if (core.mainWindow.isMinimized()) {
             core.mainWindow.restore();
@@ -80,8 +83,18 @@ app.on('second-instance', (event, argv, workingDirectory) => {
 
         core.mainWindow.focus();
 
-        if (ipc.isContainsSupportedFileArg(argv[1])) {
-            ipc.asyncNewTaskFromFile(argv[1]);
+        let filePath = null;
+
+        if (additionalData && additionalData.argv) {
+            filePath = additionalData.argv.file;
+        }
+
+        if (!filePath) {
+            filePath = cmd.parseFilePath(argv);
+        }
+
+        if (filePath && ipc.isContainsSupportedFileArg(filePath)) {
+            ipc.asyncNewTaskFromFile(filePath);
             ipc.navigateToNewTask();
         }
     }
