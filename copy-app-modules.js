@@ -1,23 +1,29 @@
 const fs = require('fs-extra');
 const path = require('path');
-const argv = require('yargs')
+const yargs = require('yargs')(process.argv.slice(2));
+const argv = yargs
     .usage('Usage: $0 -d <dist>')
-    .option('d', {
-        alias: 'dist',
+    .help('help')
+    .alias('version', 'v')
+    .option('help', {
+        alias: 'h'
+    })
+    .option('dist', {
+        alias: 'd',
         type: 'string',
+        requiresArg: true,
         describe: 'The directory where dependencies would be copies to.',
     })
-    .option('r', {
-        alias: 'dryrun',
+    .option('dryrun', {
         type: 'boolean',
         describe: 'Find the dependencies and log to the screen only.',
     })
-    .option('v', {
-        alias: 'verbose',
+    .option('verbose', {
+        alias: 'V',
         type: 'boolean',
         describe: 'Enable verbose log.',
     })
-    .parse();
+    .argv;
 
 const pkgfile = require('./package');
 
@@ -91,8 +97,12 @@ function copyDependencies(dependencies, dist) {
     }
 }
 
-let dependencies = getDependencies(pkgfile.entry);
+if (!argv.dist || argv.help) {
+    yargs.showHelp();
+} else {
+    let dependencies = getDependencies(pkgfile.entry);
 
-if (!argv.dryrun) {
-    copyDependencies(dependencies, argv.dist);
+    if (!argv.dryrun) {
+        copyDependencies(dependencies, argv.dist);
+    }
 }
