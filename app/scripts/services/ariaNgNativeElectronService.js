@@ -3,7 +3,7 @@
 
     angular.module('ariaNg').factory('ariaNgNativeElectronService', ['ariaNgLogService', 'ariaNgLocalizationService', function (ariaNgLogService, ariaNgLocalizationService) {
         var electron = angular.isFunction(window.nodeRequire) ? nodeRequire('electron') : {};
-        var remote = electron.remote || {
+        var remote = angular.isFunction(window.nodeRequire) ? nodeRequire('@electron/remote') : {
             require: function () {
                 return {};
             }
