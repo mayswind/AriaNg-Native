@@ -418,6 +418,8 @@
             return task && task.status === 'error' && task.errorDescription && !task.bittorrent;
         };
 
+        $rootScope.keydownActions = {};
+
         $rootScope.swipeActions = {
             leftSwipe: function () {
                 if (!ariaNgSettingService.getSwipeGesture()) {
@@ -470,6 +472,24 @@
 
         $rootScope.useCustomAppTitle = ariaNgNativeElectronService.useCustomAppTitle();
         $rootScope.nativeWindowContext.maximized = ariaNgNativeElectronService.isMaximized();
+
+        $window.addEventListener('keydown', function (event) {
+            if (!ariaNgSettingService.getKeyboardShortcuts()) {
+                return;
+            }
+
+            var keyCode = event.keyCode || event.which || event.charCode;
+
+            if ((event.code === 'KeyA' || keyCode === 65) && (event.ctrlKey || event.metaKey)) { // Select All Tasks
+                if (angular.isFunction($rootScope.keydownActions.selectAll)) {
+                    $rootScope.keydownActions.selectAll();
+                }
+            } else if (event.code === 'Delete' || keyCode === 46) { // Remove Selected Task
+                if (angular.isFunction($rootScope.keydownActions.delete)) {
+                    $rootScope.keydownActions.delete();
+                }
+            }
+        }, true);
 
         ariaNgNativeElectronService.onMainWindowMaximize(function () {
             $rootScope.nativeWindowContext.maximized = true;
@@ -542,6 +562,8 @@
 
             $rootScope.loadPromise = null;
 
+            delete $rootScope.keydownActions.selectAll;
+            delete $rootScope.keydownActions.delete;
             delete $rootScope.swipeActions.extendLeftSwipe;
             delete $rootScope.swipeActions.extendRightSwipe;
 
