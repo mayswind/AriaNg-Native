@@ -9,7 +9,6 @@
             }
         };
         var ipcRenderer = electron.ipcRenderer || {};
-        var config = remote.require('./config') || {};
         var menu = remote.require('./menu') || {};
         var tray = remote.require('./tray') || {};
         var localfs = remote.require('./localfs') || {};
@@ -53,6 +52,14 @@
             ipcRenderer.send && ipcRenderer.send(channel, ...args);
         };
 
+        var invokeSyncMainProcessMethod = function (channel, ...args) {
+            if (!ipcRenderer.sendSync) {
+                return null;
+            }
+
+            return ipcRenderer.sendSync(channel, ...args);
+        };
+
         return {
             getRuntimeEnvironment: function () {
                 if (!remote.process || !remote.process.versions) {
@@ -82,14 +89,11 @@
                 return !!getSetting('useCustomAppTitle');
             },
             getNativeConfig: function () {
+                var config = invokeSyncMainProcessMethod('get-native-config');
                 var cfg = {};
 
                 for (var key in config) {
                     if (!config.hasOwnProperty(key)) {
-                        continue;
-                    }
-
-                    if (angular.isFunction(config[key])) {
                         continue;
                     }
 
@@ -99,12 +103,10 @@
                 return cfg;
             },
             setDefaultPosition: function (value) {
-                config.defaultPosition = value;
-                config.save('defaultPosition');
+                sendMessageToMainProcess('set-native-config-default-position', value);
             },
             setMinimizedToTray: function (value) {
-                config.minimizedToTray = !!value;
-                config.save('minimizedToTray');
+                sendMessageToMainProcess('set-native-config-minimized-to-tray', value);
             },
             setMainWindowLanguage: function () {
                 this.setApplicationMenu();

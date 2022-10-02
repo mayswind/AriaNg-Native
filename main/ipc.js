@@ -7,6 +7,7 @@ const electron = require('electron');
 
 const pkgfile = require('../package');
 const core = require('./core');
+const config = require('./config');
 const localfs = require('./localfs');
 
 const shell = electron.shell;
@@ -128,6 +129,23 @@ let asyncNewTaskFromText = function (text) {
         newTaskFromText(text, true);
     });
 };
+
+ipcMain.on('get-native-config', (event) => {
+    event.returnValue = {
+        defaultPosition: config.defaultPosition,
+        minimizedToTray: config.minimizedToTray
+    };
+});
+
+ipcMain.on('set-native-config-default-position', (event, value) => {
+    config.defaultPosition = value;
+    config.save('defaultPosition');
+});
+
+ipcMain.on('set-native-config-minimized-to-tray', (event, value) => {
+    config.minimizedToTray = !!value;
+    config.save('minimizedToTray');
+});
 
 ipcMain.on('open-external-url', (event, url) => {
     shell.openExternal(url);
