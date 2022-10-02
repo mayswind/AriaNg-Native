@@ -7,7 +7,9 @@ const electron = require('electron');
 
 const pkgfile = require('../package');
 const core = require('./core');
+const localfs = require('./localfs');
 
+const shell = electron.shell;
 const ipcMain = electron.ipcMain;
 
 const supportedFileExtensions = {
@@ -126,6 +128,20 @@ let asyncNewTaskFromText = function (text) {
         newTaskFromText(text, true);
     });
 };
+
+ipcMain.on('open-external-url', (event, url) => {
+    shell.openExternal(url);
+});
+
+ipcMain.on('open-local-directory', (event, dir, filename) => {
+    var fullpath = localfs.getFullPath(dir, filename);
+
+    if (localfs.isExists(fullpath)) {
+        return shell.showItemInFolder && shell.showItemInFolder(fullpath);
+    } else {
+        return shell.openItem && shell.openItem(dir);
+    }
+});
 
 module.exports = {
     loadIndexUrl: loadIndexUrl,

@@ -9,7 +9,6 @@
             }
         };
         var ipcRenderer = electron.ipcRenderer || {};
-        var shell = electron.shell || {};
         var config = remote.require('./config') || {};
         var menu = remote.require('./menu') || {};
         var tray = remote.require('./tray') || {};
@@ -50,8 +49,8 @@
             ipcRenderer.removeListener && ipcRenderer.removeListener(channel, callback);
         };
 
-        var sendMessageToMainProcess = function (channel, message) {
-            ipcRenderer.send && ipcRenderer.send(channel, message);
+        var sendMessageToMainProcess = function (channel, ...args) {
+            ipcRenderer.send && ipcRenderer.send(channel, ...args);
         };
 
         return {
@@ -126,19 +125,13 @@
                 return info;
             },
             openProjectLink: function () {
-                return shell.openExternal && shell.openExternal('https://github.com/mayswind/AriaNg-Native');
+                sendMessageToMainProcess('open-external-url', 'https://github.com/mayswind/AriaNg-Native');
             },
             openProjectReleaseLink: function () {
-                return shell.openExternal && shell.openExternal('https://github.com/mayswind/AriaNg-Native/releases');
+                sendMessageToMainProcess('open-external-url', 'https://github.com/mayswind/AriaNg-Native/releases');
             },
             openFileInDirectory: function (dir, filename) {
-                var fullpath = localfs.getFullPath(dir, filename);
-
-                if (localfs.isExists(fullpath)) {
-                    return shell.showItemInFolder && shell.showItemInFolder(fullpath);
-                } else {
-                    return shell.openItem && shell.openItem(dir);
-                }
+                sendMessageToMainProcess('open-local-directory', dir, filename);
             },
             onMainWindowMaximize: function (callback) {
                 onMainWindowEvent('maximize', callback);
