@@ -201,6 +201,14 @@ ipcMain.on('render-open-external-url', (event, url) => {
     shell.openExternal(url);
 });
 
+ipcMain.on('render-sync-get-package-file-content', (event, path) => {
+    event.returnValue = localfs.readPackageFile(path);
+});
+
+ipcMain.handle('render-get-localfs-exists', (event, fullpath) => {
+    return localfs.isExists(fullpath);
+});
+
 ipcMain.on('render-open-local-directory', (event, dir, filename) => {
     let fullpath = localfs.getFullPath(dir, filename);
 

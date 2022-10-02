@@ -9,7 +9,6 @@
             }
         };
         var ipcRenderer = electron.ipcRenderer || {};
-        var localfs = remote.require('./localfs') || {};
         var bittorrent = remote.require('./bittorrent') || {};
 
         var getSetting = function (item) {
@@ -157,12 +156,6 @@
             setMinimizedToTray: function (value) {
                 invokeMainProcessMethod('render-set-native-config-minimized-to-tray', value);
             },
-            isLocalFSExists: function (fullpath) {
-                return localfs.isExists(fullpath);
-            },
-            readPackageFile: function (path) {
-                return localfs.readPackageFile(path);
-            },
             parseBittorrentInfo: function (path) {
                 var info = angular.copy(bittorrent.parseBittorrentInfo(path));
                 info.type = 'bittorrent';
@@ -176,6 +169,17 @@
             },
             openProjectReleaseLink: function () {
                 invokeMainProcessMethod('render-open-external-url', 'https://github.com/mayswind/AriaNg-Native/releases');
+            },
+            readPackageFile: function (path) {
+                return invokeSyncMainProcessMethod('render-sync-get-package-file-content', path);
+            },
+            getLocalFSExists: function (fullpath, callback) {
+                return invokeAsyncMainProcessMethod('render-get-localfs-exists', fullpath)
+                    .then(function onReceive(value) {
+                        if (callback) {
+                            callback(value);
+                        }
+                    });
             },
             openFileInDirectory: function (dir, filename) {
                 invokeMainProcessMethod('render-open-local-directory', dir, filename);
