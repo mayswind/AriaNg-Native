@@ -92,8 +92,8 @@ app.on('second-instance', (event, argv, workingDirectory, additionalData) => {
         }
 
         if (filePath && ipc.isContainsSupportedFileArg(filePath)) {
-            ipc.asyncNewTaskFromFile(filePath);
-            ipc.navigateToNewTask();
+            ipc.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
+            ipc.notifyRenderProcessNavigateToNewTask();
         }
     }
 });
@@ -151,7 +151,7 @@ app.on('ready', () => {
     tray.init();
 
     if (ipc.isContainsSupportedFileArg(filePathInCommandLine)) {
-        ipc.asyncNewTaskFromFile(filePathInCommandLine);
+        ipc.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathInCommandLine);
         ipc.loadNewTaskUrl();
     } else {
         ipc.loadIndexUrl();
@@ -169,12 +169,12 @@ app.on('ready', () => {
 
     core.mainWindow.on('maximize', () => {
         config.maximized = core.mainWindow.isMaximized();
-        ipc.notifyRenderProcessWindowMaximizedAsync(core.mainWindow.isMaximized());
+        ipc.notifyRenderProcessWindowMaximized(core.mainWindow.isMaximized());
     });
 
     core.mainWindow.on('unmaximize', () => {
         config.maximized = core.mainWindow.isMaximized();
-        ipc.notifyRenderProcessWindowUnmaximizedAsync(core.mainWindow.isMaximized());
+        ipc.notifyRenderProcessWindowUnmaximized(core.mainWindow.isMaximized());
     });
 
     core.mainWindow.on('move', () => {
@@ -216,7 +216,7 @@ app.on('ready', () => {
         core.mainWindow = null;
     });
 
-    ipc.onNewDropFile((event, arg) => {
+    ipc.onRenderProcessNewDropFile((event, arg) => {
         if (!arg) {
             return;
         }
@@ -225,14 +225,14 @@ app.on('ready', () => {
         let location = arg.location;
 
         if (location.indexOf('/new') === 0) {
-            ipc.newTaskFromFile(filePath);
+            ipc.notifyRenderProcessNewTaskFromFile(filePath);
         } else {
-            ipc.asyncNewTaskFromFile(filePath);
-            ipc.navigateToNewTask();
+            ipc.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
+            ipc.notifyRenderProcessNavigateToNewTask();
         }
     });
 
-    ipc.onNewDropText((event, arg) => {
+    ipc.onRenderProcessNewDropText((event, arg) => {
         if (!arg) {
             return;
         }
@@ -241,10 +241,10 @@ app.on('ready', () => {
         let location = arg.location;
 
         if (location.indexOf('/new') === 0) {
-            ipc.newTaskFromText(text);
+            ipc.notifyRenderProcessNewTaskFromText(text);
         } else {
-            ipc.asyncNewTaskFromText(text);
-            ipc.navigateToNewTask();
+            ipc.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(text);
+            ipc.notifyRenderProcessNavigateToNewTask();
         }
     });
 });

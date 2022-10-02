@@ -133,7 +133,7 @@
             readPackageFile: function (path) {
                 return invokeSyncMainProcessMethod('render-sync-get-package-file-content', path);
             },
-            getLocalFSExists: function (fullpath, callback) {
+            getLocalFSExistsAsync: function (fullpath, callback) {
                 return invokeAsyncMainProcessMethod('render-get-localfs-exists', fullpath)
                     .then(function onReceive(exists) {
                         if (callback) {
@@ -152,38 +152,38 @@
 
                 return info;
             },
+            notifyMainProcessViewLoaded: function (locationPath) {
+                invokeMainProcessMethod('on-render-view-content-loaded', locationPath);
+            },
+            notifyMainProcessorNewDropFile: function (message) {
+                invokeMainProcessMethod('on-render-new-drop-file', message);
+            },
+            notifyMainProcessorNewDropText: function (message) {
+                invokeMainProcessMethod('on-render-new-drop-text', message);
+            },
             onMainWindowMaximize: function (callback) {
                 onMainProcessEvent('on-main-window-maximized', callback);
             },
             onMainWindowUnmaximize: function (callback) {
                 onMainProcessEvent('on-main-window-unmaximized', callback);
             },
-            onMainProcessNavigateTo: function (callback) {
-                onMainProcessEvent('navigate-to', callback);
-            },
             onMainProcessShowError: function (callback) {
-                onMainProcessEvent('show-error', callback);
+                onMainProcessEvent('on-main-show-error', callback);
+            },
+            onMainProcessNavigateTo: function (callback) {
+                onMainProcessEvent('on-main-navigate-to', callback);
             },
             onMainProcessNewTaskFromFile: function (callback) {
-                onMainProcessEvent('new-task-from-file', callback);
+                onMainProcessEvent('on-main-new-task-from-file', callback);
             },
             onMainProcessNewTaskFromText: function (callback) {
-                onMainProcessEvent('new-task-from-text', callback);
+                onMainProcessEvent('on-main-new-task-from-text', callback);
             },
             removeMainProcessNewTaskFromFileCallback: function (callback) {
-                removeMainProcessEvent('new-task-from-file', callback);
+                removeMainProcessEvent('on-main-new-task-from-file', callback);
             },
             removeMainProcessNewTaskFromTextCallback: function (callback) {
-                removeMainProcessEvent('new-task-from-text',  callback);
-            },
-            sendViewLoadedMessageToMainProcess: function (message) {
-                invokeMainProcessMethod('view-content-loaded', message);
-            },
-            sendNewDropFileMessageToMainProcess: function (message) {
-                invokeMainProcessMethod('new-drop-file', message);
-            },
-            sendNewDropTextMessageToMainProcess: function (message) {
-                invokeMainProcessMethod('new-drop-text', message);
+                removeMainProcessEvent('on-main-new-task-from-text',  callback);
             }
         };
     }]);

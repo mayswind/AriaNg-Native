@@ -25,7 +25,7 @@ let buildMenu = function(context) {
                 {
                     label: getMenuTitle(context, 'AboutAriaNgNative', 'About AriaNg Native'),
                     click: function () {
-                        ipc.navigateToAriaNgSettings();
+                        ipc.notifyRenderProcessNavigateToAriaNgSettings();
                     }
                 },
                 {

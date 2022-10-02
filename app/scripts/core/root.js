@@ -172,7 +172,7 @@
                 var file = getDropFile(e.originalEvent);
 
                 if (file) {
-                    ariaNgNativeElectronService.sendNewDropFileMessageToMainProcess({
+                    ariaNgNativeElectronService.notifyMainProcessorNewDropFile({
                         filePath: file.path,
                         location: $location.url()
                     });
@@ -182,7 +182,7 @@
                 var text = getDropText(e.originalEvent);
 
                 if (text) {
-                    ariaNgNativeElectronService.sendNewDropTextMessageToMainProcess({
+                    ariaNgNativeElectronService.notifyMainProcessorNewDropText({
                         text: text,
                         location: $location.url()
                     });
@@ -599,7 +599,7 @@
         });
 
         $rootScope.$on('$viewContentLoaded', function () {
-            ariaNgNativeElectronService.sendViewLoadedMessageToMainProcess($location.path());
+            ariaNgNativeElectronService.notifyMainProcessViewLoaded($location.path());
         });
 
         $rootScope.$on('$translateChangeSuccess', function(event, current, previous) {

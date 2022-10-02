@@ -22,6 +22,20 @@ const supportedFileExtensions = {
     '.metalink': 'metalink'
 };
 
+let isContainsSupportedFileArg = function (arg) {
+    if (!arg) {
+        return false;
+    }
+
+    let fileExtension = path.extname(arg);
+
+    if (!supportedFileExtensions[fileExtension]) {
+        return false;
+    }
+
+    return fs.existsSync(arg);
+};
+
 let getIndexUrl = function () {
     return url.format({
         protocol: 'file',
@@ -38,49 +52,35 @@ let loadNewTaskUrl = function () {
     core.mainWindow.loadURL(getIndexUrl() + '#!/new');
 };
 
-let navigateTo = function (routeUrl) {
-    core.mainWindow.webContents.send('navigate-to', routeUrl);
+let notifyRenderProcessWindowMaximized = function (maximized) {
+    core.mainWindow.webContents.send('on-main-window-maximized', maximized);
 };
 
-let navigateToNewTask = function () {
-    navigateTo('/new');
+let notifyRenderProcessWindowUnmaximized = function (maximized) {
+    core.mainWindow.webContents.send('on-main-window-unmaximized', maximized);
 };
 
-let navigateToAriaNgSettings = function () {
-    navigateTo('/settings/ariang');
+let notifyRenderProcessShowErrorMessage = function (message) {
+    core.mainWindow.webContents.send('on-main-show-error', message);
 };
 
-let showErrorMessage = function (message) {
-    core.mainWindow.webContents.send('show-error', message);
+let notifyRenderProcessNavigateToPath = function (routeUrl) {
+    core.mainWindow.webContents.send('on-main-navigate-to', routeUrl);
 };
 
-let onNewDropFile = function (callback) {
-    ipcMain.on('new-drop-file', callback);
+let notifyRenderProcessNavigateToNewTask = function () {
+    notifyRenderProcessNavigateToPath('/new');
 };
 
-let onNewDropText = function (callback) {
-    ipcMain.on('new-drop-text', callback);
+let notifyRenderProcessNavigateToAriaNgSettings = function () {
+    notifyRenderProcessNavigateToPath('/settings/ariang');
 };
 
-let isContainsSupportedFileArg = function (arg) {
-    if (!arg) {
-        return false;
-    }
-
-    let fileExtension = path.extname(arg);
-
-    if (!supportedFileExtensions[fileExtension]) {
-        return false;
-    }
-
-    return fs.existsSync(arg);
-};
-
-let newTaskFromFile = function (filePath, async) {
+let notifyRenderProcessNewTaskFromFile = function (filePath, async) {
     let fileExtension = path.extname(filePath);
 
     if (!supportedFileExtensions[fileExtension]) {
-        showErrorMessage('The selected file type is invalid!');
+        notifyRenderProcessShowErrorMessage('The selected file type is invalid!');
         return;
     }
 
@@ -101,45 +101,45 @@ let newTaskFromFile = function (filePath, async) {
         }
     }
 
-    core.mainWindow.webContents.send('new-task-from-file', result);
+    core.mainWindow.webContents.send('on-main-new-task-from-file', result);
 };
 
-let asyncNewTaskFromFile = function (filePath) {
-    if (!filePath) {
-        return;
-    }
-
-    ipcMain.once('view-content-loaded', (event, arg) => {
-        newTaskFromFile(filePath, true);
-    });
-};
-
-let newTaskFromText = function (text, async) {
+let notifyRenderProcessNewTaskFromText = function (text, async) {
     let result = {
         text: text,
         async: !!async
     };
 
-    core.mainWindow.webContents.send('new-task-from-text', result);
+    core.mainWindow.webContents.send('on-main-new-task-from-text', result);
 };
 
-let asyncNewTaskFromText = function (text) {
+let notifyRenderProcessNewNewTaskFromFileAfterViewLoaded = function (filePath) {
+    if (!filePath) {
+        return;
+    }
+
+    ipcMain.once('on-render-view-content-loaded', (event, arg) => {
+        notifyRenderProcessNewTaskFromFile(filePath, true);
+    });
+};
+
+let notifyRenderProcessNewNewTaskFromTextAfterViewLoaded = function (text) {
     if (!text) {
         return;
     }
 
-    ipcMain.once('view-content-loaded', (event, arg) => {
-        newTaskFromText(text, true);
+    ipcMain.once('on-render-view-content-loaded', (event, arg) => {
+        notifyRenderProcessNewTaskFromText(text, true);
     });
 };
 
-let notifyRenderProcessWindowMaximizedAsync = function (maximized) {
-    core.mainWindow.webContents.send('on-main-window-maximized', maximized);
-}
+let onRenderProcessNewDropFile = function (callback) {
+    ipcMain.on('on-render-new-drop-file', callback);
+};
 
-let notifyRenderProcessWindowUnmaximizedAsync = function (maximized) {
-    core.mainWindow.webContents.send('on-main-window-unmaximized', maximized);
-}
+let onRenderProcessNewDropText = function (callback) {
+    ipcMain.on('on-render-new-drop-text', callback);
+};
 
 ipcMain.on('render-sync-get-runtime-environment', (event) => {
     if (!process || !process.versions) {
@@ -256,21 +256,18 @@ ipcMain.on('render-sync-parse-bittorrent-info', (event, data) => {
 });
 
 module.exports = {
-    notifyRenderProcessWindowMaximizedAsync: notifyRenderProcessWindowMaximizedAsync,
-    notifyRenderProcessWindowUnmaximizedAsync: notifyRenderProcessWindowUnmaximizedAsync,
-
-
-
+    isContainsSupportedFileArg: isContainsSupportedFileArg,
     loadIndexUrl: loadIndexUrl,
     loadNewTaskUrl: loadNewTaskUrl,
-    navigateToNewTask: navigateToNewTask,
-    navigateToAriaNgSettings: navigateToAriaNgSettings,
-    showErrorMessage: showErrorMessage,
-    onNewDropFile: onNewDropFile,
-    onNewDropText: onNewDropText,
-    isContainsSupportedFileArg: isContainsSupportedFileArg,
-    newTaskFromFile: newTaskFromFile,
-    asyncNewTaskFromFile: asyncNewTaskFromFile,
-    newTaskFromText: newTaskFromText,
-    asyncNewTaskFromText: asyncNewTaskFromText
+    notifyRenderProcessWindowMaximized: notifyRenderProcessWindowMaximized,
+    notifyRenderProcessWindowUnmaximized: notifyRenderProcessWindowUnmaximized,
+    notifyRenderProcessShowErrorMessage: notifyRenderProcessShowErrorMessage,
+    notifyRenderProcessNavigateToNewTask: notifyRenderProcessNavigateToNewTask,
+    notifyRenderProcessNavigateToAriaNgSettings: notifyRenderProcessNavigateToAriaNgSettings,
+    notifyRenderProcessNewTaskFromFile: notifyRenderProcessNewTaskFromFile,
+    notifyRenderProcessNewTaskFromText: notifyRenderProcessNewTaskFromText,
+    notifyRenderProcessNewNewTaskFromFileAfterViewLoaded: notifyRenderProcessNewNewTaskFromFileAfterViewLoaded,
+    notifyRenderProcessNewNewTaskFromTextAfterViewLoaded: notifyRenderProcessNewNewTaskFromTextAfterViewLoaded,
+    onRenderProcessNewDropFile: onRenderProcessNewDropFile,
+    onRenderProcessNewDropText: onRenderProcessNewDropText
 };
