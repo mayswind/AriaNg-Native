@@ -48,7 +48,7 @@
             ipcRenderer.removeListener && ipcRenderer.removeListener(channel, callback);
         };
 
-        var sendMessageToMainProcess = function (channel, ...args) {
+        var invokeMainProcessMethod = function (channel, ...args) {
             ipcRenderer.send && ipcRenderer.send(channel, ...args);
         };
 
@@ -58,6 +58,14 @@
             }
 
             return ipcRenderer.sendSync(channel, ...args);
+        };
+
+        var invokeAsyncMainProcessMethod = function (channel, ...args) {
+            if (!ipcRenderer.invoke) {
+                return null;
+            }
+
+            return ipcRenderer.invoke(channel, ...args);
         };
 
         return {
@@ -103,10 +111,10 @@
                 return cfg;
             },
             setDefaultPosition: function (value) {
-                sendMessageToMainProcess('set-native-config-default-position', value);
+                invokeMainProcessMethod('set-native-config-default-position', value);
             },
             setMinimizedToTray: function (value) {
-                sendMessageToMainProcess('set-native-config-minimized-to-tray', value);
+                invokeMainProcessMethod('set-native-config-minimized-to-tray', value);
             },
             setMainWindowLanguage: function () {
                 this.setApplicationMenu();
@@ -127,13 +135,13 @@
                 return info;
             },
             openProjectLink: function () {
-                sendMessageToMainProcess('open-external-url', 'https://github.com/mayswind/AriaNg-Native');
+                invokeMainProcessMethod('open-external-url', 'https://github.com/mayswind/AriaNg-Native');
             },
             openProjectReleaseLink: function () {
-                sendMessageToMainProcess('open-external-url', 'https://github.com/mayswind/AriaNg-Native/releases');
+                invokeMainProcessMethod('open-external-url', 'https://github.com/mayswind/AriaNg-Native/releases');
             },
             openFileInDirectory: function (dir, filename) {
-                sendMessageToMainProcess('open-local-directory', dir, filename);
+                invokeMainProcessMethod('open-local-directory', dir, filename);
             },
             onMainWindowMaximize: function (callback) {
                 onMainWindowEvent('maximize', callback);
@@ -160,13 +168,13 @@
                 removeMainProcessCallback('new-task-from-text',  callback);
             },
             sendViewLoadedMessageToMainProcess: function (message) {
-                sendMessageToMainProcess('view-content-loaded', message);
+                invokeMainProcessMethod('view-content-loaded', message);
             },
             sendNewDropFileMessageToMainProcess: function (message) {
-                sendMessageToMainProcess('new-drop-file', message);
+                invokeMainProcessMethod('new-drop-file', message);
             },
             sendNewDropTextMessageToMainProcess: function (message) {
-                sendMessageToMainProcess('new-drop-text', message);
+                invokeMainProcessMethod('new-drop-text', message);
             },
             setApplicationMenu: function () {
                 if (menu.setApplicationMenu) {

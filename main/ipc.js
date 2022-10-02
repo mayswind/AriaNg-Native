@@ -152,7 +152,7 @@ ipcMain.on('open-external-url', (event, url) => {
 });
 
 ipcMain.on('open-local-directory', (event, dir, filename) => {
-    var fullpath = localfs.getFullPath(dir, filename);
+    let fullpath = localfs.getFullPath(dir, filename);
 
     if (localfs.isExists(fullpath)) {
         return shell.showItemInFolder && shell.showItemInFolder(fullpath);
