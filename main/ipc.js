@@ -144,10 +144,6 @@ ipcMain.handle('render-get-native-window-maximized', (event) => {
     return core.mainWindow.isMaximized();
 });
 
-ipcMain.on('render-reload-native-window', (event) => {
-    core.mainWindow.reload();
-});
-
 ipcMain.on('render-minimize-native-window', (event) => {
     core.mainWindow.minimize();
 });
@@ -158,6 +154,10 @@ ipcMain.on('render-maximize-or-restore-native-window', (event) => {
     } else {
         core.mainWindow.unmaximize();
     }
+});
+
+ipcMain.on('render-reload-native-window', (event) => {
+    core.mainWindow.reload();
 });
 
 ipcMain.on('render-exit-native-app', (event) => {
