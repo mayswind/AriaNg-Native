@@ -5,12 +5,17 @@ const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 
 const pkgfile = require('../package');
-const config = require('./config/config');
-const menu = require('./components/menu');
-const tray = require('./components/tray');
+
 const core = require('./core');
 const cmd = require('./cmd');
-const ipc = require('./ipc');
+const config = require('./config/config');
+const constants = require('./config/constants');
+const menu = require('./components/menu');
+const tray = require('./components/tray');
+const file = require('./lib/file');
+const page = require('./lib/page');
+const ipcEvents = require('./ipc/events');
+require('./ipc/methods');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -32,7 +37,7 @@ function isEnableCloseToHide() {
 
 global.settings = {
     version: pkgfile.version,
-    ariaNgVersion: pkgfile["ariang-version"],
+    ariaNgVersion: pkgfile['ariang-version'],
     isDevMode: cmd.argv.development,
     useCustomAppTitle: false
 };
@@ -91,9 +96,9 @@ app.on('second-instance', (event, argv, workingDirectory, additionalData) => {
             filePath = cmd.parseFilePath(argv);
         }
 
-        if (filePath && ipc.isContainsSupportedFileArg(filePath)) {
-            ipc.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
-            ipc.notifyRenderProcessNavigateToNewTask();
+        if (filePath && file.isContainsSupportedFileArg(filePath)) {
+            ipcEvents.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
+            ipcEvents.notifyRenderProcessNavigateToNewTask();
         }
     }
 });
@@ -150,11 +155,11 @@ app.on('ready', () => {
     menu.init();
     tray.init();
 
-    if (ipc.isContainsSupportedFileArg(filePathInCommandLine)) {
-        ipc.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathInCommandLine);
-        ipc.loadNewTaskUrl();
+    if (file.isContainsSupportedFileArg(filePathInCommandLine)) {
+        ipcEvents.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathInCommandLine);
+        core.mainWindow.loadURL(page.getPageFullUrl(constants.ariaNgPageLocations.NewTask));
     } else {
-        ipc.loadIndexUrl();
+        core.mainWindow.loadURL(page.getPageFullUrl());
     }
 
     core.mainWindow.once('ready-to-show', () => {
@@ -169,12 +174,12 @@ app.on('ready', () => {
 
     core.mainWindow.on('maximize', () => {
         config.maximized = core.mainWindow.isMaximized();
-        ipc.notifyRenderProcessWindowMaximized(core.mainWindow.isMaximized());
+        ipcEvents.notifyRenderProcessWindowMaximized(core.mainWindow.isMaximized());
     });
 
     core.mainWindow.on('unmaximize', () => {
         config.maximized = core.mainWindow.isMaximized();
-        ipc.notifyRenderProcessWindowUnmaximized(core.mainWindow.isMaximized());
+        ipcEvents.notifyRenderProcessWindowUnmaximized(core.mainWindow.isMaximized());
     });
 
     core.mainWindow.on('move', () => {
@@ -216,7 +221,7 @@ app.on('ready', () => {
         core.mainWindow = null;
     });
 
-    ipc.onRenderProcessNewDropFile((event, arg) => {
+    ipcEvents.onRenderProcessNewDropFile((event, arg) => {
         if (!arg) {
             return;
         }
@@ -225,14 +230,14 @@ app.on('ready', () => {
         let location = arg.location;
 
         if (location.indexOf('/new') === 0) {
-            ipc.notifyRenderProcessNewTaskFromFile(filePath);
+            ipcEvents.notifyRenderProcessNewTaskFromFile(filePath);
         } else {
-            ipc.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
-            ipc.notifyRenderProcessNavigateToNewTask();
+            ipcEvents.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
+            ipcEvents.notifyRenderProcessNavigateToNewTask();
         }
     });
 
-    ipc.onRenderProcessNewDropText((event, arg) => {
+    ipcEvents.onRenderProcessNewDropText((event, arg) => {
         if (!arg) {
             return;
         }
@@ -241,10 +246,10 @@ app.on('ready', () => {
         let location = arg.location;
 
         if (location.indexOf('/new') === 0) {
-            ipc.notifyRenderProcessNewTaskFromText(text);
+            ipcEvents.notifyRenderProcessNewTaskFromText(text);
         } else {
-            ipc.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(text);
-            ipc.notifyRenderProcessNavigateToNewTask();
+            ipcEvents.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(text);
+            ipcEvents.notifyRenderProcessNavigateToNewTask();
         }
     });
 });

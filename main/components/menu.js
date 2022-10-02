@@ -4,7 +4,7 @@ const os = require('os');
 const electron = require('electron');
 
 const core = require('../core');
-const ipc = require('../ipc');
+const ipcEvents = require('../ipc/events');
 
 const app = electron.app;
 const Menu = electron.Menu;
@@ -25,7 +25,7 @@ let buildMenu = function(context) {
                 {
                     label: getMenuTitle(context, 'AboutAriaNgNative', 'About AriaNg Native'),
                     click: function () {
-                        ipc.notifyRenderProcessNavigateToAriaNgSettings();
+                        ipcEvents.notifyRenderProcessNavigateToAriaNgSettings();
                     }
                 },
                 {

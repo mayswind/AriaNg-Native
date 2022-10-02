@@ -12,7 +12,7 @@ let isExists = function (fullPath) {
 };
 
 let readPackageFile = function (filePath) {
-    return fs.readFileSync(path.join(__dirname, '../app/', filePath), 'UTF-8');
+    return fs.readFileSync(path.join(__dirname, '../../app/', filePath), 'UTF-8');
 };
 
 module.exports = {

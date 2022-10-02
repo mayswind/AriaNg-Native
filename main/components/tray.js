@@ -11,7 +11,7 @@ const Menu = electron.Menu;
 const Tray = electron.Tray;
 
 let instance = null;
-let iconPath = path.join(__dirname, '..', 'assets', 'AriaNg.ico');
+let iconPath = path.join(__dirname, '../../', 'assets', 'AriaNg.ico');
 
 let init = function () {
     if (instance === null && os.platform() === 'win32') {
