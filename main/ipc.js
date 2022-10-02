@@ -7,11 +7,11 @@ const electron = require('electron');
 
 const pkgfile = require('../package');
 const core = require('./core');
-const config = require('./config');
-const menu = require('./menu');
-const tray = require('./tray');
-const localfs = require('./localfs');
-const bittorrent = require('./bittorrent');
+const config = require('./config/config');
+const menu = require('./components/menu');
+const tray = require('./components/tray');
+const localfs = require('./lib/localfs');
+const bittorrent = require('./lib/bittorrent');
 
 const shell = electron.shell;
 const ipcMain = electron.ipcMain;

@@ -3,8 +3,8 @@
 const os = require('os');
 const electron = require('electron');
 
-const core = require('./core');
-const ipc = require('./ipc');
+const core = require('../core');
+const ipc = require('../ipc');
 
 const app = electron.app;
 const Menu = electron.Menu;

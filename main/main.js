@@ -5,12 +5,12 @@ const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 
 const pkgfile = require('../package');
-const config = require('./config');
+const config = require('./config/config');
+const menu = require('./components/menu');
+const tray = require('./components/tray');
 const core = require('./core');
 const cmd = require('./cmd');
 const ipc = require('./ipc');
-const menu = require('./menu');
-const tray = require('./tray');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;

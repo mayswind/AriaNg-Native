@@ -4,7 +4,7 @@ const os = require('os');
 const path = require('path');
 const electron = require('electron');
 
-const core = require('./core');
+const core = require('../core');
 
 const app = electron.app;
 const Menu = electron.Menu;
