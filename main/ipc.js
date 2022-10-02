@@ -11,6 +11,7 @@ const config = require('./config');
 const menu = require('./menu');
 const tray = require('./tray');
 const localfs = require('./localfs');
+const bittorrent = require('./bittorrent');
 
 const shell = electron.shell;
 const ipcMain = electron.ipcMain;
@@ -217,6 +218,10 @@ ipcMain.on('render-open-local-directory', (event, dir, filename) => {
     } else {
         shell.openItem(dir);
     }
+});
+
+ipcMain.on('render-sync-parse-bittorrent-info', (event, data) => {
+    event.returnValue = bittorrent.parseBittorrentInfo(data);
 });
 
 module.exports = {

@@ -9,7 +9,6 @@
             }
         };
         var ipcRenderer = electron.ipcRenderer || {};
-        var bittorrent = remote.require('./bittorrent') || {};
 
         var getSetting = function (item) {
             if (!remote || !remote.getGlobal) {
@@ -83,9 +82,9 @@
             },
             getWindowMaximizedAsync: function (callback) {
                 return invokeAsyncMainProcessMethod('render-get-native-window-maximized')
-                    .then(function onReceive(value) {
+                    .then(function onReceive(maximized) {
                         if (callback) {
-                            callback(value);
+                            callback(maximized);
                         }
                     });
             },
@@ -156,14 +155,6 @@
             setMinimizedToTray: function (value) {
                 invokeMainProcessMethod('render-set-native-config-minimized-to-tray', value);
             },
-            parseBittorrentInfo: function (path) {
-                var info = angular.copy(bittorrent.parseBittorrentInfo(path));
-                info.type = 'bittorrent';
-
-                ariaNgLogService.debug('[ariaNgNativeElectronService.parseBittorrentInfo] bittorrent info', info);
-
-                return info;
-            },
             openProjectLink: function () {
                 invokeMainProcessMethod('render-open-external-url', 'https://github.com/mayswind/AriaNg-Native');
             },
@@ -175,14 +166,22 @@
             },
             getLocalFSExists: function (fullpath, callback) {
                 return invokeAsyncMainProcessMethod('render-get-localfs-exists', fullpath)
-                    .then(function onReceive(value) {
+                    .then(function onReceive(exists) {
                         if (callback) {
-                            callback(value);
+                            callback(exists);
                         }
                     });
             },
             openFileInDirectory: function (dir, filename) {
                 invokeMainProcessMethod('render-open-local-directory', dir, filename);
+            },
+            parseBittorrentInfo: function (data) {
+                var info = angular.copy(invokeSyncMainProcessMethod('render-sync-parse-bittorrent-info', data));
+                info.type = 'bittorrent';
+
+                ariaNgLogService.debug('[ariaNgNativeElectronService.parseBittorrentInfo] bittorrent info', info);
+
+                return info;
             },
             onMainWindowMaximize: function (callback) {
                 onMainProcessEvent('on-main-window-maximized', callback);
