@@ -52,7 +52,7 @@
     padding: 0 8px 0 8px;
 }
 
-.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maxmize {
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maximize {
     padding: 0 6px 0 8px;
 }
 
@@ -68,13 +68,13 @@
 
 .custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-minimize:hover,
 .custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-minimize:focus,
-.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maxmize:hover,
-.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maxmize:focus{
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maximize:hover,
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maximize:focus{
     color: #0080ff !important;
 }
 
 .custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-minimize:active,
-.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maxmize:active{
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a.btn-title-maximize:active{
     color: #0069c3 !important;
 }
 

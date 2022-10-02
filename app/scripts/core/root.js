@@ -202,6 +202,16 @@
             return angular.element('body').hasClass('sidebar-open');
         };
 
+        var toggleMaximizeButton = function () {
+            angular.element('#native-title-maximize-icon').addClass('fa-window-maximize').removeClass('fa-window-restore');
+            angular.element('#native-title-maximize-btn').attr('title', ariaNgLocalizationService.getLocalizedText('Maximize'));
+        };
+
+        var toggleRestoreButton = function () {
+            angular.element('#native-title-maximize-icon').addClass('fa-window-restore').removeClass('fa-window-maximize');
+            angular.element('#native-title-maximize-btn').attr('title', ariaNgLocalizationService.getLocalizedText('Restore Down'));
+        };
+
         $rootScope.currentTheme = 'light';
 
         $rootScope.searchContext = {
@@ -466,14 +476,14 @@
             }
         };
 
-        $rootScope.nativeWindowContext = {
-            maximized: false
-        };
-
         $rootScope.useCustomAppTitle = ariaNgNativeElectronService.useCustomAppTitle();
 
         ariaNgNativeElectronService.getWindowMaximizedAsync(function (maximized) {
-            $rootScope.nativeWindowContext.maximized = maximized;
+            if (maximized) {
+                toggleRestoreButton();
+            } else {
+                toggleMaximizeButton();
+            }
         });
 
         $window.addEventListener('keydown', function (event) {
@@ -495,11 +505,11 @@
         }, true);
 
         ariaNgNativeElectronService.onMainWindowMaximize(function () {
-            $rootScope.nativeWindowContext.maximized = true;
+            toggleRestoreButton();
         });
 
         ariaNgNativeElectronService.onMainWindowUnmaximize(function () {
-            $rootScope.nativeWindowContext.maximized = false;
+            toggleMaximizeButton();
         });
 
         ariaNgNativeElectronService.onMainProcessNavigateTo(function (event, routeUrl) {

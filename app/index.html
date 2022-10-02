@@ -88,19 +88,18 @@
             <div class="navbar-app-title pull-right">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a class="toolbar btn-title-minimize" title="{{'Minimize' | translate}}" ng-click="minimizeWindow()">
-                            <i class="fa fa-window-minimize"></i>
+                        <a id="native-title-minimize-btn" class="toolbar btn-title-minimize" title="{{'Minimize' | translate}}" ng-click="minimizeWindow()">
+                            <i id="native-title-minimize-icon" class="fa fa-window-minimize"></i>
                         </a>
                     </li>
                     <li>
-                        <a class="toolbar btn-title-maxmize" title="{{(nativeWindowContext.maximized ? 'Restore Down' : 'Maximize') | translate}}" ng-click="maximizeOrRestoreWindow()">
-                            <i class="fa fa-window-maximize" ng-if="!nativeWindowContext.maximized"></i>
-                            <i class="fa fa-window-restore ng-cloak" ng-if="nativeWindowContext.maximized"></i>
+                        <a id="native-title-maximize-btn" class="toolbar btn-title-maximize" title="{{'Maximize' | translate}}" ng-click="maximizeOrRestoreWindow()">
+                            <i id="native-title-maximize-icon" class="fa fa-window-maximize"></i>
                         </a>
                     </li>
                     <li>
-                        <a class="toolbar btn-title-close" title="{{'Close' | translate}}" ng-click="exitApp()">
-                            <i class="fa fa-lg fa-close"></i>
+                        <a id="native-title-close-btn" class="toolbar btn-title-close" title="{{'Close' | translate}}" ng-click="exitApp()">
+                            <i id="native-title-close-icon" class="fa fa-lg fa-close"></i>
                         </a>
                     </li>
                 </ul>
