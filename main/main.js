@@ -173,10 +173,12 @@ app.on('ready', () => {
 
     core.mainWindow.on('maximize', () => {
         config.maximized = core.mainWindow.isMaximized();
+        ipc.notifyRenderProcessWindowMaximizedAsync(core.mainWindow.isMaximized());
     });
 
     core.mainWindow.on('unmaximize', () => {
         config.maximized = core.mainWindow.isMaximized();
+        ipc.notifyRenderProcessWindowUnmaximizedAsync(core.mainWindow.isMaximized());
     });
 
     core.mainWindow.on('move', () => {

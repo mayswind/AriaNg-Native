@@ -28,23 +28,11 @@
             return settings[item];
         };
 
-        var getCurrentWindow = function () {
-            if (!remote || !remote.getCurrentWindow) {
-                return {};
-            }
-
-            return remote.getCurrentWindow();
-        };
-
-        var onMainWindowEvent = function (event, callback) {
-            getCurrentWindow().on && getCurrentWindow().on(event, callback);
-        };
-
-        var onMainProcessMessage = function (channel, callback) {
+        var onMainProcessEvent = function (channel, callback) {
             ipcRenderer.on && ipcRenderer.on(channel, callback);
         };
 
-        var removeMainProcessCallback = function (channel, callback) {
+        var removeMainProcessEvent = function (channel, callback) {
             ipcRenderer.removeListener && ipcRenderer.removeListener(channel, callback);
         };
 
@@ -97,7 +85,7 @@
                 return !!getSetting('useCustomAppTitle');
             },
             getNativeConfig: function () {
-                var config = invokeSyncMainProcessMethod('get-native-config');
+                var config = invokeSyncMainProcessMethod('render-sync-get-native-config');
                 var cfg = {};
 
                 for (var key in config) {
@@ -111,10 +99,10 @@
                 return cfg;
             },
             setDefaultPosition: function (value) {
-                invokeMainProcessMethod('set-native-config-default-position', value);
+                invokeMainProcessMethod('render-set-native-config-default-position', value);
             },
             setMinimizedToTray: function (value) {
-                invokeMainProcessMethod('set-native-config-minimized-to-tray', value);
+                invokeMainProcessMethod('render-set-native-config-minimized-to-tray', value);
             },
             setMainWindowLanguage: function () {
                 this.setApplicationMenu();
@@ -135,37 +123,37 @@
                 return info;
             },
             openProjectLink: function () {
-                invokeMainProcessMethod('open-external-url', 'https://github.com/mayswind/AriaNg-Native');
+                invokeMainProcessMethod('render-open-external-url', 'https://github.com/mayswind/AriaNg-Native');
             },
             openProjectReleaseLink: function () {
-                invokeMainProcessMethod('open-external-url', 'https://github.com/mayswind/AriaNg-Native/releases');
+                invokeMainProcessMethod('render-open-external-url', 'https://github.com/mayswind/AriaNg-Native/releases');
             },
             openFileInDirectory: function (dir, filename) {
-                invokeMainProcessMethod('open-local-directory', dir, filename);
+                invokeMainProcessMethod('render-open-local-directory', dir, filename);
             },
             onMainWindowMaximize: function (callback) {
-                onMainWindowEvent('maximize', callback);
+                onMainProcessEvent('on-main-window-maximized', callback);
             },
             onMainWindowUnmaximize: function (callback) {
-                onMainWindowEvent('unmaximize', callback);
+                onMainProcessEvent('on-main-window-unmaximized', callback);
             },
             onMainProcessNavigateTo: function (callback) {
-                onMainProcessMessage('navigate-to', callback);
+                onMainProcessEvent('navigate-to', callback);
             },
             onMainProcessShowError: function (callback) {
-                onMainProcessMessage('show-error', callback);
+                onMainProcessEvent('show-error', callback);
             },
             onMainProcessNewTaskFromFile: function (callback) {
-                onMainProcessMessage('new-task-from-file', callback);
+                onMainProcessEvent('new-task-from-file', callback);
             },
             onMainProcessNewTaskFromText: function (callback) {
-                onMainProcessMessage('new-task-from-text', callback);
+                onMainProcessEvent('new-task-from-text', callback);
             },
             removeMainProcessNewTaskFromFileCallback: function (callback) {
-                removeMainProcessCallback('new-task-from-file', callback);
+                removeMainProcessEvent('new-task-from-file', callback);
             },
             removeMainProcessNewTaskFromTextCallback: function (callback) {
-                removeMainProcessCallback('new-task-from-text',  callback);
+                removeMainProcessEvent('new-task-from-text',  callback);
             },
             sendViewLoadedMessageToMainProcess: function (message) {
                 invokeMainProcessMethod('view-content-loaded', message);
@@ -218,23 +206,24 @@
                 }
             },
             reload: function () {
-                getCurrentWindow().reload && getCurrentWindow().reload();
+                invokeMainProcessMethod('render-reload-native-window');
             },
-            isMaximized: function () {
-                return getCurrentWindow().isMaximized && getCurrentWindow().isMaximized();
+            getWindowMaximizedAsync: function (callback) {
+                return invokeAsyncMainProcessMethod('render-get-native-window-maximized')
+                    .then(function onReceive(value) {
+                        if (callback) {
+                            callback(value);
+                        }
+                    });
             },
             minimizeWindow: function () {
-                getCurrentWindow().minimize && getCurrentWindow().minimize();
+                invokeMainProcessMethod('render-minimize-native-window');
             },
             maximizeOrRestoreWindow: function () {
-                if (!this.isMaximized()) {
-                    getCurrentWindow().maximize && getCurrentWindow().maximize();
-                } else {
-                    getCurrentWindow().unmaximize && getCurrentWindow().unmaximize();
-                }
+                invokeMainProcessMethod('render-maximize-or-restore-native-window');
             },
             exitApp: function () {
-                getCurrentWindow().close && getCurrentWindow().close();
+                invokeMainProcessMethod('render-exit-native-app');
             }
         };
     }]);

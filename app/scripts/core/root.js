@@ -471,7 +471,10 @@
         };
 
         $rootScope.useCustomAppTitle = ariaNgNativeElectronService.useCustomAppTitle();
-        $rootScope.nativeWindowContext.maximized = ariaNgNativeElectronService.isMaximized();
+
+        ariaNgNativeElectronService.getWindowMaximizedAsync(function (maximized) {
+            $rootScope.nativeWindowContext.maximized = maximized;
+        });
 
         $window.addEventListener('keydown', function (event) {
             if (!ariaNgSettingService.getKeyboardShortcuts()) {

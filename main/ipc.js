@@ -130,38 +130,75 @@ let asyncNewTaskFromText = function (text) {
     });
 };
 
-ipcMain.on('get-native-config', (event) => {
+let notifyRenderProcessWindowMaximizedAsync = function (maximized) {
+    core.mainWindow.webContents.send('on-main-window-maximized', maximized);
+}
+
+let notifyRenderProcessWindowUnmaximizedAsync = function (maximized) {
+    core.mainWindow.webContents.send('on-main-window-unmaximized', maximized);
+}
+
+ipcMain.handle('render-get-native-window-maximized', (event) => {
+    return core.mainWindow.isMaximized();
+});
+
+ipcMain.on('render-reload-native-window', (event) => {
+    core.mainWindow.reload();
+});
+
+ipcMain.on('render-minimize-native-window', (event) => {
+    core.mainWindow.minimize();
+});
+
+ipcMain.on('render-maximize-or-restore-native-window', (event) => {
+    if (!core.mainWindow.isMaximized()) {
+        core.mainWindow.maximize();
+    } else {
+        core.mainWindow.unmaximize();
+    }
+});
+
+ipcMain.on('render-exit-native-app', (event) => {
+    core.mainWindow.close();
+});
+
+ipcMain.on('render-sync-get-native-config', (event) => {
     event.returnValue = {
         defaultPosition: config.defaultPosition,
         minimizedToTray: config.minimizedToTray
     };
 });
 
-ipcMain.on('set-native-config-default-position', (event, value) => {
+ipcMain.on('render-set-native-config-default-position', (event, value) => {
     config.defaultPosition = value;
     config.save('defaultPosition');
 });
 
-ipcMain.on('set-native-config-minimized-to-tray', (event, value) => {
+ipcMain.on('render-set-native-config-minimized-to-tray', (event, value) => {
     config.minimizedToTray = !!value;
     config.save('minimizedToTray');
 });
 
-ipcMain.on('open-external-url', (event, url) => {
+ipcMain.on('render-open-external-url', (event, url) => {
     shell.openExternal(url);
 });
 
-ipcMain.on('open-local-directory', (event, dir, filename) => {
+ipcMain.on('render-open-local-directory', (event, dir, filename) => {
     let fullpath = localfs.getFullPath(dir, filename);
 
     if (localfs.isExists(fullpath)) {
-        return shell.showItemInFolder && shell.showItemInFolder(fullpath);
+        shell.showItemInFolder(fullpath);
     } else {
-        return shell.openItem && shell.openItem(dir);
+        shell.openItem(dir);
     }
 });
 
 module.exports = {
+    notifyRenderProcessWindowMaximizedAsync: notifyRenderProcessWindowMaximizedAsync,
+    notifyRenderProcessWindowUnmaximizedAsync: notifyRenderProcessWindowUnmaximizedAsync,
+
+
+
     loadIndexUrl: loadIndexUrl,
     loadNewTaskUrl: loadNewTaskUrl,
     navigateToNewTask: navigateToNewTask,
