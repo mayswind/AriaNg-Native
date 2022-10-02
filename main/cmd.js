@@ -1,6 +1,5 @@
 'use strict';
 
-const os = require('os');
 const yargs = require('yargs');
 
 const argv = yargs(process.argv.slice(1))
