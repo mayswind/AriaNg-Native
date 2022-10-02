@@ -8,6 +8,8 @@ const electron = require('electron');
 const pkgfile = require('../package');
 const core = require('./core');
 const config = require('./config');
+const menu = require('./menu');
+const tray = require('./tray');
 const localfs = require('./localfs');
 
 const shell = electron.shell;
@@ -160,6 +162,22 @@ ipcMain.on('render-maximize-or-restore-native-window', (event) => {
 
 ipcMain.on('render-exit-native-app', (event) => {
     core.mainWindow.close();
+});
+
+ipcMain.on('render-update-app-menu-label', (event, labels) => {
+    menu.setApplicationMenu({
+        labels: labels
+    });
+});
+
+ipcMain.on('render-update-tray-menu-label', (event, labels) => {
+    tray.setContextMenu({
+        labels: labels
+    });
+});
+
+ipcMain.on('render-update-tray-tip', (event, tooltip) => {
+    tray.setToolTip(tooltip);
 });
 
 ipcMain.on('render-sync-get-native-config', (event) => {

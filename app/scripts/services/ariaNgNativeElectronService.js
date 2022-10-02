@@ -9,8 +9,6 @@
             }
         };
         var ipcRenderer = electron.ipcRenderer || {};
-        var menu = remote.require('./menu') || {};
-        var tray = remote.require('./tray') || {};
         var localfs = remote.require('./localfs') || {};
         var bittorrent = remote.require('./bittorrent') || {};
 
@@ -165,45 +163,35 @@
                 invokeMainProcessMethod('new-drop-text', message);
             },
             setApplicationMenu: function () {
-                if (menu.setApplicationMenu) {
-                    menu.setApplicationMenu({
-                        labels: {
-                            AboutAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.AboutAriaNgNative'),
-                            Services: ariaNgLocalizationService.getLocalizedText('menu.Services'),
-                            HideAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.HideAriaNgNative'),
-                            HideOthers: ariaNgLocalizationService.getLocalizedText('menu.HideOthers'),
-                            ShowAll: ariaNgLocalizationService.getLocalizedText('menu.ShowAll'),
-                            QuitAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.QuitAriaNgNative'),
-                            Edit: ariaNgLocalizationService.getLocalizedText('menu.Edit'),
-                            Undo: ariaNgLocalizationService.getLocalizedText('menu.Undo'),
-                            Redo: ariaNgLocalizationService.getLocalizedText('menu.Redo'),
-                            Cut: ariaNgLocalizationService.getLocalizedText('menu.Cut'),
-                            Copy: ariaNgLocalizationService.getLocalizedText('menu.Copy'),
-                            Paste: ariaNgLocalizationService.getLocalizedText('menu.Paste'),
-                            Delete: ariaNgLocalizationService.getLocalizedText('menu.Delete'),
-                            SelectAll: ariaNgLocalizationService.getLocalizedText('menu.SelectAll'),
-                            Window: ariaNgLocalizationService.getLocalizedText('menu.Window'),
-                            Minimize: ariaNgLocalizationService.getLocalizedText('menu.Minimize'),
-                            Zoom: ariaNgLocalizationService.getLocalizedText('menu.Zoom'),
-                            BringAllToFront: ariaNgLocalizationService.getLocalizedText('menu.BringAllToFront')
-                        }
-                    });
-                }
+                invokeMainProcessMethod('render-update-app-menu-label', {
+                    AboutAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.AboutAriaNgNative'),
+                    Services: ariaNgLocalizationService.getLocalizedText('menu.Services'),
+                    HideAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.HideAriaNgNative'),
+                    HideOthers: ariaNgLocalizationService.getLocalizedText('menu.HideOthers'),
+                    ShowAll: ariaNgLocalizationService.getLocalizedText('menu.ShowAll'),
+                    QuitAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.QuitAriaNgNative'),
+                    Edit: ariaNgLocalizationService.getLocalizedText('menu.Edit'),
+                    Undo: ariaNgLocalizationService.getLocalizedText('menu.Undo'),
+                    Redo: ariaNgLocalizationService.getLocalizedText('menu.Redo'),
+                    Cut: ariaNgLocalizationService.getLocalizedText('menu.Cut'),
+                    Copy: ariaNgLocalizationService.getLocalizedText('menu.Copy'),
+                    Paste: ariaNgLocalizationService.getLocalizedText('menu.Paste'),
+                    Delete: ariaNgLocalizationService.getLocalizedText('menu.Delete'),
+                    SelectAll: ariaNgLocalizationService.getLocalizedText('menu.SelectAll'),
+                    Window: ariaNgLocalizationService.getLocalizedText('menu.Window'),
+                    Minimize: ariaNgLocalizationService.getLocalizedText('menu.Minimize'),
+                    Zoom: ariaNgLocalizationService.getLocalizedText('menu.Zoom'),
+                    BringAllToFront: ariaNgLocalizationService.getLocalizedText('menu.BringAllToFront')
+                });
             },
             setTrayMenu: function () {
-                if (tray.setContextMenu) {
-                    tray.setContextMenu({
-                        labels: {
-                            ShowAriaNgNative: ariaNgLocalizationService.getLocalizedText('tray.ShowAriaNgNative'),
-                            Exit: ariaNgLocalizationService.getLocalizedText('tray.Exit')
-                        }
-                    });
-                }
+                invokeMainProcessMethod('render-update-tray-menu-label', {
+                    ShowAriaNgNative: ariaNgLocalizationService.getLocalizedText('tray.ShowAriaNgNative'),
+                    Exit: ariaNgLocalizationService.getLocalizedText('tray.Exit')
+                });
             },
             setTrayToolTip: function (value) {
-                if (tray.setToolTip) {
-                    tray.setToolTip(value);
-                }
+                invokeMainProcessMethod('render-update-tray-tip', value);
             },
             reload: function () {
                 invokeMainProcessMethod('render-reload-native-window');
