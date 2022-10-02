@@ -141,6 +141,37 @@ let notifyRenderProcessWindowUnmaximizedAsync = function (maximized) {
     core.mainWindow.webContents.send('on-main-window-unmaximized', maximized);
 }
 
+ipcMain.on('render-sync-get-runtime-environment', (event) => {
+    if (!process || !process.versions) {
+        return null;
+    }
+
+    var versions = process.versions;
+
+    event.returnValue = [
+        {
+            name: 'Electron',
+            value: versions.electron
+        },
+        {
+            name: 'Node.js',
+            value: versions.node
+        },
+        {
+            name: 'Chrome',
+            value: versions.chrome
+        },
+        {
+            name: 'V8',
+            value: versions.v8
+        }
+    ];
+});
+
+ipcMain.on('render-sync-get-global-setting', (event, key) => {
+    event.returnValue = global.settings[key];
+});
+
 ipcMain.handle('render-get-native-window-maximized', (event) => {
     return core.mainWindow.isMaximized();
 });

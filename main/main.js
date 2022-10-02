@@ -2,7 +2,6 @@
 
 const os = require('os');
 const electron = require('electron');
-const remote = require('@electron/remote/main');
 const electronLocalshortcut = require('electron-localshortcut');
 
 const pkgfile = require('../package');
@@ -43,7 +42,6 @@ if (!app.isPackaged) {
 }
 
 app.setAppUserModelId(pkgfile.appId);
-remote.initialize();
 
 if (os.platform() === 'win32' && !cmd.argv.classic) {
     global.settings.useCustomAppTitle = true;
@@ -112,11 +110,9 @@ app.on('ready', () => {
         show: false,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false,
-            enableRemoteModule: true
+            contextIsolation: false
         }
     });
-    remote.enable(core.mainWindow.webContents);
 
     let displays = electron.screen.getAllDisplays();
     let isLastPositionInScreen = false;

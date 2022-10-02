@@ -3,26 +3,7 @@
 
     angular.module('ariaNg').factory('ariaNgNativeElectronService', ['ariaNgLogService', 'ariaNgLocalizationService', function (ariaNgLogService, ariaNgLocalizationService) {
         var electron = angular.isFunction(window.nodeRequire) ? nodeRequire('electron') : {};
-        var remote = angular.isFunction(window.nodeRequire) ? nodeRequire('@electron/remote') : {
-            require: function () {
-                return {};
-            }
-        };
         var ipcRenderer = electron.ipcRenderer || {};
-
-        var getSetting = function (item) {
-            if (!remote || !remote.getGlobal) {
-                return null;
-            }
-
-            var settings = remote.getGlobal('settings');
-
-            if (!settings) {
-                return null;
-            }
-
-            return settings[item];
-        };
 
         var onMainProcessEvent = function (channel, callback) {
             ipcRenderer.on && ipcRenderer.on(channel, callback);
@@ -54,31 +35,19 @@
 
         return {
             getRuntimeEnvironment: function () {
-                if (!remote.process || !remote.process.versions) {
-                    return null;
-                }
-
-                var versions = remote.process.versions;
-                var items = [];
-
-                items.push({name: 'Electron', value: versions.electron});
-                items.push({name: 'Node.js', value: versions.node});
-                items.push({name: 'Chrome', value: versions.chrome});
-                items.push({name: 'V8', value: versions.v8});
-
-                return items;
+                return invokeSyncMainProcessMethod('render-sync-get-runtime-environment');
             },
             getVersion: function() {
-                return getSetting('version');
+                return invokeSyncMainProcessMethod('render-sync-get-global-setting', 'version');
             },
             getAriaNgVersion: function() {
-                return getSetting('ariaNgVersion');
+                return invokeSyncMainProcessMethod('render-sync-get-global-setting', 'ariaNgVersion');
             },
             isDevMode: function () {
-                return !!getSetting('isDevMode');
+                return invokeSyncMainProcessMethod('render-sync-get-global-setting', 'isDevMode');
             },
             useCustomAppTitle: function () {
-                return !!getSetting('useCustomAppTitle');
+                return invokeSyncMainProcessMethod('render-sync-get-global-setting', 'useCustomAppTitle');
             },
             getWindowMaximizedAsync: function (callback) {
                 return invokeAsyncMainProcessMethod('render-get-native-window-maximized')
