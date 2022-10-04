@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgNativeElectronService', ['ariaNgLogService', 'ariaNgLocalizationService', function (ariaNgLogService, ariaNgLocalizationService) {
+    angular.module('ariaNg').factory('ariaNgNativeElectronService', ['$q', 'ariaNgLogService', 'ariaNgLocalizationService', function ($q, ariaNgLogService, ariaNgLocalizationService) {
         var electron = angular.isFunction(window.nodeRequire) ? nodeRequire('electron') : {};
         var ipcRenderer = electron.ipcRenderer || {};
 
@@ -123,6 +123,22 @@
             },
             setMinimizedToTray: function (value) {
                 invokeMainProcessMethod('render-set-native-config-minimized-to-tray', value);
+            },
+            requestHttp: function (requestContext) {
+                var deferred = $q.defer();
+
+                invokeMainProcessMethodAsync('render-request-http', requestContext)
+                    .then(function onReceive(result) {
+                        if (result && result.success) {
+                            deferred.resolve(result.response);
+                        } else {
+                            deferred.reject(result.response);
+                        }
+                    }).catch(function onError() {
+                        deferred.reject({});
+                    });
+
+                return deferred.promise;
             },
             openProjectLink: function () {
                 invokeMainProcessMethod('render-open-external-url', 'https://github.com/mayswind/AriaNg-Native');

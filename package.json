@@ -67,6 +67,7 @@
     "angular-websocket": "^2.0.1",
     "angularjs-dragula": "^2.0.0",
     "awesome-bootstrap-checkbox": "^0.3.7",
+    "axios": "^0.27.2",
     "bootstrap": "3.4.1",
     "bootstrap-contextmenu": "^1.0.0",
     "echarts": "3.8.5",
@@ -82,6 +83,7 @@
     "yargs": "^15.4.1"
   },
   "mainDependencies": [
+    "axios",
     "electron-localshortcut",
     "electron-store",
     "yargs",
