@@ -17,7 +17,7 @@
             ipcRenderer.send && ipcRenderer.send(channel, ...args);
         };
 
-        var invokeSyncMainProcessMethod = function (channel, ...args) {
+        var invokeMainProcessMethodSync = function (channel, ...args) {
             if (!ipcRenderer.sendSync) {
                 return null;
             }
@@ -25,7 +25,7 @@
             return ipcRenderer.sendSync(channel, ...args);
         };
 
-        var invokeAsyncMainProcessMethod = function (channel, ...args) {
+        var invokeMainProcessMethodAsync = function (channel, ...args) {
             if (!ipcRenderer.invoke) {
                 return null;
             }
@@ -35,22 +35,22 @@
 
         return {
             getRuntimeEnvironment: function () {
-                return invokeSyncMainProcessMethod('render-sync-get-runtime-environment');
+                return invokeMainProcessMethodSync('render-sync-get-runtime-environment');
             },
             getVersion: function() {
-                return invokeSyncMainProcessMethod('render-sync-get-global-setting', 'version');
+                return invokeMainProcessMethodSync('render-sync-get-global-setting', 'version');
             },
             getAriaNgVersion: function() {
-                return invokeSyncMainProcessMethod('render-sync-get-global-setting', 'ariaNgVersion');
+                return invokeMainProcessMethodSync('render-sync-get-global-setting', 'ariaNgVersion');
             },
             isDevMode: function () {
-                return invokeSyncMainProcessMethod('render-sync-get-global-setting', 'isDevMode');
+                return invokeMainProcessMethodSync('render-sync-get-global-setting', 'isDevMode');
             },
             useCustomAppTitle: function () {
-                return invokeSyncMainProcessMethod('render-sync-get-global-setting', 'useCustomAppTitle');
+                return invokeMainProcessMethodSync('render-sync-get-global-setting', 'useCustomAppTitle');
             },
             getWindowMaximizedAsync: function (callback) {
-                return invokeAsyncMainProcessMethod('render-get-native-window-maximized')
+                return invokeMainProcessMethodAsync('render-get-native-window-maximized')
                     .then(function onReceive(maximized) {
                         if (callback) {
                             callback(maximized);
@@ -105,7 +105,7 @@
                 this.setTrayMenu();
             },
             getNativeConfig: function () {
-                var config = invokeSyncMainProcessMethod('render-sync-get-native-config');
+                var config = invokeMainProcessMethodSync('render-sync-get-native-config');
                 var cfg = {};
 
                 for (var key in config) {
@@ -131,10 +131,10 @@
                 invokeMainProcessMethod('render-open-external-url', 'https://github.com/mayswind/AriaNg-Native/releases');
             },
             readPackageFile: function (path) {
-                return invokeSyncMainProcessMethod('render-sync-get-package-file-content', path);
+                return invokeMainProcessMethodSync('render-sync-get-package-file-content', path);
             },
             getLocalFSExistsAsync: function (fullpath, callback) {
-                return invokeAsyncMainProcessMethod('render-get-localfs-exists', fullpath)
+                return invokeMainProcessMethodAsync('render-get-localfs-exists', fullpath)
                     .then(function onReceive(exists) {
                         if (callback) {
                             callback(exists);
@@ -145,7 +145,7 @@
                 invokeMainProcessMethod('render-open-local-directory', dir, filename);
             },
             parseBittorrentInfo: function (data) {
-                var info = angular.copy(invokeSyncMainProcessMethod('render-sync-parse-bittorrent-info', data));
+                var info = angular.copy(invokeMainProcessMethodSync('render-sync-parse-bittorrent-info', data));
                 info.type = 'bittorrent';
 
                 ariaNgLogService.debug('[ariaNgNativeElectronService.parseBittorrentInfo] bittorrent info', info);
