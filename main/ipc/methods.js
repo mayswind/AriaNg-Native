@@ -7,6 +7,7 @@ const config = require('../config/config');
 const menu = require('../components/menu');
 const tray = require('../components/tray');
 const http = require('../lib/http');
+const websocket = require('../lib/websocket');
 const localfs = require('../lib/localfs');
 const bittorrent = require('../lib/bittorrent');
 
@@ -103,6 +104,47 @@ ipcMain.on('render-set-native-config-minimized-to-tray', (event, value) => {
 
 ipcMain.handle('render-request-http', (event, requestContext) => {
     return http.request(requestContext);
+});
+
+ipcMain.on('render-connect-websocket', (event, rpcUrl, options) => {
+    websocket.connect(rpcUrl, options,
+        function onOpen(context) {
+            core.mainWindow.webContents.send('on-main-websocket-open', {
+                url: context.url
+            });
+        },
+        function onClose(context) {
+            core.mainWindow.webContents.send('on-main-websocket-close', {
+                url: context.url
+            });
+        },
+        function onMessage(context) {
+            core.mainWindow.webContents.send('on-main-websocket-message', {
+                success: context.success,
+                url: context.url,
+                data: context.message
+            });
+        }
+    );
+});
+
+ipcMain.on('render-reconnect-websocket', (event, rpcUrl, options) => {
+    websocket.reconnect(rpcUrl, options);
+});
+
+ipcMain.on('render-send-websocket-message', (event, requestContext) => {
+    websocket.send(requestContext)
+        .catch(function () {
+            core.mainWindow.webContents.send('on-main-websocket-message', {
+                success: false,
+                url: requestContext.url,
+                data: null
+            });
+        });
+});
+
+ipcMain.on('render-get-websocket-readystate', (event) => {
+    event.returnValue = websocket.getReadyState();
 });
 
 ipcMain.on('render-open-external-url', (event, url) => {

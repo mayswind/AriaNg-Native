@@ -106,6 +106,10 @@ let notifyRenderProcessNewNewTaskFromTextAfterViewLoaded = function (text) {
     });
 };
 
+let onRenderProcessElectronServiceInited = function (callback) {
+    ipcMain.on('on-render-electron-service-inited', callback);
+};
+
 let onRenderProcessNewDropFile = function (callback) {
     ipcMain.on('on-render-new-drop-file', callback);
 };
@@ -128,6 +132,7 @@ module.exports = {
     notifyRenderProcessNewTaskFromText: notifyRenderProcessNewTaskFromText,
     notifyRenderProcessNewNewTaskFromFileAfterViewLoaded: notifyRenderProcessNewNewTaskFromFileAfterViewLoaded,
     notifyRenderProcessNewNewTaskFromTextAfterViewLoaded: notifyRenderProcessNewNewTaskFromTextAfterViewLoaded,
+    onRenderProcessElectronServiceInited: onRenderProcessElectronServiceInited,
     onRenderProcessNewDropFile: onRenderProcessNewDropFile,
     onRenderProcessNewDropText: onRenderProcessNewDropText
 }

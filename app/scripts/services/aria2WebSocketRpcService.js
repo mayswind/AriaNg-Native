@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('aria2WebSocketRpcService', ['$q', '$websocket', '$timeout', 'ariaNgConstants', 'ariaNgSettingService', 'ariaNgLogService', function ($q, $websocket, $timeout, ariaNgConstants, ariaNgSettingService, ariaNgLogService) {
+    angular.module('ariaNg').factory('aria2WebSocketRpcService', ['$q', 'ariaNgNativeElectronService', '$timeout', 'ariaNgConstants', 'ariaNgSettingService', 'ariaNgLogService', function ($q, ariaNgNativeElectronService, $timeout, ariaNgConstants, ariaNgSettingService, ariaNgLogService) {
         var websocketStatusConnecting = 0;
         var websocketStatusOpen = 1;
 
@@ -76,7 +76,7 @@
         var getSocketClient = function (context) {
             if (socketClient === null) {
                 try {
-                    socketClient = $websocket(rpcUrl, {
+                    socketClient = ariaNgNativeElectronService.createWebSocketClient(rpcUrl, {
                         maxTimeout: 1 // ms
                     });
 

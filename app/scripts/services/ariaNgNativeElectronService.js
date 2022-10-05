@@ -49,6 +49,8 @@
             ariaNgLogService.error(msg, obj);
         });
 
+        invokeMainProcessMethod('on-render-electron-service-inited');
+
         return {
             getRuntimeEnvironment: function () {
                 return invokeMainProcessMethodSync('render-sync-get-runtime-environment');
@@ -155,6 +157,82 @@
                     });
 
                 return deferred.promise;
+            },
+            createWebSocketClient: function (rpcUrl, options) {
+                var WebSocketClient = function (rpcUrl, options) {
+                    var openCallback = null;
+                    var closeCallback = null;
+                    var messageCallback = null;
+
+                    Object.defineProperty(WebSocketClient.prototype, 'readyState', {
+                        get: function get() {
+                            return invokeMainProcessMethodSync('render-get-websocket-readystate');
+                        },
+                        set: function set() {
+                            throw new Error('The \"readyState\" property is readonly.');
+                        }
+                    });
+
+                    this.send = function (request) {
+                        invokeMainProcessMethod('render-send-websocket-message', {
+                            url: rpcUrl,
+                            data: request
+                        });
+                    };
+
+                    this.reconnect = function () {
+                        invokeMainProcessMethod('render-reconnect-websocket', rpcUrl, options);
+                    };
+
+                    this.onOpen = function (callback) {
+                        openCallback = callback;
+                    };
+
+                    this.onClose = function (callback) {
+                        closeCallback = callback;
+                    };
+
+                    this.onMessage = function (callback) {
+                        messageCallback = callback;
+                    };
+
+                    onMainProcessEvent('on-main-websocket-open', function (event, e) {
+                        if (e.url !== rpcUrl) {
+                            ariaNgLogService.debug('[ariaNgNativeElectronService.websocket.onOpen] event dropped, because rpc url not equals, excepted url: ' + rpcUrl + ", actual url: " + e.url);
+                            return;
+                        }
+
+                        if (angular.isFunction(openCallback)) {
+                            openCallback(e);
+                        }
+                    });
+
+                    onMainProcessEvent('on-main-websocket-close', function (event, e) {
+                        if (e.url !== rpcUrl) {
+                            ariaNgLogService.debug('[ariaNgNativeElectronService.websocket.onClose] event dropped, because rpc url not equals, excepted url: ' + rpcUrl + ", actual url: " + e.url);
+                            return;
+                        }
+
+                        if (angular.isFunction(closeCallback)) {
+                            closeCallback(e);
+                        }
+                    });
+
+                    onMainProcessEvent('on-main-websocket-message', function (event, message) {
+                        if (message.url !== rpcUrl) {
+                            ariaNgLogService.debug('[ariaNgNativeElectronService.websocket.onMessage] event dropped, because rpc url not equals, excepted url: ' + rpcUrl + ", actual url: " + message.url, message.data);
+                            return;
+                        }
+
+                        if (angular.isFunction(messageCallback)) {
+                            messageCallback(message);
+                        }
+                    });
+
+                    invokeMainProcessMethod('render-connect-websocket', rpcUrl, options);
+                };
+
+                return new WebSocketClient(rpcUrl, options);
             },
             openProjectLink: function () {
                 invokeMainProcessMethod('render-open-external-url', 'https://github.com/mayswind/AriaNg-Native');

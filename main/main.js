@@ -14,6 +14,7 @@ const menu = require('./components/menu');
 const tray = require('./components/tray');
 const file = require('./lib/file');
 const page = require('./lib/page');
+const websocket = require('./lib/websocket');
 const ipcEvents = require('./ipc/events');
 require('./ipc/methods');
 
@@ -219,6 +220,10 @@ app.on('ready', () => {
         }
 
         core.mainWindow = null;
+    });
+
+    ipcEvents.onRenderProcessElectronServiceInited((event) => {
+        websocket.init();
     });
 
     ipcEvents.onRenderProcessNewDropFile((event, arg) => {
