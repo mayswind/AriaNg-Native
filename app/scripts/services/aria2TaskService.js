@@ -920,7 +920,6 @@
                 aria2RpcService.onConnectionSuccess({
                     callback: callback
                 });
-
             },
             onConnectionFailed: function (callback) {
                 if (!callback) {
@@ -931,7 +930,26 @@
                 aria2RpcService.onConnectionFailed({
                     callback: callback
                 });
+            },
+            onConnectionReconnecting: function (callback) {
+                if (!callback) {
+                    ariaNgLogService.warn('[aria2TaskService.onConnectionReconnecting] callback is null');
+                    return;
+                }
 
+                aria2RpcService.onConnectionReconnecting({
+                    callback: callback
+                });
+            },
+            onConnectionWaitingToReconnect: function (callback) {
+                if (!callback) {
+                    ariaNgLogService.warn('[aria2TaskService.onConnectionWaitingToReconnect] callback is null');
+                    return;
+                }
+
+                aria2RpcService.onConnectionWaitingToReconnect({
+                    callback: callback
+                });
             },
             onFirstSuccess: function (callback) {
                 if (!callback) {
