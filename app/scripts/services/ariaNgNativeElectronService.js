@@ -33,6 +33,22 @@
             return ipcRenderer.invoke(channel, ...args);
         };
 
+        onMainProcessEvent('on-main-log-debug', function (event, msg, obj) {
+            ariaNgLogService.debug(msg, obj);
+        });
+
+        onMainProcessEvent('on-main-log-info', function (event, msg, obj) {
+            ariaNgLogService.info(msg, obj);
+        });
+
+        onMainProcessEvent('on-main-log-warn', function (event, msg, obj) {
+            ariaNgLogService.warn(msg, obj);
+        });
+
+        onMainProcessEvent('on-main-log-error', function (event, msg, obj) {
+            ariaNgLogService.error(msg, obj);
+        });
+
         return {
             getRuntimeEnvironment: function () {
                 return invokeMainProcessMethodSync('render-sync-get-runtime-environment');

@@ -9,6 +9,22 @@ const constants = require('../config/constants');
 
 const ipcMain = electron.ipcMain;
 
+let notifyRenderProcessLogDebug = function (msg, object) {
+    core.mainWindow.webContents.send('on-main-log-debug', msg, object);
+};
+
+let notifyRenderProcessLogInfo = function (msg, object) {
+    core.mainWindow.webContents.send('on-main-log-info', msg, object);
+};
+
+let notifyRenderProcessLogWarn = function (msg, object) {
+    core.mainWindow.webContents.send('on-main-log-warn', msg, object);
+};
+
+let notifyRenderProcessLogError = function (msg, object) {
+    core.mainWindow.webContents.send('on-main-log-error', msg, object);
+};
+
 let notifyRenderProcessWindowMaximized = function (maximized) {
     core.mainWindow.webContents.send('on-main-window-maximized', maximized);
 };
@@ -99,6 +115,10 @@ let onRenderProcessNewDropText = function (callback) {
 };
 
 module.exports = {
+    notifyRenderProcessLogDebug: notifyRenderProcessLogDebug,
+    notifyRenderProcessLogInfo: notifyRenderProcessLogInfo,
+    notifyRenderProcessLogWarn: notifyRenderProcessLogWarn,
+    notifyRenderProcessLogError: notifyRenderProcessLogError,
     notifyRenderProcessWindowMaximized: notifyRenderProcessWindowMaximized,
     notifyRenderProcessWindowUnmaximized: notifyRenderProcessWindowUnmaximized,
     notifyRenderProcessShowErrorMessage: notifyRenderProcessShowErrorMessage,
