@@ -111,6 +111,8 @@
         $scope.checkUpdate = function () {
             return ariaNgVersionService.getTheLatestVersion()
                 .then(function onSuccess(response) {
+                    ariaNgLogService.debug('[AriaNgSettingsController.checkUpdate] latest version info', response);
+
                     if (!response || !response.data || !response.data.tag_name) {
                         ariaNgLogService.warn('[AriaNgSettingsController.checkUpdate] data format of latest version is invalid', response);
                         ariaNgLocalizationService.showError('Failed to get latest version!');

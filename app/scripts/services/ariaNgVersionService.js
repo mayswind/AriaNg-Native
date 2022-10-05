@@ -1,11 +1,11 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgVersionService', ['$http', function ($http) {
+    angular.module('ariaNg').factory('ariaNgVersionService', ['ariaNgNativeElectronService', function (ariaNgNativeElectronService) {
         var latestApi = 'https://api.github.com/repos/mayswind/AriaNg-Native/releases/latest';
 
         var getTheLatestVersion = function () {
-            return $http({
+            return ariaNgNativeElectronService.requestHttp({
                 url: latestApi,
                 method: 'GET',
                 headers: {
