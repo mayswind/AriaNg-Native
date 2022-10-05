@@ -51,7 +51,7 @@ let getFinalHttpResponse = function (response, success) {
     };
 };
 
-let requestHttp = function (requestContext) {
+let request = function (requestContext) {
     const request = {
         url: requestContext.url,
         method: requestContext.method
@@ -73,5 +73,5 @@ let requestHttp = function (requestContext) {
 };
 
 module.exports = {
-    requestHttp: requestHttp
+    request: request
 };

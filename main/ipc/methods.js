@@ -6,7 +6,7 @@ const core = require('../core');
 const config = require('../config/config');
 const menu = require('../components/menu');
 const tray = require('../components/tray');
-const network = require('../lib/network');
+const http = require('../lib/http');
 const localfs = require('../lib/localfs');
 const bittorrent = require('../lib/bittorrent');
 
@@ -102,7 +102,7 @@ ipcMain.on('render-set-native-config-minimized-to-tray', (event, value) => {
 });
 
 ipcMain.handle('render-request-http', (event, requestContext) => {
-    return network.requestHttp(requestContext);
+    return http.request(requestContext);
 });
 
 ipcMain.on('render-open-external-url', (event, url) => {
