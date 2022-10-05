@@ -54,9 +54,16 @@ let getFinalHttpResponse = function (response, success) {
 let requestHttp = function (requestContext) {
     const request = {
         url: requestContext.url,
-        method: requestContext.method,
-        timeout: requestContext.timeout
+        method: requestContext.method
     };
+
+    if (requestContext.timeout) {
+        request.timeout = requestContext.timeout;
+    }
+
+    if (requestContext.headers) {
+        request.headers = requestContext.headers;
+    }
 
     if (requestContext.method === 'POST') {
         request.data = requestContext.data;
