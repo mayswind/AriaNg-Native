@@ -4,7 +4,7 @@ const os = require('os');
 const electron = require('electron');
 
 const core = require('../core');
-const ipcEvents = require('../ipc/events');
+const ipcRender = require('../ipc/render-proecss');
 
 const app = electron.app;
 const Menu = electron.Menu;
@@ -25,7 +25,7 @@ let buildMenu = function(context) {
                 {
                     label: getMenuTitle(context, 'AboutAriaNgNative', 'About AriaNg Native'),
                     click: function () {
-                        ipcEvents.notifyRenderProcessNavigateToAriaNgSettings();
+                        ipcRender.notifyRenderProcessNavigateToAriaNgSettings();
                     }
                 },
                 {
@@ -123,7 +123,7 @@ let init = function () {
     if (!core.mainWindow) {
         return;
     }
-    
+
     if (os.platform() === 'darwin') {
         const menu = buildMenu(null);
         Menu.setApplicationMenu(menu);

@@ -15,8 +15,8 @@ const tray = require('./components/tray');
 const file = require('./lib/file');
 const page = require('./lib/page');
 const websocket = require('./lib/websocket');
-const ipcEvents = require('./ipc/events');
-require('./ipc/methods');
+const ipcRender = require('./ipc/render-proecss');
+require('./ipc/main-process');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -98,8 +98,8 @@ app.on('second-instance', (event, argv, workingDirectory, additionalData) => {
         }
 
         if (filePath && file.isContainsSupportedFileArg(filePath)) {
-            ipcEvents.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
-            ipcEvents.notifyRenderProcessNavigateToNewTask();
+            ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
+            ipcRender.notifyRenderProcessNavigateToNewTask();
         }
     }
 });
@@ -157,7 +157,7 @@ app.on('ready', () => {
     tray.init();
 
     if (file.isContainsSupportedFileArg(filePathInCommandLine)) {
-        ipcEvents.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathInCommandLine);
+        ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathInCommandLine);
         core.mainWindow.loadURL(page.getPageFullUrl(constants.ariaNgPageLocations.NewTask));
     } else {
         core.mainWindow.loadURL(page.getPageFullUrl());
@@ -175,12 +175,12 @@ app.on('ready', () => {
 
     core.mainWindow.on('maximize', () => {
         config.maximized = core.mainWindow.isMaximized();
-        ipcEvents.notifyRenderProcessWindowMaximized(core.mainWindow.isMaximized());
+        ipcRender.notifyRenderProcessWindowMaximized(core.mainWindow.isMaximized());
     });
 
     core.mainWindow.on('unmaximize', () => {
         config.maximized = core.mainWindow.isMaximized();
-        ipcEvents.notifyRenderProcessWindowUnmaximized(core.mainWindow.isMaximized());
+        ipcRender.notifyRenderProcessWindowUnmaximized(core.mainWindow.isMaximized());
     });
 
     core.mainWindow.on('move', () => {
@@ -222,11 +222,11 @@ app.on('ready', () => {
         core.mainWindow = null;
     });
 
-    ipcEvents.onRenderProcessElectronServiceInited((event) => {
+    ipcRender.onRenderProcessElectronServiceInited((event) => {
         websocket.init();
     });
 
-    ipcEvents.onRenderProcessNewDropFile((event, arg) => {
+    ipcRender.onRenderProcessNewDropFile((event, arg) => {
         if (!arg) {
             return;
         }
@@ -235,14 +235,14 @@ app.on('ready', () => {
         let location = arg.location;
 
         if (location.indexOf('/new') === 0) {
-            ipcEvents.notifyRenderProcessNewTaskFromFile(filePath);
+            ipcRender.notifyRenderProcessNewTaskFromFile(filePath);
         } else {
-            ipcEvents.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
-            ipcEvents.notifyRenderProcessNavigateToNewTask();
+            ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
+            ipcRender.notifyRenderProcessNavigateToNewTask();
         }
     });
 
-    ipcEvents.onRenderProcessNewDropText((event, arg) => {
+    ipcRender.onRenderProcessNewDropText((event, arg) => {
         if (!arg) {
             return;
         }
@@ -251,10 +251,10 @@ app.on('ready', () => {
         let location = arg.location;
 
         if (location.indexOf('/new') === 0) {
-            ipcEvents.notifyRenderProcessNewTaskFromText(text);
+            ipcRender.notifyRenderProcessNewTaskFromText(text);
         } else {
-            ipcEvents.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(text);
-            ipcEvents.notifyRenderProcessNavigateToNewTask();
+            ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(text);
+            ipcRender.notifyRenderProcessNavigateToNewTask();
         }
     });
 });
