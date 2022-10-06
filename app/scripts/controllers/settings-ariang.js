@@ -47,7 +47,7 @@
                 return;
             }
 
-            lastRefreshPageNotification = ariaNgLocalizationService.notifyInPage('', 'Configuration has been modified, please reload the page for the changes to take effect.', {
+            lastRefreshPageNotification = ariaNgNotificationService.notifyInPage('', 'Configuration has been modified, please reload the page for the changes to take effect.', {
                 delay: false,
                 type: 'info',
                 templateUrl: 'views/notification-reloadable.html',
@@ -116,21 +116,21 @@
 
                     if (!response || !response.data || !response.data.tag_name) {
                         ariaNgLogService.warn('[AriaNgSettingsController.checkUpdate] data format of latest version is invalid', response);
-                        ariaNgLocalizationService.showError('Failed to get latest version!');
+                        ariaNgCommonService.showError('Failed to get latest version!');
                         return;
                     }
 
                     var latestVersion = response.data.tag_name;
 
                     if (ariaNgVersionService.compareVersion($scope.context.ariaNgNativeVersion, latestVersion) >= 0) {
-                        ariaNgLocalizationService.showInfo('Check Update', 'You have installed the latest version!');
+                        ariaNgCommonService.showInfo('Check Update', 'You have installed the latest version!');
                         $scope.context.isCurrentLatestVersion = true;
                     } else {
                         ariaNgNativeElectronService.openProjectReleaseLink();
                     }
                 }).catch(function onError(response) {
                     ariaNgLogService.error('[AriaNgSettingsController.checkUpdate] failed to get latest version', response);
-                    ariaNgLocalizationService.showError('Failed to get latest version!');
+                    ariaNgCommonService.showError('Failed to get latest version!');
                 });
         };
 
@@ -204,7 +204,7 @@
                 ariaNgNotificationService.requestBrowserPermission(function (result) {
                     if (!result.granted) {
                         $scope.context.settings.browserNotification = false;
-                        ariaNgLocalizationService.showError('You have disabled notification in your browser. You should change your browser\'s settings before you enable this function.');
+                        ariaNgCommonService.showError('You have disabled notification in your browser. You should change your browser\'s settings before you enable this function.');
                     }
                 });
             }
@@ -300,7 +300,7 @@
             }, function (result) {
                 $scope.context.importSettings = result.content;
             }, function (error) {
-                ariaNgLocalizationService.showError(error);
+                ariaNgCommonService.showError(error);
             }, angular.element('#import-file-holder'));
         };
 
@@ -311,18 +311,18 @@
                 settingsObj = JSON.parse(settings);
             } catch (e) {
                 ariaNgLogService.error('[AriaNgSettingsController.importSettings] parse settings json error', e);
-                ariaNgLocalizationService.showError('Invalid settings data format!');
+                ariaNgCommonService.showError('Invalid settings data format!');
                 return;
             }
 
             if (!angular.isObject(settingsObj) || angular.isArray(settingsObj)) {
                 ariaNgLogService.error('[AriaNgSettingsController.importSettings] settings json is not object');
-                ariaNgLocalizationService.showError('Invalid settings data format!');
+                ariaNgCommonService.showError('Invalid settings data format!');
                 return;
             }
 
             if (settingsObj) {
-                ariaNgLocalizationService.confirm('Confirm Import', 'Are you sure you want to import all settings?', 'warning', function () {
+                ariaNgCommonService.confirm('Confirm Import', 'Are you sure you want to import all settings?', 'warning', function () {
                     ariaNgSettingService.importAllOptions(settingsObj);
                     $window.location.reload();
                 });
@@ -364,7 +364,7 @@
         $scope.removeRpcSetting = function (setting) {
             var rpcName = (setting.rpcAlias ? setting.rpcAlias : setting.rpcHost + ':' + setting.rpcPort);
 
-            ariaNgLocalizationService.confirm('Confirm Remove', 'Are you sure you want to remove rpc setting "{rpcName}"?', 'warning', function () {
+            ariaNgCommonService.confirm('Confirm Remove', 'Are you sure you want to remove rpc setting "{rpcName}"?', 'warning', function () {
                 setNeedRefreshPage();
 
                 var currentIndex = $scope.getCurrentRpcTabIndex();
@@ -396,14 +396,14 @@
         };
 
         $scope.resetSettings = function () {
-            ariaNgLocalizationService.confirm('Confirm Reset', 'Are you sure you want to reset all settings?', 'warning', function () {
+            ariaNgCommonService.confirm('Confirm Reset', 'Are you sure you want to reset all settings?', 'warning', function () {
                 ariaNgSettingService.resetSettings();
                 $window.location.reload();
             });
         };
 
         $scope.clearHistory = function () {
-            ariaNgLocalizationService.confirm('Confirm Clear', 'Are you sure you want to clear all settings history?', 'warning', function () {
+            ariaNgCommonService.confirm('Confirm Clear', 'Are you sure you want to clear all settings history?', 'warning', function () {
                 aria2SettingService.clearSettingsHistorys();
                 $window.location.reload();
             });

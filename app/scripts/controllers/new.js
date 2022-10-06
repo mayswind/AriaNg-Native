@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('NewTaskController', ['$rootScope', '$scope', '$location', '$timeout', 'ariaNgFileTypes', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $location, $timeout, ariaNgFileTypes, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').controller('NewTaskController', ['$rootScope', '$scope', '$location', '$timeout', 'ariaNgFileTypes', 'ariaNgCommonService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $location, $timeout, ariaNgFileTypes, ariaNgCommonService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
         var tabStatusItems = [
             {
                 name: 'links',
@@ -142,13 +142,13 @@
                     ariaNgLogService.error('[NewTaskController] get file via electron error', result.exception);
 
                     if (result.exception.code === 'ENOENT') {
-                        ariaNgLocalizationService.showError('native.error.file-not-found', null, {
+                        ariaNgCommonService.showError('native.error.file-not-found', null, {
                             textParams: {
                                 filepath: result.exception.path
                             }
                         });
                     } else {
-                        ariaNgLocalizationService.showError(result.exception.code);
+                        ariaNgCommonService.showError(result.exception.code);
                     }
                 }
             });
@@ -663,7 +663,7 @@
                 $scope.context.taskType = 'torrent';
                 $scope.changeTab('links');
             }, function (error) {
-                ariaNgLocalizationService.showError(error);
+                ariaNgCommonService.showError(error);
             }, angular.element('#file-holder'));
         };
 
@@ -680,7 +680,7 @@
                 $scope.context.taskType = 'metalink';
                 $scope.changeTab('options');
             }, function (error) {
-                ariaNgLocalizationService.showError(error);
+                ariaNgCommonService.showError(error);
             }, angular.element('#file-holder'));
         };
 

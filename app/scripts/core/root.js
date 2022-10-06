@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').run(['$window', '$rootScope', '$location', '$document', '$timeout', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', function ($window, $rootScope, $location, $document, $timeout, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').run(['$window', '$rootScope', '$location', '$document', '$timeout', 'ariaNgCommonService', 'ariaNgNotificationService', 'ariaNgLogService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', function ($window, $rootScope, $location, $document, $timeout, ariaNgCommonService, ariaNgNotificationService, ariaNgLogService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService) {
         var autoRefreshAfterPageLoad = false;
 
         var isUrlMatchUrl2 = function (url, url2) {
@@ -77,7 +77,7 @@
                 angular.element('.main-sidebar').addClass('blur');
                 angular.element('.navbar').addClass('blur');
                 angular.element('.content-body').addClass('blur');
-                ariaNgLocalizationService.notifyInPage('', 'You cannot use AriaNg because this browser does not meet the minimum requirements for data storage.', {
+                ariaNgNotificationService.notifyInPage('', 'You cannot use AriaNg because this browser does not meet the minimum requirements for data storage.', {
                     type: 'error',
                     delay: false
                 });
@@ -517,13 +517,13 @@
         });
 
         ariaNgNativeElectronService.onMainProcessShowError(function (event, message) {
-            ariaNgLocalizationService.showError(message);
+            ariaNgCommonService.showError(message);
         });
 
         ariaNgSettingService.setDebugMode(ariaNgNativeElectronService.isDevMode());
 
         ariaNgSettingService.onApplicationCacheUpdated(function () {
-            ariaNgLocalizationService.notifyInPage('', 'Application cache has been updated, please reload the page for the changes to take effect.', {
+            ariaNgNotificationService.notifyInPage('', 'Application cache has been updated, please reload the page for the changes to take effect.', {
                 delay: false,
                 type: 'info',
                 templateUrl: 'views/notification-reloadable.html'
@@ -531,7 +531,7 @@
         });
 
         ariaNgSettingService.onFirstAccess(function () {
-            ariaNgLocalizationService.notifyInPage('', 'Tap to configure and get started with AriaNg.', {
+            ariaNgNotificationService.notifyInPage('', 'Tap to configure and get started with AriaNg.', {
                 delay: false,
                 onClose: function () {
                     $location.path('/settings/ariang');
@@ -540,7 +540,7 @@
         });
 
         aria2TaskService.onFirstSuccess(function (event) {
-            ariaNgLocalizationService.notifyInPage('', 'is connected', {
+            ariaNgNotificationService.notifyInPage('', 'is connected', {
                 type: 'success',
                 contentPrefix: event.rpcName + ' '
             });
@@ -579,15 +579,15 @@
         });
 
         aria2TaskService.onTaskCompleted(function (event) {
-            ariaNgLocalizationService.notifyTaskComplete(event.task);
+            ariaNgNotificationService.notifyTaskComplete(event.task);
         });
 
         aria2TaskService.onBtTaskCompleted(function (event) {
-            ariaNgLocalizationService.notifyBtTaskComplete(event.task);
+            ariaNgNotificationService.notifyBtTaskComplete(event.task);
         });
 
         aria2TaskService.onTaskErrorOccur(function (event) {
-            ariaNgLocalizationService.notifyTaskError(event.task);
+            ariaNgNotificationService.notifyTaskError(event.task);
         });
 
         $rootScope.$on('$locationChangeStart', function (event) {

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgLanguageLoader', ['$http', '$q', 'ariaNgConstants', 'ariaNgLanguages', 'ariaNgAssetsCacheService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgStorageService', 'ariaNgNativeElectronService', function ($http, $q, ariaNgConstants, ariaNgLanguages, ariaNgAssetsCacheService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgStorageService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').factory('ariaNgLanguageLoader', ['$http', '$q', 'ariaNgConstants', 'ariaNgLanguages', 'ariaNgAssetsCacheService', 'ariaNgNotificationService', 'ariaNgLogService', 'ariaNgStorageService', 'ariaNgNativeElectronService', function ($http, $q, ariaNgConstants, ariaNgLanguages, ariaNgAssetsCacheService, ariaNgNotificationService, ariaNgLogService, ariaNgStorageService, ariaNgNativeElectronService) {
         var getKeyValuePair = function (line) {
             for (var i = 0; i < line.length; i++) {
                 if (i > 0 && line.charAt(i - 1) !== '\\' && line.charAt(i) === '=') {
@@ -156,7 +156,7 @@
 
                 if (languageUpdated) {
                     ariaNgLogService.info('[ariaNgLanguageLoader] load language resource successfully, and resource is updated');
-                    ariaNgLocalizationService.notifyInPage('', 'Language resource has been updated, please reload the page for the changes to take effect.', {
+                    ariaNgNotificationService.notifyInPage('', 'Language resource has been updated, please reload the page for the changes to take effect.', {
                         delay: false,
                         type: 'info',
                         templateUrl: 'views/notification-reloadable.html'
