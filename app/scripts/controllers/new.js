@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('NewTaskController', ['$rootScope', '$scope', '$location', '$timeout', 'ariaNgFileTypes', 'ariaNgCommonService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $location, $timeout, ariaNgFileTypes, ariaNgCommonService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').controller('NewTaskController', ['$rootScope', '$scope', '$location', '$timeout', 'ariaNgFileTypes', 'ariaNgCommonService', 'ariaNgLogService', 'ariaNgKeyboardService', 'ariaNgFileService', 'ariaNgSettingService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $location, $timeout, ariaNgFileTypes, ariaNgCommonService, ariaNgLogService, ariaNgKeyboardService, ariaNgFileService, ariaNgSettingService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
         var tabStatusItems = [
             {
                 name: 'links',
@@ -745,9 +745,7 @@
                 return;
             }
 
-            var keyCode = event.keyCode || event.which || event.charCode;
-
-            if ((event.code === 'Enter' || keyCode === 13) && (event.ctrlKey || event.metaKey) && $scope.newTaskForm.$valid) { // Ctrl+Enter
+            if (ariaNgKeyboardService.isCtrlEnterPressed(event) && $scope.newTaskForm.$valid) {
                 $scope.startDownload();
             }
         };
