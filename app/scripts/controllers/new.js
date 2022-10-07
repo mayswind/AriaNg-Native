@@ -746,7 +746,13 @@
             }
 
             if (ariaNgKeyboardService.isCtrlEnterPressed(event) && $scope.newTaskForm.$valid) {
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+
                 $scope.startDownload();
+
+                return false;
             }
         };
 
