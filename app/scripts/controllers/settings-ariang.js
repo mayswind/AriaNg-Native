@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('AriaNgSettingsController', ['$rootScope', '$scope', '$routeParams', '$window', '$interval', '$timeout', '$filter', 'clipboard', 'ariaNgLanguages', 'ariaNgCommonService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2SettingService', 'ariaNgVersionService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $window, $interval, $timeout, $filter, clipboard, ariaNgLanguages, ariaNgCommonService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2SettingService, ariaNgVersionService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').controller('AriaNgSettingsController', ['$rootScope', '$scope', '$routeParams', '$window', '$interval', '$timeout', '$filter', 'clipboard', 'ariaNgLanguages', 'ariaNgCommonService', 'ariaNgVersionService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $window, $interval, $timeout, $filter, clipboard, ariaNgLanguages, ariaNgCommonService, ariaNgVersionService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2SettingService, ariaNgNativeElectronService) {
         var extendType = $routeParams.extendType;
         var lastRefreshPageNotification = null;
 
@@ -59,8 +59,9 @@
 
         $scope.context = {
             currentTab: 'global',
-            ariaNgNativeVersion: ariaNgNativeElectronService.getVersion(),
-            ariaNgVersion: ariaNgNativeElectronService.getAriaNgVersion(),
+            ariaNgNativeVersion: ariaNgVersionService.getBuildVersion(),
+            ariaNgVersion: ariaNgVersionService.getAriaNgVersion(),
+            buildCommit: ariaNgVersionService.getBuildCommit(),
             isCurrentLatestVersion: false,
             runtimeEnvironment: ariaNgNativeElectronService.getRuntimeEnvironment(),
             runtimeEnvironmentCollapsed: true,

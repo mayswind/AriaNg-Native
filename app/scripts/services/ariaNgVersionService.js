@@ -59,6 +59,15 @@
         };
 
         return {
+            getBuildVersion: function () {
+                return ariaNgNativeElectronService.getVersion();
+            },
+            getAriaNgVersion: function() {
+                return ariaNgNativeElectronService.getAriaNgVersion();
+            },
+            getBuildCommit: function () {
+                return '';
+            },
             getTheLatestVersion: getTheLatestVersion,
             compareVersion: compareVersion
         };
