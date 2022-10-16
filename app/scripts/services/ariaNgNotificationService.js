@@ -76,6 +76,7 @@
             }
 
             if (!options.positionY) {
+                // AriaNg Native changes the notification position to right bottom of the page
                 options.positionY = 'bottom';
             }
 

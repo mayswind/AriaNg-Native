@@ -84,7 +84,7 @@
         };
 
         $scope.context.titlePreview = getFinalTitle();
-        $scope.context.showDebugMode = $scope.context.sessionSettings.debugMode || extendType === 'debug';
+        $scope.context.showDebugMode = false; // AriaNg Native does not allow to disable debug mode when current is in debug mode
 
         $scope.changeGlobalTab = function () {
             $scope.context.currentTab = 'global';
