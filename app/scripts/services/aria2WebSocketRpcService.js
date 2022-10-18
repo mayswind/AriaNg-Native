@@ -150,13 +150,14 @@
                     socketClient.onClose(function (e) {
                         ariaNgLogService.warn('[aria2WebSocketRpcService.onClose] websocket is closed', e);
 
-                        var enableAutoReconnect = ariaNgSettingService.getWebSocketReconnectInterval() > 0;
+                        // AriaNg Native would reconnect websocket by main process, so don't need call this method
+                        // var enableAutoReconnect = ariaNgSettingService.getWebSocketReconnectInterval() > 0;
+                        //
+                        // if (enableAutoReconnect) {
+                        //     planToReconnect(context);
+                        // }
 
-                        if (enableAutoReconnect) {
-                            planToReconnect(context);
-                        }
-
-                        if (enableAutoReconnect && context && context.connectionWaitingToReconnectCallback) {
+                        if (e && e.autoReconnect && context && context.connectionWaitingToReconnectCallback) {
                             context.connectionWaitingToReconnectCallback({
                                 rpcUrl: rpcUrl
                             });

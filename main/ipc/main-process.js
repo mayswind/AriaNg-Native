@@ -115,7 +115,8 @@ ipcMain.on('render-connect-websocket', (event, rpcUrl, options) => {
         },
         function onClose(context) {
             core.mainWindow.webContents.send('on-main-websocket-close', {
-                url: context.url
+                url: context.url,
+                autoReconnect: context.autoReconnect
             });
         },
         function onMessage(context) {
@@ -138,6 +139,7 @@ ipcMain.on('render-send-websocket-message', (event, requestContext) => {
             core.mainWindow.webContents.send('on-main-websocket-message', {
                 success: false,
                 url: requestContext.url,
+                request: requestContext.data,
                 data: null
             });
         });
