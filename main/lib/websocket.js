@@ -59,7 +59,6 @@ let init = function () {
         wsClient.onopen = null;
         wsClient.onclose = null;
         wsClient.onmessage = null;
-        wsClient.onerror = null;
         wsClient.terminate();
         wsClient = null;
     }
