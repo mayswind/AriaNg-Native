@@ -4,10 +4,13 @@ const os = require('os');
 const electron = require('electron');
 
 const core = require('../core');
+const utils = require('../lib/utils');
 const ipcRender = require('../ipc/render-proecss');
 
 const app = electron.app;
 const Menu = electron.Menu;
+
+let textboxContextMenuTemplate = null;
 
 let getMenuTitle = function(context, titleKey, defaultTitle) {
     if (!context || !context.labels || !context.labels[titleKey]) {
@@ -17,7 +20,7 @@ let getMenuTitle = function(context, titleKey, defaultTitle) {
     return context.labels[titleKey];
 }
 
-let buildMenu = function(context) {
+let buildApplicationMenu = function(context) {
     return Menu.buildFromTemplate([
         {
             label: app.getName(),
@@ -119,13 +122,35 @@ let buildMenu = function(context) {
     ]);
 }
 
+let buildTextboxContextMenu = function(context) {
+    if (!context) {
+        return Menu.buildFromTemplate(textboxContextMenuTemplate);
+    }
+
+    const newMenus = [];
+
+    for (let i = 0; i < textboxContextMenuTemplate.length; i++) {
+        const item = utils.copyObjectTo(textboxContextMenuTemplate[i], {});
+
+        if (item.role === 'cut' || item.role === 'copy') {
+            if (!context.selected) {
+                item.enabled = false;
+            }
+        }
+
+        newMenus.push(item);
+    }
+
+    return Menu.buildFromTemplate(newMenus);
+}
+
 let init = function () {
     if (!core.mainWindow) {
         return;
     }
 
     if (os.platform() === 'darwin') {
-        const menu = buildMenu(null);
+        const menu = buildApplicationMenu(null);
         Menu.setApplicationMenu(menu);
     } else {
         core.mainWindow.setMenu(null);
@@ -134,12 +159,53 @@ let init = function () {
 
 let setApplicationMenu = function (context) {
     if (core.mainWindow && os.platform() === 'darwin') {
-        const menu = buildMenu(context);
+        const menu = buildApplicationMenu(context);
         Menu.setApplicationMenu(menu);
     }
 };
 
+let setTextboxContextMenuTemplate = function (context) {
+    textboxContextMenuTemplate = [
+        {
+            label: getMenuTitle(context, 'Undo', 'Undo'),
+            role: 'undo'
+        },
+        {
+            label: getMenuTitle(context, 'Redo', 'Redo'),
+            role: 'redo'
+        },
+        {
+            type: 'separator'
+        },
+        {
+            label: getMenuTitle(context, 'Cut', 'Cut'),
+            role: 'cut'
+        },
+        {
+            label: getMenuTitle(context, 'Copy', 'Copy'),
+            role: 'copy'
+        },
+        {
+            label: getMenuTitle(context, 'Paste', 'Paste'),
+            role: 'paste'
+        },
+        {
+            type: 'separator'
+        },
+        {
+            label: getMenuTitle(context, 'SelectAll', 'Select All'),
+            role: 'selectAll'
+        }
+    ];
+};
+
+let getTextboxContentMenu = function (context) {
+    return buildTextboxContextMenu(context);
+};
+
 module.exports = {
     init: init,
-    setApplicationMenu: setApplicationMenu
+    setApplicationMenu: setApplicationMenu,
+    setTextboxContextMenuTemplate: setTextboxContextMenuTemplate,
+    getTextboxContentMenu: getTextboxContentMenu
 };

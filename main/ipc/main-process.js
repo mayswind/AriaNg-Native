@@ -69,8 +69,19 @@ ipcMain.on('render-exit-native-app', (event) => {
     core.mainWindow.close();
 });
 
+ipcMain.on('render-show-textbox-context-menu', (event, context) => {
+    const contextMenu = menu.getTextboxContentMenu(context);
+
+    if (contextMenu) {
+        contextMenu.popup(core.mainWindow);
+    }
+});
+
 ipcMain.on('render-update-app-menu-label', (event, labels) => {
     menu.setApplicationMenu({
+        labels: labels
+    });
+    menu.setTextboxContextMenuTemplate({
         labels: labels
     });
 });

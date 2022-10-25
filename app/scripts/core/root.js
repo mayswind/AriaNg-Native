@@ -503,6 +503,17 @@
             }
         });
 
+        $window.addEventListener('contextmenu', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (event.target.nodeName.match(/^(input|textarea)$/i) || event.target.isContentEditable) {
+                ariaNgNativeElectronService.showTextboxContextMenu({
+                    selected: ($window.getSelection ? $window.getSelection().toString() : true)
+                });
+            }
+        });
+
         $window.addEventListener('keydown', function (event) {
             if (!ariaNgSettingService.getKeyboardShortcuts()) {
                 return;
