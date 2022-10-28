@@ -116,7 +116,8 @@ app.on('ready', () => {
         show: false,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false
+            contextIsolation: false,
+            spellcheck: false
         }
     });
 
