@@ -3,7 +3,7 @@
 [![Lastest Release](https://img.shields.io/github/release/mayswind/AriaNg-Native.svg?style=flat)](https://github.com/mayswind/AriaNg-Native/releases)
 
 ## Introduction
-AriaNg Native is a desktop application built by [Electron](https://github.com/electron/electron), containing full feature of [AriaNg](https://github.com/mayswind/AriaNg). You can run AriaNg Native on Windows or macOS without any browser. In addition, AriaNg Native also has many features that [AriaNg](https://github.com/mayswind/AriaNg) cannot implement.
+AriaNg Native is a desktop application built by [Electron](https://github.com/electron/electron), with all features of [AriaNg](https://github.com/mayswind/AriaNg). You can run AriaNg Native on Windows or macOS without any browser. In addition, AriaNg Native also has many features that [AriaNg](https://github.com/mayswind/AriaNg) cannot implement.
 
 #### Extra features
 1. More user-friendly interface
@@ -11,6 +11,7 @@ AriaNg Native is a desktop application built by [Electron](https://github.com/el
 3. Command line arguments, supporting creating new task by opening file
 4. Local file system operating support
 5. File & Url drag support
+6. Show torrent file information and choose download file before creating task
 
 ## Introduction of AriaNg
 Please visit [https://github.com/mayswind/AriaNg](https://github.com/mayswind/AriaNg) for more information.
