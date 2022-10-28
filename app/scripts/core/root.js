@@ -507,10 +507,15 @@
             event.preventDefault();
             event.stopPropagation();
 
+            var context = {};
+
+            if (angular.isFunction($window.getSelection)) {
+                var selection = $window.getSelection().toString();
+                context.selected = !!selection && selection.length > 0;
+            }
+
             if (event.target.nodeName.match(/^(input|textarea)$/i) || event.target.isContentEditable) {
-                ariaNgNativeElectronService.showTextboxContextMenu({
-                    selected: ($window.getSelection ? $window.getSelection().toString() : true)
-                });
+                ariaNgNativeElectronService.showTextboxContextMenu(context);
             }
         });
 

@@ -133,7 +133,7 @@ let buildTextboxContextMenu = function(context) {
         const item = utils.copyObjectTo(textboxContextMenuTemplate[i], {});
 
         if (item.role === 'cut' || item.role === 'copy') {
-            if (!context.selected) {
+            if (context.selected === false) {
                 item.enabled = false;
             }
         }
