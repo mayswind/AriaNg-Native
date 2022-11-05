@@ -145,7 +145,7 @@
                 if (e.dataTransfer.items && e.dataTransfer.items[0] && e.dataTransfer.items[0].kind === 'file') {
                     return e.dataTransfer.items[0].getAsFile();
                 } else if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                    return  e.dataTransfer.files[0];
+                    return e.dataTransfer.files[0];
                 } else {
                     return null;
                 }
@@ -163,6 +163,7 @@
             var dropzoneFileZone = angular.element('#dropzone-filezone');
 
             angular.element($window).on('dragenter', function (e) {
+                ariaNgCommonService.closeAllDialogs();
                 dropzone.show();
                 e.preventDefault();
             });
@@ -577,7 +578,11 @@
         });
 
         ariaNgNativeElectronService.onMainProcessNavigateTo(function (event, routeUrl) {
-            $location.path(routeUrl);
+            angular.element('.modal.in:visible').modal('hide');
+            angular.element('.modal-backdrop').remove();
+            $rootScope.$apply(function () {
+                $location.path(routeUrl);
+            });
         });
 
         ariaNgNativeElectronService.onMainProcessShowError(function (event, message) {
