@@ -12,6 +12,7 @@ const localfs = require('../lib/localfs');
 const bittorrent = require('../lib/bittorrent');
 
 const shell = electron.shell;
+const dialog = electron.dialog;
 const ipcMain = electron.ipcMain;
 
 ipcMain.on('render-sync-get-runtime-environment', (event) => {
@@ -99,7 +100,10 @@ ipcMain.on('render-update-tray-tip', (event, tooltip) => {
 ipcMain.on('render-sync-get-native-config', (event) => {
     event.returnValue = {
         defaultPosition: config.defaultPosition,
-        minimizedToTray: config.minimizedToTray
+        minimizedToTray: config.minimizedToTray,
+        execCommandOnStartup: config.execCommandOnStartup,
+        execCommandArgumentsOnStartup: config.execCommandArgumentsOnStartup,
+        execDetachedCommandOnStartup: config.execDetachedCommandOnStartup
     };
 });
 
@@ -111,6 +115,21 @@ ipcMain.on('render-set-native-config-default-position', (event, value) => {
 ipcMain.on('render-set-native-config-minimized-to-tray', (event, value) => {
     config.minimizedToTray = !!value;
     config.save('minimizedToTray');
+});
+
+ipcMain.on('render-set-native-config-exec-command-on-startup', (event, value) => {
+    config.execCommandOnStartup = value;
+    config.save('execCommandOnStartup');
+});
+
+ipcMain.on('render-set-native-config-exec-command-arguments-on-startup', (event, value) => {
+    config.execCommandArgumentsOnStartup = value;
+    config.save('execCommandArgumentsOnStartup');
+});
+
+ipcMain.on('render-set-native-config-exec-detached-command-on-startup', (event, value) => {
+    config.execDetachedCommandOnStartup = value;
+    config.save('execDetachedCommandOnStartup');
 });
 
 ipcMain.handle('render-get-native-config-last-check-updates-time', (event) => {
@@ -189,6 +208,13 @@ ipcMain.on('render-open-local-directory', (event, dir, filename) => {
     } else {
         shell.openItem(dir);
     }
+});
+
+ipcMain.handle('render-show-open-file-dialog', (event, filters) => {
+    return dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: filters
+    });
 });
 
 ipcMain.on('render-sync-parse-bittorrent-info', (event, data) => {

@@ -319,6 +319,46 @@
                     </div>
                     <div class="row">
                         <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Execute Command on Startup</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <div class="input-group">
+                                <input class="form-control" type="text"
+                                       ng-model="context.nativeSettings.execCommandOnStartup"
+                                       ng-change="setExecCommandOnStartup(context.nativeSettings.execCommandOnStartup)"/>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="browseAndSetExecCommandOnStartup()">
+                                        <span translate>Browse</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="context.nativeSettings.execCommandOnStartup">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Execute Command Arguments on Startup</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <textarea class="form-control" rows="3"
+                                      ng-placeholder="'Support multiple arguments, one argument per line.' | translate"
+                                      ng-model="context.nativeSettings.execCommandArgumentsOnStartup"
+                                      ng-change="setExecCommandArgumentsOnStartup(context.nativeSettings.execCommandArgumentsOnStartup)"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="context.nativeSettings.execCommandOnStartup">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Execute Command Options on Startup</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <select class="form-control" style="width: 100%;" ng-model="context.nativeSettings.execCommandOptionsOnStartup"
+                                    ng-change="setExecCommandOptionsOnStartup(context.nativeSettings.execCommandOptionsOnStartup)">
+                                <option value="as-child-process" translate>As Child Process</option>
+                                <option value="as-detached-process" translate>As Detached Process</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
                             <span translate>Action After Main Window Closed</span>
                         </div>
                         <div class="setting-value col-sm-8">

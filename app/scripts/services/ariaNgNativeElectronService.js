@@ -145,6 +145,15 @@
             setMinimizedToTray: function (value) {
                 invokeMainProcessMethod('render-set-native-config-minimized-to-tray', value);
             },
+            setExecCommandOnStartup: function (value) {
+                invokeMainProcessMethod('render-set-native-config-exec-command-on-startup', value);
+            },
+            setExecCommandArgumentsOnStartup: function (value) {
+                invokeMainProcessMethod('render-set-native-config-exec-command-arguments-on-startup', value);
+            },
+            setExecDetachedCommandOnStartup: function (value) {
+                invokeMainProcessMethod('render-set-native-config-exec-detached-command-on-startup', value);
+            },
             getLastCheckUpdatesTimeAsync: function (callback) {
                 return invokeMainProcessMethodAsync('render-get-native-config-last-check-updates-time')
                     .then(function onReceive(lastCheckUpdatesTime) {
@@ -267,6 +276,17 @@
             },
             openFileInDirectory: function (dir, filename) {
                 invokeMainProcessMethod('render-open-local-directory', dir, filename);
+            },
+            showOpenFileDialogAsync: function (filters, callback) {
+                return invokeMainProcessMethodAsync('render-show-open-file-dialog', filters)
+                    .then(function onReceive(result) {
+                        if (callback) {
+                            callback({
+                                canceled: result.canceled,
+                                filePaths: result.filePaths
+                            });
+                        }
+                    });
             },
             parseBittorrentInfo: function (data) {
                 var info = angular.copy(invokeMainProcessMethodSync('render-sync-parse-bittorrent-info', data));

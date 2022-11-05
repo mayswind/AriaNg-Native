@@ -39,6 +39,15 @@
                 config.afterMainWindowClosed = 'minimize-to-tray';
             }
 
+            config.execCommandOnStartup = originalConfig.execCommandOnStartup;
+            config.execCommandArgumentsOnStartup = originalConfig.execCommandArgumentsOnStartup;
+
+            if (!originalConfig.execDetachedCommandOnStartup) {
+                config.execCommandOptionsOnStartup = 'as-child-process';
+            } else {
+                config.execCommandOptionsOnStartup = 'as-detached-process';
+            }
+
             return config;
         };
 
@@ -279,6 +288,38 @@
 
         $scope.setDefaultPosition = function (value) {
             ariaNgNativeElectronService.setDefaultPosition(value);
+        }
+
+        $scope.setExecCommandOnStartup = function (value) {
+            ariaNgNativeElectronService.setExecCommandOnStartup(value);
+        };
+
+        $scope.setExecCommandArgumentsOnStartup = function (value) {
+            ariaNgNativeElectronService.setExecCommandArgumentsOnStartup(value);
+        };
+
+        $scope.setExecCommandOptionsOnStartup = function (value) {
+            if (value === 'as-child-process') {
+                ariaNgNativeElectronService.setExecDetachedCommandOnStartup(false);
+            } else if (value === 'as-detached-process') {
+                ariaNgNativeElectronService.setExecDetachedCommandOnStartup(true);
+            }
+        };
+
+        $scope.browseAndSetExecCommandOnStartup = function () {
+            ariaNgNativeElectronService.showOpenFileDialogAsync([{
+                name: ariaNgLocalizationService.getLocalizedText('All Files'),
+                extensions: ['*']
+            }], function (result) {
+                if (result && !result.canceled && angular.isArray(result.filePaths) && result.filePaths.length) {
+                    var filePath = result.filePaths[0];
+
+                    $scope.$apply(function () {
+                        $scope.context.nativeSettings.execCommandOnStartup = filePath;
+                        $scope.setExecCommandOnStartup(filePath);
+                    });
+                }
+            });
         }
 
         $scope.setAfterMainWindowClosed = function (value) {

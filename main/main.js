@@ -15,6 +15,7 @@ const tray = require('./components/tray');
 const file = require('./lib/file');
 const page = require('./lib/page');
 const websocket = require('./lib/websocket');
+const process = require('./lib/process');
 const ipcRender = require('./ipc/render-proecss');
 require('./ipc/main-process');
 
@@ -71,6 +72,10 @@ if (os.platform() === 'darwin') {
             core.mainWindow.show();
         }
     });
+}
+
+if (config.execCommandOnStartup) {
+    process.execCommandAsync(config.execCommandOnStartup, config.execCommandArgumentsOnStartup, config.execDetachedCommandOnStartup);
 }
 
 app.on('window-all-closed', () => {
