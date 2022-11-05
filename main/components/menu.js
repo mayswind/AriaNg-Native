@@ -138,6 +138,12 @@ let buildTextboxContextMenu = function(context) {
             }
         }
 
+        if (item.role === 'undo' || item.role === 'redo' || item.role === 'cut' || item.role === 'paste') {
+            if (context.editable === false) {
+                item.enabled = false;
+            }
+        }
+
         newMenus.push(item);
     }
 

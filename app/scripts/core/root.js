@@ -537,6 +537,10 @@
                 context.selected = !!selection && selection.length > 0;
             }
 
+            if (angular.element(event.target).attr('readonly') === 'readonly') {
+                context.editable = false;
+            }
+
             if (event.target.nodeName.match(/^(input|textarea)$/i) || event.target.isContentEditable) {
                 ariaNgNativeElectronService.showTextboxContextMenu(context);
             }
