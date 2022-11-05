@@ -353,6 +353,13 @@
                 sessionSettings.debugMode = value;
                 ariaNgLogService.setEnableDebugLog(value);
             },
+            getAutoCheckUpdates: function () {
+                return getOption('autoCheckUpdates');
+            },
+            setAutoCheckUpdates: function (value) {
+                setOption('autoCheckUpdates', value);
+                return true;
+            },
             getTitle: function () {
                 return getOption('title');
             },

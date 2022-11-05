@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').run(['$window', '$rootScope', '$location', '$document', '$timeout', 'ariaNgCommonService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLogService', 'ariaNgLocalizationService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', function ($window, $rootScope, $location, $document, $timeout, ariaNgCommonService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLogService, ariaNgLocalizationService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').run(['$window', '$rootScope', '$location', '$document', '$timeout', 'ariaNgCommonService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLogService', 'ariaNgLocalizationService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', 'ariaNgVersionService', function ($window, $rootScope, $location, $document, $timeout, ariaNgCommonService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLogService, ariaNgLocalizationService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService, ariaNgVersionService) {
         var autoRefreshAfterPageLoad = false;
 
         var isAnyTextboxOrTextareaFocus = function () {
@@ -214,6 +214,29 @@
         var toggleRestoreButton = function () {
             angular.element('#native-title-maximize-icon').addClass('fa-window-restore').removeClass('fa-window-maximize');
             angular.element('#native-title-maximize-btn').attr('title', ariaNgLocalizationService.getLocalizedText('Restore Down'));
+        };
+
+        var autoCheckUpdates = function () {
+            ariaNgVersionService.getTheLatestVersion()
+                .then(function onSuccess(response) {
+                    ariaNgLogService.debug('[root.autoCheckUpdates] latest version info', response);
+
+                    if (!response || !response.data || !response.data.tag_name) {
+                        return;
+                    }
+
+                    var latestVersion = response.data.tag_name;
+
+                    if (ariaNgVersionService.compareVersion(ariaNgVersionService.getBuildVersion(), latestVersion) < 0) {
+                        ariaNgNotificationService.notifyViaBrowser('AriaNg Native Updates', 'A new version has been released', {
+                            contentParams: {
+                                version: latestVersion
+                            }
+                        });
+                    }
+                }).catch(function onError(response) {
+                    ariaNgLogService.error('[root.autoCheckUpdates] failed to get latest version', response);
+                });
         };
 
         $rootScope.currentTheme = 'light';
@@ -666,6 +689,33 @@
                     } else {
                         setLightTheme();
                     }
+                }
+            });
+        }
+
+        if (ariaNgSettingService.getAutoCheckUpdates() && ariaNgSettingService.getAutoCheckUpdates() !== 'never') {
+            ariaNgNativeElectronService.getLastCheckUpdatesTimeAsync(function (lastCheckUpdatesTime) {
+                var checkFrequency = ariaNgSettingService.getAutoCheckUpdates();
+                var currentTime = parseInt(ariaNgCommonService.getCurrentUnixTime());
+                var oneDaySeconds = 86400; // s
+                var needCheckUpdates = false;
+
+                if (!angular.isNumber(lastCheckUpdatesTime)) {
+                    needCheckUpdates = true;
+                } else if (checkFrequency === 'daily' && (currentTime - lastCheckUpdatesTime) >= oneDaySeconds) {
+                    needCheckUpdates = true;
+                } else if (checkFrequency === 'weekly' && (currentTime - lastCheckUpdatesTime) >= oneDaySeconds * 7) {
+                    needCheckUpdates = true;
+                } else if (checkFrequency === 'monthly' && (currentTime - lastCheckUpdatesTime) >= oneDaySeconds * 31) {
+                    needCheckUpdates = true;
+                }
+
+                if (needCheckUpdates) {
+                    ariaNgLogService.debug('[root] need check for updates, last check time is ' + lastCheckUpdatesTime);
+                    autoCheckUpdates();
+                    ariaNgNativeElectronService.setLastCheckUpdatesTime(currentTime);
+                } else {
+                    ariaNgLogService.debug('[root] do not need check for updates, last check time is ' + lastCheckUpdatesTime);
                 }
             });
         }

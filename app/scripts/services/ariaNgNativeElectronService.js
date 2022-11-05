@@ -145,6 +145,17 @@
             setMinimizedToTray: function (value) {
                 invokeMainProcessMethod('render-set-native-config-minimized-to-tray', value);
             },
+            getLastCheckUpdatesTimeAsync: function (callback) {
+                return invokeMainProcessMethodAsync('render-get-native-config-last-check-updates-time')
+                    .then(function onReceive(lastCheckUpdatesTime) {
+                        if (callback) {
+                            callback(lastCheckUpdatesTime);
+                        }
+                    });
+            },
+            setLastCheckUpdatesTime: function (value) {
+                invokeMainProcessMethod('render-set-native-config-last-check-updates-time', value);
+            },
             requestHttp: function (requestContext) {
                 var deferred = $q.defer();
 

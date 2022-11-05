@@ -186,6 +186,10 @@
             $scope.updateTitlePreview();
         };
 
+        $scope.setAutoCheckUpdates = function (value) {
+            ariaNgSettingService.setAutoCheckUpdates(value);
+        };
+
         $scope.setTheme = function (value) {
             ariaNgSettingService.setTheme(value);
             $rootScope.setTheme(value);

@@ -113,6 +113,15 @@ ipcMain.on('render-set-native-config-minimized-to-tray', (event, value) => {
     config.save('minimizedToTray');
 });
 
+ipcMain.handle('render-get-native-config-last-check-updates-time', (event) => {
+    return config.lastCheckUpdatesTime;
+});
+
+ipcMain.on('render-set-native-config-last-check-updates-time', (event, value) => {
+    config.lastCheckUpdatesTime = value;
+    config.save('lastCheckUpdatesTime');
+});
+
 ipcMain.handle('render-request-http', (event, requestContext) => {
     return http.request(requestContext);
 });

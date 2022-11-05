@@ -25,6 +25,9 @@ const userSettingsSchema = {
     },
     pos_y: {
         type: 'number'
+    },
+    lastCheckUpdatesTime: {
+        type: 'number'
     }
 };
 
@@ -39,6 +42,7 @@ let config = {
     maximized: !!userSettingsStore.get('maximized'),
     defaultPosition: userSettingsStore.get('defaultPosition') || 'last-position',
     minimizedToTray: userSettingsStore.get('minimizedToTray', true),
+    lastCheckUpdatesTime: userSettingsStore.get('lastCheckUpdatesTime') || 0,
     save: function (item) {
         if (item && this[item] !== undefined) {
             userSettingsStore.set(item, this[item]);

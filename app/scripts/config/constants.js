@@ -24,6 +24,7 @@
     }).constant('ariaNgDefaultOptions', {
         language: 'en',
         theme: 'light',
+        autoCheckUpdates: 'never',
         title: '${downspeed}, ${upspeed} - ${title}',
         titleRefreshInterval: 5000,
         browserNotification: false,
