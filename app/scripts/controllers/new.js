@@ -65,10 +65,13 @@
             return selectedFileIndex;
         };
 
-        var downloadByLinks = function (pauseOnAdded, responseCallback) {
+        var getDownloadTasksByLinks = function (options) {
             var urls = ariaNgCommonService.parseUrlsFromOriginInput($scope.context.urls);
-            var options = angular.copy($scope.context.options);
             var tasks = [];
+
+            if (!options) {
+                options = angular.copy($scope.context.options);
+            }
 
             for (var i = 0; i < urls.length; i++) {
                 if (urls[i] === '' || urls[i].trim() === '') {
@@ -80,6 +83,13 @@
                     options: options
                 });
             }
+
+            return tasks;
+        };
+
+        var downloadByLinks = function (pauseOnAdded, responseCallback) {
+            var options = angular.copy($scope.context.options);
+            var tasks = getDownloadTasksByLinks(options);
 
             saveDownloadPath(options);
 
@@ -257,7 +267,8 @@
                 global: true,
                 http: false,
                 bittorrent: false
-            }
+            },
+            exportCommandApiOptions: null
         };
 
         if (parameters.url) {
@@ -728,6 +739,13 @@
             } else if ($scope.context.taskType === 'metalink') {
                 $rootScope.loadPromise = downloadByMetalink(pauseOnAdded, responseCallback);
             }
+        };
+
+        $scope.showExportCommandAPIModal = function () {
+            $scope.context.exportCommandApiOptions = {
+                type: 'new-task',
+                data: getDownloadTasksByLinks()
+            };
         };
 
         $scope.setOption = function (key, value, optionStatus) {
