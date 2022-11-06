@@ -189,6 +189,7 @@
             'Example: ${downspeed:noprefix:nosuffix:scale=1}': 'Example: ${downspeed:noprefix:nosuffix:scale=1}',
             'Updating Page Title Interval': 'Updating Page Title Interval',
             'Enable Browser Notification': 'Enable Browser Notification',
+            'Enable System Notification': 'Enable System Notification',
             'WebSocket Auto Reconnect Interval': 'WebSocket Auto Reconnect Interval',
             'Aria2 RPC Alias': 'Aria2 RPC Alias',
             'Aria2 RPC Address': 'Aria2 RPC Address',
