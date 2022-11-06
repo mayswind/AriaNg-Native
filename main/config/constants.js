@@ -1,5 +1,9 @@
 'use strict';
 
+const startupCommandConstants = {
+    outputLogLimit: 100
+};
+
 const ariaNgPageLocations = {
     NewTask: '/new',
     AriaNgSettings: '/settings/ariang'
@@ -12,6 +16,7 @@ const supportedFileExtensions = {
 };
 
 module.exports = {
+    startupCommandConstants: startupCommandConstants,
     ariaNgPageLocations: ariaNgPageLocations,
     supportedFileExtensions: supportedFileExtensions
 }

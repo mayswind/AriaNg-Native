@@ -1,10 +1,14 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('AriaNgDebugController', ['$rootScope', '$scope', '$location', '$interval', '$timeout', '$filter', 'ariaNgConstants', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgKeyboardService', 'ariaNgSettingService', 'aria2RpcService', function ($rootScope, $scope, $location, $interval, $timeout, $filter, ariaNgConstants, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgKeyboardService, ariaNgSettingService, aria2RpcService) {
+    angular.module('ariaNg').controller('AriaNgDebugController', ['$rootScope', '$scope', '$location', '$interval', '$timeout', '$filter', 'ariaNgConstants', 'ariaNgCommonService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgKeyboardService', 'ariaNgSettingService', 'aria2RpcService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $location, $interval, $timeout, $filter, ariaNgConstants, ariaNgCommonService, ariaNgLocalizationService, ariaNgLogService, ariaNgKeyboardService, ariaNgSettingService, aria2RpcService, ariaNgNativeElectronService) {
         var tabStatusItems = [
             {
                 name: 'logs',
+                show: true
+            },
+            {
+                name: 'startup-command',
                 show: true
             },
             {
@@ -41,6 +45,15 @@
             });
         };
 
+        var loadStartupCommandOutput = function () {
+            return ariaNgNativeElectronService.getStartupCommandOutputAsync()
+                .then(function (outputs) {
+                    $scope.$apply(function () {
+                        $scope.context.startupCommandOutput = outputs;
+                    });
+                });
+        };
+
         $scope.context = {
             currentTab: 'logs',
             logMaxCount: ariaNgConstants.cachedDebugLogsLimit,
@@ -50,6 +63,7 @@
             logLevelFilter: 'DEBUG',
             logs: [],
             currentLog: null,
+            startupCommandOutput: null,
             availableRpcMethods: [],
             rpcRequestMethod: '',
             rpcRequestParameters: '{}',
@@ -61,7 +75,11 @@
         };
 
         $scope.changeTab = function (tabName) {
-            if (tabName === 'rpc') {
+            if (tabName === 'logs') {
+                $scope.context.logs = ariaNgLogService.getDebugLogs().slice();
+            } else if (tabName === 'startup-command') {
+                $rootScope.loadPromise = loadStartupCommandOutput();
+            } else if (tabName === 'rpc') {
                 $rootScope.loadPromise = loadAria2RPCMethods();
             }
 
@@ -131,7 +149,11 @@
         };
 
         $scope.reloadLogs = function () {
-            $scope.context.logs = ariaNgLogService.getDebugLogs().slice();
+            if ($scope.context.currentTab === 'logs') {
+                $scope.context.logs = ariaNgLogService.getDebugLogs().slice();
+            } else if ($scope.context.currentTab === 'startup-command') {
+                return loadStartupCommandOutput();
+            }
         };
 
         $scope.clearDebugLogs = function () {

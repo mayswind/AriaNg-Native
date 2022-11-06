@@ -165,6 +165,9 @@
             setLastCheckUpdatesTime: function (value) {
                 invokeMainProcessMethod('render-set-native-config-last-check-updates-time', value);
             },
+            getStartupCommandOutputAsync: function () {
+                return invokeMainProcessMethodAsync('render-get-startup-command-process-output');
+            },
             requestHttp: function (requestContext) {
                 var deferred = $q.defer();
 

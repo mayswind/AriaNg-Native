@@ -302,6 +302,7 @@
             'Are you sure you want to clear debug logs?': 'Are you sure you want to clear debug logs?',
             'Show Detail': 'Show Detail',
             'Log Detail': 'Log Detail',
+            'Startup Command Output': 'Startup Command Output',
             'Aria2 RPC Debug': 'Aria2 RPC Debug',
             'Aria2 RPC Request Method': 'Aria2 RPC Request Method',
             'Aria2 RPC Request Parameters': 'Aria2 RPC Request Parameters',

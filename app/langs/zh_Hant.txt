@@ -298,6 +298,7 @@ Clear Logs=清除記錄
 Are you sure you want to clear debug logs?=您是否要清除偵錯記錄?
 Show Detail=顯示詳情
 Log Detail=記錄詳情
+Startup Command Output=啟動命令輸出
 Aria2 RPC Debug=Aria2 RPC 偵錯
 Aria2 RPC Request Method=Aria2 RPC 要求方法
 Aria2 RPC Request Parameters=Aria2 RPC 要求參數

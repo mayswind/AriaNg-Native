@@ -141,6 +141,10 @@ ipcMain.on('render-set-native-config-last-check-updates-time', (event, value) =>
     config.save('lastCheckUpdatesTime');
 });
 
+ipcMain.handle('render-get-startup-command-process-output', (event, requestContext) => {
+    return core.startupCommandOutput;
+});
+
 ipcMain.handle('render-request-http', (event, requestContext) => {
     return http.request(requestContext);
 });

@@ -75,7 +75,48 @@ if (os.platform() === 'darwin') {
 }
 
 if (config.execCommandOnStartup) {
-    process.execCommandAsync(config.execCommandOnStartup, config.execCommandArgumentsOnStartup, config.execDetachedCommandOnStartup);
+    const options = {
+        command: config.execCommandOnStartup,
+        args: config.execCommandArgumentsOnStartup,
+        detached: config.execDetachedCommandOnStartup,
+    };
+
+    if (global.settings.isDevMode) {
+        options.onoutput = function (output) {
+            const lastOutput = (core.startupCommandOutput.length > 1 ? core.startupCommandOutput[core.startupCommandOutput.length - 1] : null);
+
+            if (lastOutput && lastOutput.source === output.source && lastOutput.content === output.content) {
+                lastOutput.count++
+            } else {
+                if (core.startupCommandOutput.length >= constants.startupCommandConstants.outputLogLimit) {
+                    core.startupCommandOutput.shift();
+                }
+
+                core.startupCommandOutput.push({
+                    time: new Date(),
+                    type: 'output',
+                    source: output.source,
+                    content: output.content,
+                    count: output.count
+                });
+            }
+        };
+
+        options.onerror = function (error) {
+            if (core.startupCommandOutput.length >= constants.startupCommandConstants.outputLogLimit) {
+                core.startupCommandOutput.shift();
+            }
+
+            core.startupCommandOutput.push({
+                time: new Date(),
+                type: 'error',
+                source: error.type,
+                content: error.error
+            });
+        };
+    }
+
+    process.execCommandAsync(options);
 }
 
 app.on('window-all-closed', () => {

@@ -298,6 +298,7 @@ Clear Logs=清空日志
 Are you sure you want to clear debug logs?=您是否要清除调试日志?
 Show Detail=显示详情
 Log Detail=日志详情
+Startup Command Output=启动命令输出
 Aria2 RPC Debug=Aria2 RPC 调试
 Aria2 RPC Request Method=Aria2 RPC 请求方法
 Aria2 RPC Request Parameters=Aria2 RPC 请求参数
