@@ -11,6 +11,10 @@ let isExists = function (fullPath) {
     return fs.existsSync(fullPath);
 };
 
+let getPackageIconPath = function (iconName) {
+    return path.join(__dirname, '../../assets/', iconName);
+};
+
 let readPackageFile = function (filePath) {
     return fs.readFileSync(path.join(__dirname, '../../app/', filePath), 'UTF-8');
 };
@@ -18,5 +22,6 @@ let readPackageFile = function (filePath) {
 module.exports = {
     getFullPath: getFullPath,
     isExists: isExists,
+    getPackageIconPath: getPackageIconPath,
     readPackageFile: readPackageFile
 };

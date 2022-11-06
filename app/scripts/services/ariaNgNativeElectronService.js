@@ -90,6 +90,9 @@
             showTextboxContextMenu: function (context) {
                 invokeMainProcessMethod('render-show-textbox-context-menu', context);
             },
+            showSystemNotification: function (context) {
+                invokeMainProcessMethod('render-show-system-notification', context);
+            },
             setApplicationMenu: function () {
                 invokeMainProcessMethod('render-update-app-menu-label', {
                     AboutAriaNgNative: ariaNgLocalizationService.getLocalizedText('menu.AboutAriaNgNative'),

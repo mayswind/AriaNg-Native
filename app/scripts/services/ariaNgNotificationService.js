@@ -1,50 +1,34 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgNotificationService', ['$window', 'Notification', 'ariaNgLocalizationService', 'ariaNgSettingService', function ($window, Notification, ariaNgLocalizationService, ariaNgSettingService) {
-        var isSupportBrowserNotification = !!$window.Notification;
+    angular.module('ariaNg').factory('ariaNgNotificationService', ['$window', 'Notification', 'ariaNgLocalizationService', 'ariaNgSettingService', 'ariaNgNativeElectronService', function ($window, Notification, ariaNgLocalizationService, ariaNgSettingService, ariaNgNativeElectronService) {
+        var nativeNotificationPermission = 'granted';
+        var isSupportBrowserNotification = true;
 
         var isBrowserNotifactionGranted = function (permission) {
             return permission === 'granted';
         };
 
         var getBrowserNotifactionPermission = function () {
-            if (!$window.Notification) {
-                return null;
-            }
-
-            return $window.Notification.permission;
+            return nativeNotificationPermission;
         };
 
         var requestBrowserNotifactionPermission = function (callback) {
-            if (!$window.Notification) {
-                return;
-            }
+            var permission = nativeNotificationPermission;
 
-            $window.Notification.requestPermission(function (permission) {
-                if (callback) {
-                    callback({
-                        granted: isBrowserNotifactionGranted(permission),
-                        permission: permission
-                    });
-                }
-            });
+            if (callback) {
+                callback({
+                    granted: isBrowserNotifactionGranted(permission),
+                    permission: permission
+                });
+            }
         };
 
         var showBrowserNotifaction = function (title, options) {
-            if (!$window.Notification) {
-                return;
-            }
-
-            if (!isBrowserNotifactionGranted(getBrowserNotifactionPermission())) {
-                return;
-            }
-
-            options = angular.extend({
-                icon: 'tileicon.png'
-            }, options);
-
-            new $window.Notification(title, options);
+            ariaNgNativeElectronService.showSystemNotification({
+                title: title,
+                body: options.body
+            });
         };
 
         var notifyViaBrowser = function (title, content, options) {

@@ -6,6 +6,7 @@ const core = require('../core');
 const config = require('../config/config');
 const menu = require('../components/menu');
 const tray = require('../components/tray');
+const notification = require('../components/notification');
 const http = require('../lib/http');
 const websocket = require('../lib/websocket');
 const localfs = require('../lib/localfs');
@@ -76,6 +77,10 @@ ipcMain.on('render-show-textbox-context-menu', (event, context) => {
     if (contextMenu) {
         contextMenu.popup(core.mainWindow);
     }
+});
+
+ipcMain.on('render-show-system-notification', (event, context) => {
+    notification.showNotification(context.title, context.body);
 });
 
 ipcMain.on('render-update-app-menu-label', (event, labels) => {
