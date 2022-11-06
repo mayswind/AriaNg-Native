@@ -23,6 +23,23 @@ Please visit [https://github.com/mayswind/AriaNg](https://github.com/mayswind/Ar
 #### macOS
 ![AriaNg Native](https://raw.githubusercontent.com/mayswind/AriaNg-WebSite/master/screenshots/ariang_native_macos.png)
 
+## Command Line
+
+```
+Usage: AriaNg Native.exe [file] [options]
+
+Commands:
+  AriaNg Native.exe new [file]  Create new download task from exist
+                                torrent/metalink file                  [default]
+
+Options:
+  --version, -v      Show version number                               [boolean]
+  --help, -h                                                           [boolean]
+  --development, -d  Enable Development Mode (press F12 to open DevTools)
+                                                                       [boolean]
+  --classic, -c      Use classic window title bar (for Windows only)   [boolean]
+```
+
 ## Installation
 #### Prebuilt release
 Latest Release: [https://github.com/mayswind/AriaNg-Native/releases](https://github.com/mayswind/AriaNg-Native/releases)
