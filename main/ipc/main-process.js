@@ -152,22 +152,34 @@ ipcMain.handle('render-request-http', (event, requestContext) => {
 ipcMain.on('render-connect-websocket', (event, rpcUrl, options) => {
     websocket.connect(rpcUrl, options,
         function onOpen(context) {
-            core.mainWindow.webContents.send('on-main-websocket-open', {
-                url: context.url
-            });
+            try {
+                core.mainWindow.webContents.send('on-main-websocket-open', {
+                    url: context.url
+                });
+            } catch (ex) {
+                // Do Nothing
+            }
         },
         function onClose(context) {
-            core.mainWindow.webContents.send('on-main-websocket-close', {
-                url: context.url,
-                autoReconnect: context.autoReconnect
-            });
+            try {
+                core.mainWindow.webContents.send('on-main-websocket-close', {
+                    url: context.url,
+                    autoReconnect: context.autoReconnect
+                });
+            } catch (ex) {
+                // Do Nothing
+            }
         },
         function onMessage(context) {
-            core.mainWindow.webContents.send('on-main-websocket-message', {
-                success: context.success,
-                url: context.url,
-                data: context.message
-            });
+            try {
+                core.mainWindow.webContents.send('on-main-websocket-message', {
+                    success: context.success,
+                    url: context.url,
+                    data: context.message
+                });
+            } catch (ex) {
+                // Do Nothing
+            }
         }
     );
 });
@@ -179,12 +191,16 @@ ipcMain.on('render-reconnect-websocket', (event, rpcUrl, options) => {
 ipcMain.on('render-send-websocket-message', (event, requestContext) => {
     websocket.send(requestContext)
         .catch(function () {
-            core.mainWindow.webContents.send('on-main-websocket-message', {
-                success: false,
-                url: requestContext.url,
-                request: requestContext.data,
-                data: null
-            });
+            try {
+                core.mainWindow.webContents.send('on-main-websocket-message', {
+                    success: false,
+                    url: requestContext.url,
+                    request: requestContext.data,
+                    data: null
+                });
+            } catch (ex) {
+                // Do Nothing
+            }
         });
 });
 

@@ -10,27 +10,51 @@ const constants = require('../config/constants');
 const ipcMain = electron.ipcMain;
 
 let notifyRenderProcessLogDebug = function (msg, object) {
-    core.mainWindow.webContents.send('on-main-log-debug', msg, object);
+    try {
+        core.mainWindow.webContents.send('on-main-log-debug', msg, object);
+    } catch (ex) {
+        // Do Nothing
+    }
 };
 
 let notifyRenderProcessLogInfo = function (msg, object) {
-    core.mainWindow.webContents.send('on-main-log-info', msg, object);
+    try {
+        core.mainWindow.webContents.send('on-main-log-info', msg, object);
+    } catch (ex) {
+        // Do Nothing
+    }
 };
 
 let notifyRenderProcessLogWarn = function (msg, object) {
-    core.mainWindow.webContents.send('on-main-log-warn', msg, object);
+    try {
+        core.mainWindow.webContents.send('on-main-log-warn', msg, object);
+    } catch (ex) {
+        // Do Nothing
+    }
 };
 
 let notifyRenderProcessLogError = function (msg, object) {
-    core.mainWindow.webContents.send('on-main-log-error', msg, object);
+    try {
+        core.mainWindow.webContents.send('on-main-log-error', msg, object);
+    } catch (ex) {
+        // Do Nothing
+    }
 };
 
 let notifyRenderProcessWindowMaximized = function (maximized) {
-    core.mainWindow.webContents.send('on-main-window-maximized', maximized);
+    try {
+        core.mainWindow.webContents.send('on-main-window-maximized', maximized);
+    } catch (ex) {
+        // Do Nothing
+    }
 };
 
 let notifyRenderProcessWindowUnmaximized = function (maximized) {
-    core.mainWindow.webContents.send('on-main-window-unmaximized', maximized);
+    try {
+        core.mainWindow.webContents.send('on-main-window-unmaximized', maximized);
+    } catch (ex) {
+        // Do Nothing
+    }
 };
 
 let notifyRenderProcessShowErrorMessage = function (message) {
