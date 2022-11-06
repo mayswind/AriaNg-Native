@@ -372,6 +372,18 @@
             setBrowserNotification: function (value) {
                 setOption('browserNotification', value);
             },
+            getBrowserNotificationSound: function () {
+                return getOption('browserNotificationSound');
+            },
+            setBrowserNotificationSound: function (value) {
+                setOption('browserNotificationSound', value);
+            },
+            getBrowserNotificationFrequency: function () {
+                return getOption('browserNotificationFrequency');
+            },
+            setBrowserNotificationFrequency: function (value) {
+                setOption('browserNotificationFrequency', value);
+            },
             getWebSocketReconnectInterval: function () {
                 return getOption('webSocketReconnectInterval');
             },

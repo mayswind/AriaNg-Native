@@ -80,7 +80,7 @@ ipcMain.on('render-show-textbox-context-menu', (event, context) => {
 });
 
 ipcMain.on('render-show-system-notification', (event, context) => {
-    notification.showNotification(context.title, context.body);
+    notification.showNotification(context.title, context.body, context.silent);
 });
 
 ipcMain.on('render-update-app-menu-label', (event, labels) => {
