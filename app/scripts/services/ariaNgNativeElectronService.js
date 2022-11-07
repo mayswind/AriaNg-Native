@@ -121,12 +121,26 @@
                     Exit: ariaNgLocalizationService.getLocalizedText('tray.Exit')
                 });
             },
+            setSystemNotificationTemplate: function () {
+                invokeMainProcessMethod('render-update-system-notification-templates', {
+                    onDownloadComplete: {
+                        title: ariaNgLocalizationService.getLocalizedText('Download Completed')
+                    },
+                    onBtDownloadComplete: {
+                        title: ariaNgLocalizationService.getLocalizedText('BT Download Completed')
+                    },
+                    onDownloadError: {
+                        title: ariaNgLocalizationService.getLocalizedText('Download Error')
+                    },
+                });
+            },
             setTrayToolTip: function (value) {
                 invokeMainProcessMethod('render-update-tray-tip', value);
             },
             setMainWindowLanguage: function () {
                 this.setApplicationMenu();
                 this.setTrayMenu();
+                this.setSystemNotificationTemplate();
             },
             getNativeConfig: function () {
                 var config = invokeMainProcessMethodSync('render-sync-get-native-config');
@@ -147,6 +161,9 @@
             },
             setMinimizedToTray: function (value) {
                 invokeMainProcessMethod('render-set-native-config-minimized-to-tray', value);
+            },
+            setNotificationSound: function (value) {
+                invokeMainProcessMethod('render-set-native-config-notification-sound', value);
             },
             setExecCommandOnStartup: function (value) {
                 invokeMainProcessMethod('render-set-native-config-exec-command-on-startup', value);

@@ -39,6 +39,7 @@
                 config.afterMainWindowClosed = 'minimize-to-tray';
             }
 
+            config.notificationSound = originalConfig.notificationSound;
             config.execCommandOnStartup = originalConfig.execCommandOnStartup;
             config.execCommandArgumentsOnStartup = originalConfig.execCommandArgumentsOnStartup;
 
@@ -228,6 +229,7 @@
 
         $scope.setBrowserNotificationSound = function (value) {
             ariaNgSettingService.setBrowserNotificationSound(value);
+            ariaNgNativeElectronService.setNotificationSound(value);
         };
 
         $scope.setBrowserNotificationFrequency = function (value) {
@@ -380,6 +382,7 @@
             if (settingsObj) {
                 ariaNgCommonService.confirm('Confirm Import', 'Are you sure you want to import all settings?', 'warning', function () {
                     ariaNgSettingService.importAllOptions(settingsObj);
+                    ariaNgNativeElectronService.setNotificationSound(!!settingsObj.browserNotificationSound);
                     $window.location.reload();
                 });
             }

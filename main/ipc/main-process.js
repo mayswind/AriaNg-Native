@@ -11,6 +11,7 @@ const http = require('../lib/http');
 const websocket = require('../lib/websocket');
 const localfs = require('../lib/localfs');
 const bittorrent = require('../lib/bittorrent');
+const taskEvent = require('../task/event');
 
 const shell = electron.shell;
 const dialog = electron.dialog;
@@ -102,10 +103,15 @@ ipcMain.on('render-update-tray-tip', (event, tooltip) => {
     tray.setToolTip(tooltip);
 });
 
+ipcMain.on('render-update-system-notification-templates', (event, template) => {
+    taskEvent.setNotificationMessageTemplates(template);
+});
+
 ipcMain.on('render-sync-get-native-config', (event) => {
     event.returnValue = {
         defaultPosition: config.defaultPosition,
         minimizedToTray: config.minimizedToTray,
+        notificationSound: config.notificationSound,
         execCommandOnStartup: config.execCommandOnStartup,
         execCommandArgumentsOnStartup: config.execCommandArgumentsOnStartup,
         execDetachedCommandOnStartup: config.execDetachedCommandOnStartup
@@ -120,6 +126,11 @@ ipcMain.on('render-set-native-config-default-position', (event, value) => {
 ipcMain.on('render-set-native-config-minimized-to-tray', (event, value) => {
     config.minimizedToTray = !!value;
     config.save('minimizedToTray');
+});
+
+ipcMain.on('render-set-native-config-notification-sound', (event, value) => {
+    config.notificationSound = !!value;
+    config.save('notificationSound');
 });
 
 ipcMain.on('render-set-native-config-exec-command-on-startup', (event, value) => {
@@ -176,6 +187,7 @@ ipcMain.on('render-connect-websocket', (event, rpcUrl, options) => {
             }
         },
         function onMessage(context) {
+            taskEvent.nativeProcessTaskMessage(context);
             try {
                 core.mainWindow.webContents.send('on-main-websocket-message', {
                     success: context.success,

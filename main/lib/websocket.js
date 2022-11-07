@@ -3,10 +3,12 @@
 const WebSocket = require('ws');
 
 const ipcRender = require('../ipc/render-proecss');
+const utils = require('../lib/utils');
 
 let wsClient = null;
 let sendQueue = [];
 let pendingReconnect = null;
+let requestIdMap = {};
 
 let fireSendQueue = function () {
     while (sendQueue.length && wsClient && wsClient.readyState === WebSocket.OPEN) {
@@ -151,6 +153,23 @@ let send = function (requestContext) {
     return deferred.promise;
 };
 
+let request = function () {
+    const uniqueId = utils.generateUniqueId();
+    const deferred = {};
+
+    deferred.promise = new Promise(function (resolve, reject) {
+        deferred.resolve = resolve
+        deferred.reject = reject
+    });
+
+    // TODO
+    requestIdMap[uniqueId] = {
+
+    };
+
+    return deferred.promise;
+};
+
 let getReadyState = function () {
     if (!wsClient) {
         return null;
@@ -164,5 +183,6 @@ module.exports = {
     connect: connect,
     reconnect: reconnect,
     send: send,
+    request: request,
     getReadyState: getReadyState
 };

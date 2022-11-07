@@ -26,6 +26,9 @@ const userSettingsSchema = {
     pos_y: {
         type: 'number'
     },
+    notificationSound: {
+        type: 'boolean'
+    },
     execCommandOnStartup: {
         type: 'string'
     },
@@ -51,6 +54,7 @@ let config = {
     maximized: !!userSettingsStore.get('maximized'),
     defaultPosition: userSettingsStore.get('defaultPosition') || 'last-position',
     minimizedToTray: userSettingsStore.get('minimizedToTray', true),
+    notificationSound: userSettingsStore.get('notificationSound', true),
     execCommandOnStartup: userSettingsStore.get('execCommandOnStartup'),
     execCommandArgumentsOnStartup: userSettingsStore.get('execCommandArgumentsOnStartup'),
     execDetachedCommandOnStartup: userSettingsStore.get('execDetachedCommandOnStartup', false),

@@ -1,5 +1,7 @@
 'use strict';
 
+const constants = require('../config/constants');
+
 let isObject = function (value) {
     return value !== null && typeof value === 'object';
 }
@@ -33,8 +35,21 @@ let copyObjectTo = function (from, to) {
     return to;
 }
 
+let base64Encode = function (str) {
+    return new Buffer(str).toString('base64');
+};
+
+let generateUniqueId = function () {
+    const sourceId = constants.ariaNgNativeConstants.appPrefix + '_' + Math.round(new Date().getTime() / 1000) + '_' + Math.random();
+    const hashedId = base64Encode(sourceId);
+
+    return hashedId;
+};
+
 module.exports = {
     isObject: isObject,
     isArray: isArray,
-    copyObjectTo: copyObjectTo
-}
+    copyObjectTo: copyObjectTo,
+    generateUniqueId: generateUniqueId
+};
+

@@ -639,17 +639,18 @@
             });
         });
 
-        aria2TaskService.onTaskCompleted(function (event) {
-            ariaNgNotificationService.notifyTaskComplete(event.task);
-        });
-
-        aria2TaskService.onBtTaskCompleted(function (event) {
-            ariaNgNotificationService.notifyBtTaskComplete(event.task);
-        });
-
-        aria2TaskService.onTaskErrorOccur(function (event) {
-            ariaNgNotificationService.notifyTaskError(event.task);
-        });
+        // AriaNg Native shows notification via main process
+        // aria2TaskService.onTaskCompleted(function (event) {
+        //     ariaNgNotificationService.notifyTaskComplete(event.task);
+        // });
+        //
+        // aria2TaskService.onBtTaskCompleted(function (event) {
+        //     ariaNgNotificationService.notifyBtTaskComplete(event.task);
+        // });
+        //
+        // aria2TaskService.onTaskErrorOccur(function (event) {
+        //     ariaNgNotificationService.notifyTaskError(event.task);
+        // });
 
         $rootScope.$on('$locationChangeStart', function (event) {
             ariaNgCommonService.closeAllDialogs();
