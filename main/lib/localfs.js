@@ -19,9 +19,18 @@ let readPackageFile = function (filePath) {
     return fs.readFileSync(path.join(__dirname, '../../app/', filePath), 'UTF-8');
 };
 
+let getLocalFSFileBase64Content = function (fullpath) {
+    try {
+        return Buffer.from(fs.readFileSync(fullpath)).toString('base64');
+    } catch (ex) {
+        return null;
+    }
+};
+
 module.exports = {
     getFullPath: getFullPath,
     isExists: isExists,
     getPackageIconPath: getPackageIconPath,
-    readPackageFile: readPackageFile
+    readPackageFile: readPackageFile,
+    getLocalFSFileBase64Content: getLocalFSFileBase64Content
 };

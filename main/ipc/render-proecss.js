@@ -1,11 +1,11 @@
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 const electron = require('electron');
 
 const core = require('../core');
 const constants = require('../config/constants');
+const localfs = require('../lib/localfs');
 
 const ipcMain = electron.ipcMain;
 
@@ -84,12 +84,10 @@ let notifyRenderProcessNewTaskFromFile = function (filePath, async) {
     let result = null;
 
     try {
-        let fileContent = fs.readFileSync(filePath);
-
         result = {
             type: constants.supportedFileExtensions[fileExtension],
             fileName: path.basename(filePath),
-            base64Content: Buffer.from(fileContent).toString('base64'),
+            base64Content: localfs.getLocalFSFileBase64Content(filePath),
             async: !!async
         };
     } catch (e) {
