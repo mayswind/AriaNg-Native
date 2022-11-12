@@ -30,35 +30,35 @@ let execCommandAsync = function (options) {
             detached: !!options.detached
         });
 
-        if (options.onoutput) {
-            child.stdout.on('data', (data) => {
+        child.stdout.on('data', (data) => {
+            if (options.onoutput) {
                 options.onoutput({
                     source: 'stdout',
                     content: data.toString(),
                     count: 1
                 });
-            });
-        }
+            }
+        });
 
-        if (options.onoutput) {
-            child.stderr.on('data', (data) => {
+        child.stderr.on('data', (data) => {
+            if (options.onoutput) {
                 options.onoutput({
                     source: 'stderr',
                     content: data.toString(),
                     count: 1
                 });
-            });
-        }
+            }
+        });
 
-        if (options.onoutput) {
-            child.on('close', (code) => {
+        child.on('close', (code) => {
+            if (options.onoutput) {
                 options.onoutput({
                     source: 'close',
                     content: code,
                     count: 1
                 });
-            });
-        }
+            }
+        });
 
         child.on('error', (error) => {
             if (options.onerror) {
