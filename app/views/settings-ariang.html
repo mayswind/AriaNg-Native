@@ -153,6 +153,31 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row" ng-if="isSupportMessagePush()">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Play Sound After Download Finished</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <div class="input-group">
+                                <input class="form-control" type="text"
+                                       ng-model="context.settings.playSoundAfterDownloadFinished"
+                                       ng-change="setPlaySoundAfterDownloadFinished(context.settings.playSoundAfterDownloadFinished)"/>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="browseAndSetPlaySoundAfterDownloadFinished()">
+                                        <span translate>Browse</span>
+                                    </button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            ng-disabled="!context.settings.playSoundAfterDownloadFinished">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a class="pointer-cursor" ng-click="playSound()" translate>Play Sound</a></li>
+                                        <li><a class="pointer-cursor" ng-click="stopPlayingSound()" translate>Stop Playing Sound</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row" ng-if="context.isSupportReconnect">
                         <div class="setting-key setting-key-without-desc col-sm-4">
                             <span translate>WebSocket Auto Reconnect Interval</span>

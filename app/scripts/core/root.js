@@ -240,6 +240,19 @@
                 });
         };
 
+        var playSoundAfterDownloadFinished = function () {
+            if (!ariaNgSettingService.getPlaySoundAfterDownloadFinished()) {
+                return;
+            }
+
+            if ($rootScope.soundContext.isPlaying()) {
+                ariaNgLogService.debug('[root.playSoundAfterDownloadFinished] background audio is already playing');
+                return;
+            }
+
+            $rootScope.soundContext.playSound(ariaNgSettingService.getPlaySoundAfterDownloadFinished(), true);
+        };
+
         $rootScope.currentTheme = 'light';
 
         $rootScope.searchContext = {
@@ -443,6 +456,62 @@
             }
         };
 
+        $rootScope.soundContext = {
+            currentSoundFile: '',
+            loadSoundFile: function (filePath, callback, silent) {
+                var player = angular.element('#background-audio')[0];
+
+                ariaNgNativeElectronService.getLocalFSExistsAsync(filePath, function (exists) {
+                    if (exists) {
+                        player.src = 'file://' + filePath;
+                        $rootScope.soundContext.currentSoundFile = filePath;
+                        ariaNgLogService.debug('[root.soundContext.playSound] background audio is set to ' + filePath);
+
+                        if (angular.isFunction(callback)) {
+                            callback(filePath);
+                        }
+                    } else {
+                        if (!silent) {
+                            ariaNgCommonService.showError('Sound file not exists.');
+                        }
+
+                        ariaNgLogService.warn('[root.soundContext.playSound] sound file not exists ' + filePath);
+                    }
+                });
+            },
+            isPlaying: function () {
+                var player = angular.element('#background-audio')[0];
+
+                return !player.paused;
+            },
+            playSound: function (filePath, silent) {
+                if (!filePath) {
+                    return;
+                }
+
+                var player = angular.element('#background-audio')[0];
+
+                player.pause();
+                player.volume = 1.0;
+
+                if (this.currentSoundFile !== filePath) {
+                    this.loadSoundFile(filePath, function () {
+                        player.currentTime = 0;
+                        player.play();
+                    }, !!silent);
+                } else {
+                    player.currentTime = 0;
+                    player.play();
+                }
+            },
+            stopPlayingSound: function () {
+                var player = angular.element('#background-audio')[0];
+
+                player.pause();
+                player.currentTime = 0;
+            }
+        };
+
         $rootScope.filterTask = function (task) {
             if (!task || !angular.isString(task.taskName)) {
                 return false;
@@ -640,14 +709,17 @@
         });
 
         aria2TaskService.onTaskCompleted(function (event) {
+            playSoundAfterDownloadFinished(event.task);
             ariaNgNotificationService.notifyTaskComplete(event.task);
         });
 
         aria2TaskService.onBtTaskCompleted(function (event) {
+            playSoundAfterDownloadFinished(event.task);
             ariaNgNotificationService.notifyBtTaskComplete(event.task);
         });
 
         aria2TaskService.onTaskErrorOccur(function (event) {
+            playSoundAfterDownloadFinished(event.task);
             ariaNgNotificationService.notifyTaskError(event.task);
         });
 

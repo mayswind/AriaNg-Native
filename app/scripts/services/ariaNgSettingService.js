@@ -384,6 +384,12 @@
             setBrowserNotificationFrequency: function (value) {
                 setOption('browserNotificationFrequency', value);
             },
+            getPlaySoundAfterDownloadFinished: function () {
+                return getOption('playSoundAfterDownloadFinished');
+            },
+            setPlaySoundAfterDownloadFinished: function (value) {
+                setOption('playSoundAfterDownloadFinished', value);
+            },
             getWebSocketReconnectInterval: function () {
                 return getOption('webSocketReconnectInterval');
             },

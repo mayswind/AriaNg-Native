@@ -31,6 +31,7 @@
         browserNotification: false,
         browserNotificationSound: true,
         browserNotificationFrequency: 'unlimited',
+        playSoundAfterDownloadFinished: '',
         rpcAlias: '',
         rpcHost: '',
         rpcPort: '6800',
