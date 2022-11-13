@@ -133,18 +133,18 @@ app.on('second-instance', (event, argv, workingDirectory, additionalData) => {
 
         core.mainWindow.focus();
 
-        let filePath = null;
+        let secondInstanceArgv = null;
 
-        if (additionalData && additionalData.argv) {
-            filePath = additionalData.argv.file;
+        if (additionalData) {
+            secondInstanceArgv = additionalData.argv;
         }
 
-        if (!filePath) {
-            filePath = cmd.parseFilePath(argv);
+        if (!secondInstanceArgv) {
+            secondInstanceArgv = cmd.parseArguments(argv);
         }
 
-        if (filePath && file.isContainsSupportedFileArg(filePath)) {
-            ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
+        if (secondInstanceArgv && secondInstanceArgv.file && file.isContainsSupportedFileArg(secondInstanceArgv.file)) {
+            ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(secondInstanceArgv.file);
             ipcRender.notifyRenderProcessNavigateToNewTask();
         }
     }

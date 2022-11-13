@@ -26,7 +26,7 @@ const argv = yargs(process.argv.slice(1))
     })
     .argv;
 
-function parseFilePath(argv) {
+function parseArguments(argv) {
     if (!argv || argv.length < 2) {
         return undefined;
     }
@@ -39,16 +39,18 @@ function parseFilePath(argv) {
         }
     }
 
-    const ret = yargs(actualArgv)
-        .command({
-            command: '$0 <file>'
-        })
-        .argv;
-
-    return ret ? ret.file : undefined;
+    try {
+        return yargs(actualArgv)
+            .command({
+                command: '$0 [file]'
+            })
+            .argv;
+    } catch (ex) {
+        return undefined;
+    }
 }
 
 module.exports = {
     argv: argv,
-    parseFilePath: parseFilePath
+    parseArguments: parseArguments
 };
