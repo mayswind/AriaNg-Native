@@ -81,40 +81,46 @@ if (config.execCommandOnStartup) {
         detached: config.execDetachedCommandOnStartup,
     };
 
-    if (global.settings.isDevMode) {
-        options.onoutput = function (output) {
-            const lastOutput = (core.startupCommandOutput.length > 1 ? core.startupCommandOutput[core.startupCommandOutput.length - 1] : null);
+    options.onoutput = function (output) {
+        if (!global.settings.isDevMode) {
+            return;
+        }
 
-            if (lastOutput && lastOutput.source === output.source && lastOutput.content === output.content) {
-                lastOutput.count++
-            } else {
-                if (core.startupCommandOutput.length >= constants.startupCommandConstants.outputLogLimit) {
-                    core.startupCommandOutput.shift();
-                }
+        const lastOutput = (core.startupCommandOutput.length > 1 ? core.startupCommandOutput[core.startupCommandOutput.length - 1] : null);
 
-                core.startupCommandOutput.push({
-                    time: new Date(),
-                    type: 'output',
-                    source: output.source,
-                    content: output.content,
-                    count: output.count
-                });
-            }
-        };
-
-        options.onerror = function (error) {
+        if (lastOutput && lastOutput.source === output.source && lastOutput.content === output.content) {
+            lastOutput.count++
+        } else {
             if (core.startupCommandOutput.length >= constants.startupCommandConstants.outputLogLimit) {
                 core.startupCommandOutput.shift();
             }
 
             core.startupCommandOutput.push({
                 time: new Date(),
-                type: 'error',
-                source: error.type,
-                content: error.error
+                type: 'output',
+                source: output.source,
+                content: output.content,
+                count: output.count
             });
-        };
-    }
+        }
+    };
+
+    options.onerror = function (error) {
+        if (!global.settings.isDevMode) {
+            return;
+        }
+
+        if (core.startupCommandOutput.length >= constants.startupCommandConstants.outputLogLimit) {
+            core.startupCommandOutput.shift();
+        }
+
+        core.startupCommandOutput.push({
+            time: new Date(),
+            type: 'error',
+            source: error.type,
+            content: error.error
+        });
+    };
 
     process.execCommandAsync(options);
 }
@@ -141,6 +147,11 @@ app.on('second-instance', (event, argv, workingDirectory, additionalData) => {
 
         if (!secondInstanceArgv) {
             secondInstanceArgv = cmd.parseArguments(argv);
+        }
+
+        if (secondInstanceArgv && secondInstanceArgv.development) {
+            global.settings.isDevMode = !!secondInstanceArgv.development;
+            ipcRender.notifyRenderProcessChangeDevMode(!!secondInstanceArgv.development);
         }
 
         if (secondInstanceArgv && secondInstanceArgv.file && file.isContainsSupportedFileArg(secondInstanceArgv.file)) {

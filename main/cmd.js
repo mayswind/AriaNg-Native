@@ -34,7 +34,7 @@ function parseArguments(argv) {
     const actualArgv = [];
 
     for (let i = 1; i < argv.length; i++) {
-        if (argv[i][0] !== '-') {
+        if (argv[i][0] !== '-' || argv[i] === '-d' || argv[i] === '--development') {
             actualArgv.push(argv[i]);
         }
     }
@@ -42,7 +42,11 @@ function parseArguments(argv) {
     try {
         return yargs(actualArgv)
             .command({
-                command: '$0 [file]'
+                command: '$0 [file] [options]'
+            })
+            .option('development', {
+                alias: 'd',
+                type: 'boolean'
             })
             .argv;
     } catch (ex) {

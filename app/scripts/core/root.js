@@ -681,6 +681,10 @@
             ariaNgCommonService.showError(message);
         });
 
+        ariaNgNativeElectronService.onMainProcessChangeDevMode(function (event, devMode) {
+            ariaNgSettingService.setDebugMode(devMode);
+        });
+
         ariaNgSettingService.setDebugMode(ariaNgNativeElectronService.isDevMode());
 
         ariaNgSettingService.onFirstAccess(function () {

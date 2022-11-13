@@ -325,6 +325,9 @@
             onMainWindowUnmaximize: function (callback) {
                 onMainProcessEvent('on-main-window-unmaximized', callback);
             },
+            onMainProcessChangeDevMode: function (callback) {
+                onMainProcessEvent('on-main-change-dev-mode', callback);
+            },
             onMainProcessShowError: function (callback) {
                 onMainProcessEvent('on-main-show-error', callback);
             },

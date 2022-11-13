@@ -57,6 +57,10 @@ let notifyRenderProcessWindowUnmaximized = function (maximized) {
     }
 };
 
+let notifyRenderProcessChangeDevMode = function (devMode) {
+    core.mainWindow.webContents.send('on-main-change-dev-mode', devMode);
+};
+
 let notifyRenderProcessShowErrorMessage = function (message) {
     core.mainWindow.webContents.send('on-main-show-error', message);
 };
@@ -147,6 +151,7 @@ module.exports = {
     notifyRenderProcessLogError: notifyRenderProcessLogError,
     notifyRenderProcessWindowMaximized: notifyRenderProcessWindowMaximized,
     notifyRenderProcessWindowUnmaximized: notifyRenderProcessWindowUnmaximized,
+    notifyRenderProcessChangeDevMode: notifyRenderProcessChangeDevMode,
     notifyRenderProcessShowErrorMessage: notifyRenderProcessShowErrorMessage,
     notifyRenderProcessNavigateToNewTask: notifyRenderProcessNavigateToNewTask,
     notifyRenderProcessNavigateToAriaNgSettings: notifyRenderProcessNavigateToAriaNgSettings,
