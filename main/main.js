@@ -155,8 +155,18 @@ app.on('second-instance', (event, argv, workingDirectory, additionalData) => {
         }
 
         if (secondInstanceArgv && secondInstanceArgv.file && file.isContainsSupportedFileArg(secondInstanceArgv.file)) {
-            ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(secondInstanceArgv.file);
-            ipcRender.notifyRenderProcessNavigateToNewTask();
+            let location = '';
+
+            if (core.mainWindow.webContents) {
+                location = page.parseLocationFromFullUrl(core.mainWindow.webContents.getURL())
+            }
+
+            if (location.indexOf('/new') === 0) {
+                ipcRender.notifyRenderProcessNewTaskFromFile(secondInstanceArgv.file);
+            } else {
+                ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(secondInstanceArgv.file);
+                ipcRender.notifyRenderProcessNavigateToNewTask();
+            }
         }
     }
 });

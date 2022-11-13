@@ -5,6 +5,22 @@ const path = require('path');
 
 const pkgfile = require('../../package');
 
+const routerSeparator = '#!';
+
+let parseLocationFromFullUrl = function (fullUrl) {
+    if (!fullUrl || fullUrl.indexOf(routerSeparator) < 0) {
+        return '';
+    }
+
+    const separatorIndex = fullUrl.indexOf(routerSeparator);
+
+    if (fullUrl.length <= separatorIndex + routerSeparator.length) {
+        return '';
+    }
+
+    return fullUrl.substring(fullUrl.indexOf(routerSeparator) + routerSeparator.length);
+};
+
 let getIndexUrl = function () {
     return url.format({
         protocol: 'file',
@@ -18,9 +34,10 @@ let getPageFullUrl = function (location) {
         return getIndexUrl();
     }
 
-    return getIndexUrl() + '#!' + location;
+    return getIndexUrl() + routerSeparator + location;
 };
 
 module.exports = {
+    parseLocationFromFullUrl: parseLocationFromFullUrl,
     getPageFullUrl: getPageFullUrl
 }
