@@ -272,6 +272,14 @@
             readPackageFile: function (path) {
                 return invokeMainProcessMethodSync('render-sync-get-package-file-content', path);
             },
+            getLocalFSFileBufferAsync: function (fullpath, callback) {
+                return invokeMainProcessMethodAsync('render-get-localfs-file-buffer', fullpath)
+                    .then(function onReceive(buffer) {
+                        if (callback) {
+                            callback(buffer);
+                        }
+                    });
+            },
             getLocalFSExistsAsync: function (fullpath, callback) {
                 return invokeMainProcessMethodAsync('render-get-localfs-exists', fullpath)
                     .then(function onReceive(exists) {

@@ -19,9 +19,23 @@ let readPackageFile = function (filePath) {
     return fs.readFileSync(path.join(__dirname, '../../app/', filePath), 'UTF-8');
 };
 
+let getLocalFSFileBuffer = function (fullpath) {
+    try {
+        return Buffer.from(fs.readFileSync(fullpath));
+    } catch (ex) {
+        return null;
+    }
+};
+
 let getLocalFSFileBase64Content = function (fullpath) {
     try {
-        return Buffer.from(fs.readFileSync(fullpath)).toString('base64');
+        const buffer = getLocalFSFileBuffer(fullpath);
+
+        if (buffer) {
+            return buffer.toString('base64');
+        } else {
+            return null;
+        }
     } catch (ex) {
         return null;
     }
@@ -32,5 +46,6 @@ module.exports = {
     isExists: isExists,
     getPackageIconPath: getPackageIconPath,
     readPackageFile: readPackageFile,
+    getLocalFSFileBuffer: getLocalFSFileBuffer,
     getLocalFSFileBase64Content: getLocalFSFileBase64Content
 };

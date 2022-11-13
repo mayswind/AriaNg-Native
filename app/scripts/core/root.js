@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').run(['$window', '$rootScope', '$location', '$document', '$timeout', 'ariaNgCommonService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLogService', 'ariaNgLocalizationService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', 'ariaNgVersionService', function ($window, $rootScope, $location, $document, $timeout, ariaNgCommonService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLogService, ariaNgLocalizationService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService, ariaNgVersionService) {
+    angular.module('ariaNg').run(['$window', '$rootScope', '$location', '$document', '$timeout', 'ariaNgSupportedAudioFileTypes', 'ariaNgCommonService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLogService', 'ariaNgLocalizationService', 'ariaNgSettingService', 'aria2TaskService', 'ariaNgNativeElectronService', 'ariaNgVersionService', function ($window, $rootScope, $location, $document, $timeout, ariaNgSupportedAudioFileTypes, ariaNgCommonService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLogService, ariaNgLocalizationService, ariaNgSettingService, aria2TaskService, ariaNgNativeElectronService, ariaNgVersionService) {
         var autoRefreshAfterPageLoad = false;
 
         var isAnyTextboxOrTextareaFocus = function () {
@@ -461,23 +461,34 @@
             loadSoundFile: function (filePath, callback, silent) {
                 var player = angular.element('#background-audio')[0];
 
-                ariaNgNativeElectronService.getLocalFSExistsAsync(filePath, function (exists) {
-                    if (exists) {
-                        player.src = 'file://' + filePath;
-                        $rootScope.soundContext.currentSoundFile = filePath;
-                        ariaNgLogService.debug('[root.soundContext.playSound] background audio is set to ' + filePath);
+                if (filePath) {
+                    ariaNgNativeElectronService.getLocalFSFileBufferAsync(filePath, function (buffer) {
+                        if (buffer) {
+                            var soundExtension = ariaNgCommonService.getFileExtension(filePath);
+                            var mimeType = ariaNgSupportedAudioFileTypes[soundExtension];
+                            var blob = new Blob([buffer], { type: mimeType });
+                            player.src = URL.createObjectURL(blob);
+                            $rootScope.soundContext.currentSoundFile = filePath;
+                            ariaNgLogService.debug('[root.soundContext.loadSoundFile] background audio is set to ' + filePath);
 
-                        if (angular.isFunction(callback)) {
-                            callback(filePath);
-                        }
-                    } else {
-                        if (!silent) {
-                            ariaNgCommonService.showError('Sound file not exists.');
-                        }
+                            if (angular.isFunction(callback)) {
+                                callback(filePath);
+                            }
+                        } else {
+                            player.src = '';
+                            $rootScope.soundContext.currentSoundFile = '';
+                            ariaNgLogService.warn('[root.soundContext.loadSoundFile] background audio is set to empty due to the file buffer is null');
 
-                        ariaNgLogService.warn('[root.soundContext.playSound] sound file not exists ' + filePath);
-                    }
-                });
+                            if (!silent) {
+                                ariaNgCommonService.showError('Sound file not exists.');
+                            }
+                        }
+                    });
+                } else {
+                    player.src = '';
+                    $rootScope.soundContext.currentSoundFile = '';
+                    ariaNgLogService.debug('[root.soundContext.loadSoundFile] background audio is set to empty');
+                }
             },
             isPlaying: function () {
                 var player = angular.element('#background-audio')[0];
@@ -497,11 +508,23 @@
                 if (this.currentSoundFile !== filePath) {
                     this.loadSoundFile(filePath, function () {
                         player.currentTime = 0;
-                        player.play();
+                        player.play().catch(function (error) {
+                            ariaNgLogService.error('[root.soundContext.playSound] cannot play sound, because ' + error);
+
+                            if (!silent) {
+                                ariaNgCommonService.showError('Cannot play this sound file.');
+                            }
+                        });
                     }, !!silent);
                 } else {
                     player.currentTime = 0;
-                    player.play();
+                    player.play().catch(function (error) {
+                        ariaNgLogService.error('[root.soundContext.playSound] cannot play sound, because ' + error);
+
+                        if (!silent) {
+                            ariaNgCommonService.showError('Cannot play this sound file.');
+                        }
+                    });
                 }
             },
             stopPlayingSound: function () {

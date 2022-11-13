@@ -221,6 +221,10 @@ ipcMain.on('render-sync-get-package-file-content', (event, path) => {
     event.returnValue = localfs.readPackageFile(path);
 });
 
+ipcMain.handle('render-get-localfs-file-buffer', (event, fullpath) => {
+    return localfs.getLocalFSFileBuffer(fullpath);
+});
+
 ipcMain.handle('render-get-localfs-exists', (event, fullpath) => {
     return localfs.isExists(fullpath);
 });

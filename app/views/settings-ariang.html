@@ -159,9 +159,8 @@
                         </div>
                         <div class="setting-value col-sm-8">
                             <div class="input-group">
-                                <input class="form-control" type="text"
-                                       ng-model="context.settings.playSoundAfterDownloadFinished"
-                                       ng-change="setPlaySoundAfterDownloadFinished(context.settings.playSoundAfterDownloadFinished)"/>
+                                <input class="form-control" type="text" readonly="readonly"
+                                       ng-model="context.settings.playSoundAfterDownloadFinished"/>
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="browseAndSetPlaySoundAfterDownloadFinished()">
                                         <span translate>Browse</span>
@@ -173,6 +172,8 @@
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li><a class="pointer-cursor" ng-click="playSound()" translate>Play Sound</a></li>
                                         <li><a class="pointer-cursor" ng-click="stopPlayingSound()" translate>Stop Playing Sound</a></li>
+                                        <li class="divider"></li>
+                                        <li><a class="pointer-cursor" ng-click="clearPlaySoundAfterDownloadFinished()" translate>Clear</a></li>
                                     </ul>
                                 </div>
                             </div>

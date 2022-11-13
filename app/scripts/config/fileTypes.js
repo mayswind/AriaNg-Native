@@ -208,5 +208,11 @@
                 '.zip'
             ]
         }
-    });
+    }).constant('ariaNgSupportedAudioFileTypes', {
+         '.mp3': 'audio/mpeg',
+         '.aac': 'audio/aac',
+         '.flac': 'audio/flac',
+         '.ogg': 'audio/ogg',
+         '.wav': 'audio/wav',
+     });
 }());

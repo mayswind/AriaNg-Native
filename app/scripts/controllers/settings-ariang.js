@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('AriaNgSettingsController', ['$rootScope', '$scope', '$routeParams', '$window', '$interval', '$timeout', '$filter', 'clipboard', 'ariaNgLanguages', 'ariaNgCommonService', 'ariaNgVersionService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $window, $interval, $timeout, $filter, clipboard, ariaNgLanguages, ariaNgCommonService, ariaNgVersionService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2SettingService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').controller('AriaNgSettingsController', ['$rootScope', '$scope', '$routeParams', '$window', '$interval', '$timeout', '$filter', 'clipboard', 'ariaNgLanguages', 'ariaNgSupportedAudioFileTypes', 'ariaNgCommonService', 'ariaNgVersionService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $window, $interval, $timeout, $filter, clipboard, ariaNgLanguages, ariaNgSupportedAudioFileTypes, ariaNgCommonService, ariaNgVersionService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2SettingService, ariaNgNativeElectronService) {
         var extendType = $routeParams.extendType;
         var lastRefreshPageNotification = null;
 
@@ -238,21 +238,34 @@
             ariaNgSettingService.setBrowserNotificationFrequency(value);
         };
 
-        $scope.setPlaySoundAfterDownloadFinished = function (value) {
-            ariaNgSettingService.setPlaySoundAfterDownloadFinished(value);
-        };
-
         $scope.browseAndSetPlaySoundAfterDownloadFinished = function () {
+            var supportedExtensions = [];
+
+            for (const extension in ariaNgSupportedAudioFileTypes) {
+                if (!ariaNgSupportedAudioFileTypes.hasOwnProperty(extension)) {
+                    continue;
+                }
+
+                supportedExtensions.push(extension.substring(1));
+            }
+
             ariaNgNativeElectronService.showOpenFileDialogAsync([{
                 name: ariaNgLocalizationService.getLocalizedText('Audios'),
-                extensions: ['mp3', 'wav']
+                extensions: supportedExtensions
             }], function (result) {
                 if (result && !result.canceled && angular.isArray(result.filePaths) && result.filePaths.length) {
                     var filePath = result.filePaths[0];
+                    var fileExtension = ariaNgCommonService.getFileExtension(filePath);
+
+                    if (!ariaNgSupportedAudioFileTypes[fileExtension]) {
+                        ariaNgCommonService.showError('This sound file type is not supported.');
+                        return;
+                    }
 
                     $scope.$apply(function () {
                         $scope.context.settings.playSoundAfterDownloadFinished = filePath;
-                        $scope.setPlaySoundAfterDownloadFinished(filePath);
+                        $rootScope.soundContext.loadSoundFile(filePath);
+                        ariaNgSettingService.setPlaySoundAfterDownloadFinished(filePath);
                     });
                 }
             });
@@ -268,6 +281,12 @@
 
         $scope.stopPlayingSound = function () {
             $rootScope.soundContext.stopPlayingSound();
+        };
+
+        $scope.clearPlaySoundAfterDownloadFinished = function () {
+            $scope.context.settings.playSoundAfterDownloadFinished = '';
+            $rootScope.soundContext.loadSoundFile('');
+            ariaNgSettingService.setPlaySoundAfterDownloadFinished('');
         };
 
         $scope.setWebSocketReconnectInterval = function (value) {
