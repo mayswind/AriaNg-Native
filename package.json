@@ -120,7 +120,7 @@
       "icon": "assets/AriaNg.ico",
       "target": [
         {
-          "target": "msi",
+          "target": "nsis",
           "arch": [
             "x64",
             "ia32"
@@ -180,6 +180,11 @@
         }
       ],
       "darkModeSupport": true
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
     },
     "dmg": {
       "icon": "assets/AriaNg.icns"
