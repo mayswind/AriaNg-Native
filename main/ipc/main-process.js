@@ -235,7 +235,7 @@ ipcMain.on('render-open-local-directory', (event, dir, filename) => {
     if (localfs.isExists(fullpath)) {
         shell.showItemInFolder(fullpath);
     } else {
-        shell.openItem(dir);
+        shell.openPath(dir);
     }
 });
 
