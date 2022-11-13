@@ -7,7 +7,7 @@
   "appId": "net.mayswind.ariang",
   "version": "1.3.0",
   "ariang-version": "1.3.0",
-  "description": "A better aria2 desktop frontend than AriaNg, containing all features of AriaNg and more features for desktop.",
+  "description": "A better aria2 desktop frontend than AriaNg, with all features of AriaNg and providing more features for desktop usage.",
   "main": "main/main.js",
   "entry": "app/index.html",
   "scripts": {
