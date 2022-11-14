@@ -16,8 +16,8 @@
     "start": "electron .",
     "copy-main-dependencies": "node copy-main-modules.js -s node_modules -d dist -V",
     "copy-app-dependencies": "node copy-app-modules.js -d dist -V",
-    "publish:win": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --win",
-    "publish:osx": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --mac"
+    "publish:win": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-windows-x86.json && electron-builder --config electron-builder-windows-x64.json",
+    "publish:osx": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-mac.json"
   },
   "repository": {
     "type": "git",
@@ -91,104 +91,5 @@
     "parse-torrent",
     "ws",
     "yargs"
-  ],
-  "build": {
-    "appId": "net.mayswind.ariang",
-    "productName": "AriaNg Native",
-    "copyright": "Copyright (c) 2017-2022 MaysWind (i@mayswind.net)",
-    "files": [
-      "!node_modules",
-      {
-        "from": "dist/node_modules",
-        "to": "node_modules",
-        "filter": [
-          "**/*.js",
-          "**/*.json",
-          "**/*.css",
-          "**/*.woff",
-          "**/*.woff2",
-          "**/*.svg",
-          "**/*.eot",
-          "**/*.ttf"
-        ]
-      },
-      "app/**",
-      "assets/**",
-      "main/**",
-      "package.json"
-    ],
-    "win": {
-      "icon": "assets/AriaNg.ico",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        },
-        {
-          "target": "7z",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ],
-      "fileAssociations": [
-        {
-          "ext": [
-            "torrent"
-          ],
-          "description": "Bittorrent File",
-          "icon": "assets/AriaNg_Torrent.ico"
-        },
-        {
-          "ext": [
-            "metalink",
-            "meta4"
-          ],
-          "description": "Metadata File",
-          "icon": "assets/AriaNg_Metalink.ico"
-        }
-      ]
-    },
-    "mac": {
-      "category": "public.app-category.utilities",
-      "icon": "assets/AriaNg.icns",
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
-      ],
-      "fileAssociations": [
-        {
-          "ext": [
-            "torrent"
-          ],
-          "icon": "assets/AriaNg_Torrent.icns"
-        },
-        {
-          "ext": [
-            "metalink",
-            "meta4"
-          ],
-          "icon": "assets/AriaNg_Metalink.icns"
-        }
-      ],
-      "darkModeSupport": true
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true
-    },
-    "dmg": {
-      "icon": "assets/AriaNg.icns"
-    }
-  }
+  ]
 }

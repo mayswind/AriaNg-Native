@@ -1,0 +1,59 @@
+{
+    "appId": "net.mayswind.ariang",
+    "productName": "AriaNg Native",
+    "copyright": "Copyright (c) 2017-2022 MaysWind (i@mayswind.net)",
+    "artifactName": "AriaNg_Native-${version}-macOS-${arch}.${ext}",
+    "files": [
+        "!node_modules",
+        {
+            "from": "dist/node_modules",
+            "to": "node_modules",
+            "filter": [
+                "**/*.js",
+                "**/*.json",
+                "**/*.css",
+                "**/*.woff",
+                "**/*.woff2",
+                "**/*.svg",
+                "**/*.eot",
+                "**/*.ttf"
+            ]
+        },
+        "app/**",
+        "assets/**",
+        "main/**",
+        "package.json"
+    ],
+    "mac": {
+        "category": "public.app-category.utilities",
+        "icon": "assets/AriaNg.icns",
+        "target": [
+            {
+                "target": "dmg",
+                "arch": [
+                    "x64",
+                    "arm64"
+                ]
+            }
+        ],
+        "fileAssociations": [
+            {
+                "ext": [
+                    "torrent"
+                ],
+                "icon": "assets/AriaNg_Torrent.icns"
+            },
+            {
+                "ext": [
+                    "metalink",
+                    "meta4"
+                ],
+                "icon": "assets/AriaNg_Metalink.icns"
+            }
+        ],
+        "darkModeSupport": true
+    },
+    "dmg": {
+        "icon": "assets/AriaNg.icns"
+    }
+}
