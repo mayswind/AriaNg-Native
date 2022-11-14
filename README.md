@@ -7,11 +7,15 @@ AriaNg Native is a desktop application built by [Electron](https://github.com/el
 
 #### Extra features
 1. More user-friendly interface
-2. Taskbar tray, supporting minimizing to tray
-3. Command line arguments, supporting creating new task by opening file
-4. Local file system operating support
-5. File & Url drag support
-6. Show torrent file information and choose download file before creating task
+    * Create new task by draging-and-droping file or url
+    * Show torrent file information and choose download file before creating task
+    * Play sound after download finished
+2. Command line arguments, supporting creating new task by opening file
+3. File associations for .torrent/.metalink file
+4. Taskbar tray, supporting minimizing to tray
+5. Local file system operating support
+6. Executing custom command on startup
+7. Checking for updates on startup
 
 ## Introduction of AriaNg
 Please visit [https://github.com/mayswind/AriaNg](https://github.com/mayswind/AriaNg) for more information.
