@@ -38,6 +38,7 @@
   },
   "homepage": "http://ariang.mayswind.net/",
   "devDependencies": {
+    "cli-truncate": "^2.1.0",
     "electron": "^20.3.0",
     "electron-builder": "^23.5.1",
     "fs-extra": "^10.1.0",
