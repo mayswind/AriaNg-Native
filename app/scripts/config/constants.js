@@ -38,6 +38,7 @@
         rpcInterface: 'jsonrpc',
         protocol: 'http',
         httpMethod: 'POST',
+        rpcRequestHeaders: '',
         secret: '',
         extendRpcServers: [],
         webSocketReconnectInterval: 5000,

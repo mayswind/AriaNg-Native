@@ -208,6 +208,7 @@
                 rpcInterface: setting.rpcInterface,
                 protocol: setting.protocol,
                 httpMethod: setting.httpMethod,
+                rpcRequestHeaders: setting.rpcRequestHeaders,
                 secret: setting.secret
             };
         };
@@ -495,6 +496,9 @@
             getCurrentRpcHttpMethod: function () {
                 return getOption('httpMethod');
             },
+            getCurrentRpcRequestHeaders: function () {
+                return getOption('rpcRequestHeaders');
+            },
             isCurrentRpcUseWebSocket: function (protocol) {
                 if (!protocol) {
                     var options = getOptions();
@@ -651,6 +655,10 @@
                 }
 
                 if (options.httpMethod !== setting.httpMethod) {
+                    return false;
+                }
+
+                if (options.rpcRequestHeaders !== setting.rpcRequestHeaders) {
                     return false;
                 }
 
