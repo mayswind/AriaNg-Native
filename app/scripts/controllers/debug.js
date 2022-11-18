@@ -163,6 +163,10 @@
             }, false);
         };
 
+        $scope.showDevTools = function () {
+            ariaNgNativeElectronService.showDevTools();
+        };
+
         $scope.showLogDetail = function (log) {
             $scope.context.currentLog = log;
             angular.element('#log-detail-modal').modal();

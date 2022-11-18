@@ -10,6 +10,11 @@
             <li ng-class="{'active': context.currentTab === 'rpc'}">
                 <a class="pointer-cursor" ng-click="changeTab('rpc')" translate>Aria2 RPC Debug</a>
             </li>
+            <li class="slim">
+                <a class="pointer-cursor" ng-click="showDevTools()">
+                    <i class="fa fa-wrench"></i>
+                </a>
+            </li>
         </ul>
 
         <div class="tab-content no-padding">

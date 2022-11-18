@@ -302,6 +302,9 @@
                         }
                     });
             },
+            showDevTools: function () {
+                invokeMainProcessMethod('render-show-dev-tools');
+            },
             parseBittorrentInfo: function (data) {
                 var info = angular.copy(invokeMainProcessMethodSync('render-sync-parse-bittorrent-info', data));
                 info.type = 'bittorrent';

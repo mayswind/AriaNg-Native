@@ -246,6 +246,10 @@ ipcMain.handle('render-show-open-file-dialog', (event, filters) => {
     });
 });
 
+ipcMain.on('render-show-dev-tools', (event) => {
+    core.mainWindow.webContents.openDevTools();
+});
+
 ipcMain.on('render-sync-parse-bittorrent-info', (event, data) => {
     event.returnValue = bittorrent.parseBittorrentInfo(data);
 });
