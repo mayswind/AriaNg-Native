@@ -221,6 +221,14 @@ app.on('ready', () => {
         }
     });
 
+    if (os.platform() === 'darwin') {
+        electronLocalshortcut.register(core.mainWindow, 'Cmd+Alt+I', () => {
+            if (global.settings.isDevMode) {
+                core.mainWindow.webContents.openDevTools();
+            }
+        });
+    }
+
     menu.init();
     tray.init();
 
