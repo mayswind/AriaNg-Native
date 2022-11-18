@@ -215,11 +215,11 @@ app.on('ready', () => {
         core.mainWindow.maximize();
     }
 
-    if (global.settings.isDevMode) {
-        electronLocalshortcut.register(core.mainWindow, 'F12', () => {
+    electronLocalshortcut.register(core.mainWindow, 'F12', () => {
+        if (global.settings.isDevMode) {
             core.mainWindow.webContents.openDevTools();
-        });
-    }
+        }
+    });
 
     menu.init();
     tray.init();
