@@ -39,8 +39,7 @@ Commands:
 Options:
   --version, -v      Show version number                               [boolean]
   --help, -h                                                           [boolean]
-  --development, -d  Enable Development Mode (press F12 to open DevTools)
-                                                                       [boolean]
+  --development, -d  Enable Debug Mode                                 [boolean]
   --classic, -c      Use classic window title bar (for Windows only)   [boolean]
 ```
 

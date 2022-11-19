@@ -12,7 +12,7 @@ const argv = yargs(process.argv.slice(1))
     .option('development', {
         alias: 'd',
         type: 'boolean',
-        describe: 'Enable Development Mode (press F12 to open DevTools)',
+        describe: 'Enable Debug Mode',
     })
     .option('classic', {
         alias: 'c',
