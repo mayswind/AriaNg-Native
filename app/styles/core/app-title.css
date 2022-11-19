@@ -47,6 +47,10 @@
     -webkit-app-region: no-drag;
 }
 
+.custom-app-title .main-header .navbar-app-title .navbar-nav > li > a:active {
+    background: inherit !important;
+}
+
 .custom-app-title .main-header .navbar-app-title .navbar-nav > li > a {
     font-size: 12px !important;
     padding: 0 8px 0 8px;
