@@ -45,7 +45,17 @@ ipcMain.on('render-sync-get-runtime-environment', (event) => {
 });
 
 ipcMain.on('render-sync-get-global-setting', (event, key) => {
-    event.returnValue = global.settings[key];
+    if (key === 'version') {
+        event.returnValue = core.version;
+    } else if (key === 'ariaNgVersion') {
+        event.returnValue = core.ariaNgVersion;
+    } else if (key === 'isDevMode') {
+        event.returnValue = core.isDevMode;
+    } else if (key === 'useCustomAppTitle') {
+        event.returnValue = core.useCustomAppTitle;
+    } else {
+        event.returnValue = undefined;
+    }
 });
 
 ipcMain.on('render-set-native-theme', (event, theme) => {
