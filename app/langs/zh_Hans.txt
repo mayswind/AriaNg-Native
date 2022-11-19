@@ -224,6 +224,7 @@ Updating Task Information Interval=任务信息更新间隔
 Keyboard Shortcuts=键盘快捷键
 Supported Keyboard Shortcuts=支持的键盘快捷键
 Set Focus On Search Box=将焦点放在搜索框上
+Open Browser DevTools=打开浏览器开发者工具
 Swipe Gesture=滑动手势
 Change Tasks Order by Drag-and-drop=拖拽任务排序
 Action After Creating New Tasks=创建新任务后执行操作

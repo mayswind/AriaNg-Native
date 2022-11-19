@@ -228,6 +228,7 @@
             'Keyboard Shortcuts': 'Keyboard Shortcuts',
             'Supported Keyboard Shortcuts': 'Supported Keyboard Shortcuts',
             'Set Focus On Search Box': 'Set Focus On Search Box',
+            'Open Browser DevTools': 'Open Browser DevTools',
             'Swipe Gesture': 'Swipe Gesture',
             'Change Tasks Order by Drag-and-drop': 'Change Tasks Order by Drag-and-drop',
             'Action After Creating New Tasks': 'Action After Creating New Tasks',
