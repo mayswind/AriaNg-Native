@@ -310,9 +310,13 @@
             },
             parseBittorrentInfo: function (data) {
                 var info = angular.copy(invokeMainProcessMethodSync('render-sync-parse-bittorrent-info', data));
-                info.type = 'bittorrent';
 
-                ariaNgLogService.debug('[ariaNgNativeElectronService.parseBittorrentInfo] bittorrent info', info);
+                if (info) {
+                    info.type = 'bittorrent';
+                    ariaNgLogService.debug('[ariaNgNativeElectronService.parseBittorrentInfo] bittorrent info', info);
+                } else {
+                    ariaNgLogService.debug('[ariaNgNativeElectronService.parseBittorrentInfo] cannot parse bittorrent info', info);
+                }
 
                 return info;
             },
