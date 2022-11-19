@@ -34,6 +34,9 @@
             isCtrlFPressed: function (event) {
                 return (isModifierKeyPressed(event) && (event.code === 'KeyF' || getKeyCode(event) === 70)); // Ctrl+F / Command+F
             },
+            isCtrlNPressed: function (event) {
+                return (isModifierKeyPressed(event) && (event.code === 'KeyN' || getKeyCode(event) === 78)); // Ctrl+N / Command+N
+            },
             isCtrlEnterPressed: function (event) {
                 return (isModifierKeyPressed(event) && (event.code === 'Enter' || getKeyCode(event) === 13)); // Ctrl+Enter / Command+Return
             },

@@ -664,6 +664,10 @@
                 if (angular.isFunction($rootScope.keydownActions.delete)) {
                     return $rootScope.keydownActions.delete(event);
                 }
+            } else if (ariaNgKeyboardService.isCtrlNPressed(event)) {
+                $rootScope.$apply(function () {
+                    $location.path('/new');
+                });
             }
         }, true);
 
