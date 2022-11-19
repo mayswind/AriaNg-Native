@@ -60,10 +60,13 @@
 
         return {
             getBuildVersion: function () {
+                return 'v' + ariaNgNativeElectronService.getVersion();
+            },
+            getBuildVersionNumber: function () {
                 return ariaNgNativeElectronService.getVersion();
             },
             getAriaNgVersion: function() {
-                return ariaNgNativeElectronService.getAriaNgVersion();
+                return 'v' + ariaNgNativeElectronService.getAriaNgVersion();
             },
             getBuildCommit: function () {
                 return ariaNgNativeElectronService.getBuildCommit();

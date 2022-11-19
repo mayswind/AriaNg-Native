@@ -231,7 +231,7 @@
 
                     var latestVersion = response.data.tag_name;
 
-                    if (ariaNgVersionService.compareVersion(ariaNgVersionService.getBuildVersion(), latestVersion) < 0) {
+                    if (ariaNgVersionService.compareVersion(ariaNgVersionService.getBuildVersionNumber(), latestVersion) < 0) {
                         ariaNgNotificationService.notifyViaBrowser('AriaNg Native Updates', 'A new version has been released', {
                             contentParams: {
                                 version: latestVersion

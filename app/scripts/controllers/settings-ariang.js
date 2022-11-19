@@ -177,7 +177,7 @@
 
                     var latestVersion = response.data.tag_name;
 
-                    if (ariaNgVersionService.compareVersion($scope.context.ariaNgNativeVersion, latestVersion) >= 0) {
+                    if (ariaNgVersionService.compareVersion(ariaNgVersionService.getBuildVersionNumber(), latestVersion) >= 0) {
                         ariaNgCommonService.showInfo('Check Update', 'You have installed the latest version!');
                         $scope.context.isCurrentLatestVersion = true;
                     } else {
