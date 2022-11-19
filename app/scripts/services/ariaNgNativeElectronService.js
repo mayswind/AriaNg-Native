@@ -67,6 +67,9 @@
             useCustomAppTitle: function () {
                 return invokeMainProcessMethodSync('render-sync-get-global-setting', 'useCustomAppTitle');
             },
+            setNativeTheme: function (theme) {
+                invokeMainProcessMethod('render-set-native-theme', theme);
+            },
             getWindowMaximizedAsync: function (callback) {
                 return invokeMainProcessMethodAsync('render-get-native-window-maximized')
                     .then(function onReceive(maximized) {

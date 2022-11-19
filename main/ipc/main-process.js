@@ -13,6 +13,7 @@ const localfs = require('../lib/localfs');
 const bittorrent = require('../lib/bittorrent');
 
 const shell = electron.shell;
+const nativeTheme = electron.nativeTheme;
 const dialog = electron.dialog;
 const ipcMain = electron.ipcMain;
 
@@ -46,6 +47,16 @@ ipcMain.on('render-sync-get-runtime-environment', (event) => {
 ipcMain.on('render-sync-get-global-setting', (event, key) => {
     event.returnValue = global.settings[key];
 });
+
+ipcMain.on('render-set-native-theme', (event, theme) => {
+    if (theme === 'dark') {
+        nativeTheme.themeSource = 'dark';
+    } else if (theme === 'light')  {
+        nativeTheme.themeSource = 'light'
+    } else {
+        nativeTheme.themeSource = 'system';
+    }
+})
 
 ipcMain.handle('render-get-native-window-maximized', (event) => {
     return core.mainWindow.isMaximized();

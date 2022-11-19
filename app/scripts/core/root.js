@@ -57,10 +57,13 @@
 
         var initTheme = function () {
             if (ariaNgSettingService.getTheme() === 'system') {
+                ariaNgNativeElectronService.setNativeTheme('system');
                 setThemeBySystemSettings();
             } else if (ariaNgSettingService.getTheme() === 'dark') {
+                ariaNgNativeElectronService.setNativeTheme('dark');
                 setDarkTheme();
             } else {
+                ariaNgNativeElectronService.setNativeTheme('light');
                 setLightTheme();
             }
         };
@@ -601,10 +604,13 @@
 
         $rootScope.setTheme = function (theme) {
             if (theme === 'system') {
+                ariaNgNativeElectronService.setNativeTheme('system');
                 setThemeBySystemSettings();
             } else if (theme === 'dark') {
+                ariaNgNativeElectronService.setNativeTheme('dark');
                 setDarkTheme();
             } else {
+                ariaNgNativeElectronService.setNativeTheme('light');
                 setLightTheme();
             }
         };
