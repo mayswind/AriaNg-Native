@@ -51,6 +51,44 @@
             return config;
         };
 
+        var importNativeSetting = function (settings, key, nativeUpdateFn) {
+            if (!settings.hasOwnProperty(key)) {
+                return;
+            }
+
+            $scope.context.nativeSettings[key] = settings[key];
+            delete settings[key];
+
+            if (angular.isFunction(nativeUpdateFn)) {
+                nativeUpdateFn($scope.context.nativeSettings[key]);
+            }
+        };
+
+        var importAllSettings = function (settings) {
+            importNativeSetting(settings, 'defaultPosition', $scope.setDefaultPosition);
+            importNativeSetting(settings, 'afterMainWindowClosed', $scope.setAfterMainWindowClosed);
+            importNativeSetting(settings, 'execCommandOnStartup', $scope.setExecCommandOnStartup);
+            importNativeSetting(settings, 'execCommandArgumentsOnStartup', $scope.setExecCommandArgumentsOnStartup);
+            importNativeSetting(settings, 'execCommandOptionsOnStartup', $scope.setExecCommandOptionsOnStartup);
+            ariaNgSettingService.importAllOptions(settings);
+        };
+
+        var exportAllSettings = function () {
+            var allSettings = angular.extend({}, ariaNgSettingService.exportAllOptions());
+
+            if ($scope.context.nativeSettings) {
+                for (const key in $scope.context.nativeSettings) {
+                    if (!$scope.context.nativeSettings.hasOwnProperty(key)) {
+                        continue;
+                    }
+
+                    allSettings[key] = $scope.context.nativeSettings[key];
+                }
+            }
+
+            return allSettings;
+        };
+
         var setNeedRefreshPage = function () {
             if (lastRefreshPageNotification) {
                 return;
@@ -434,14 +472,14 @@
 
             if (settingsObj) {
                 ariaNgCommonService.confirm('Confirm Import', 'Are you sure you want to import all settings?', 'warning', function () {
-                    ariaNgSettingService.importAllOptions(settingsObj);
+                    importAllSettings(settingsObj);
                     $window.location.reload();
                 });
             }
         };
 
         $scope.showExportSettingsModal = function () {
-            $scope.context.exportSettings = $filter('json')(ariaNgSettingService.exportAllOptions());
+            $scope.context.exportSettings = $filter('json')(exportAllSettings());
             $scope.context.exportSettingsCopied = false;
             angular.element('#export-settings-modal').modal();
         };
