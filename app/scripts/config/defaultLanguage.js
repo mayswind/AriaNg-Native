@@ -170,6 +170,7 @@
             'Export': 'Export',
             'Copied': 'Copied',
             'Pause After Task Created': 'Pause After Task Created',
+            'Based on': 'Based on',
             'Check Update': 'Check Update',
             'Latest Version': 'Latest Version',
             'You have installed the latest version!': 'You have installed the latest version!',

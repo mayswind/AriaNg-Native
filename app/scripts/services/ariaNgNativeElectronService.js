@@ -61,6 +61,9 @@
             getAriaNgVersion: function() {
                 return invokeMainProcessMethodSync('render-sync-get-global-setting', 'ariaNgVersion');
             },
+            getBuildCommit: function () {
+                return invokeMainProcessMethodSync('render-sync-get-global-setting', 'buildCommit');
+            },
             isDevMode: function () {
                 return invokeMainProcessMethodSync('render-sync-get-global-setting', 'isDevMode');
             },

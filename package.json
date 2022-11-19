@@ -14,10 +14,11 @@
     "postinstall": "install-app-deps",
     "clean": "rimraf dist",
     "start": "electron .",
+    "generate-build-json": "node generate-build-json.js -f dist/build.json -V",
     "copy-main-dependencies": "node copy-main-modules.js -s node_modules -d dist -V",
     "copy-app-dependencies": "node copy-app-modules.js -d dist -V",
-    "publish:win": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-windows-x86.json && electron-builder --config electron-builder-windows-x64.json",
-    "publish:osx": "npm run clean && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-mac.json"
+    "publish:win": "npm run clean && npm run generate-build-json && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-windows-x86.json && electron-builder --config electron-builder-windows-x64.json",
+    "publish:osx": "npm run clean && npm run generate-build-json && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-mac.json"
   },
   "repository": {
     "type": "git",
@@ -42,6 +43,7 @@
     "electron": "^21.3.0",
     "electron-builder": "^23.6.0",
     "fs-extra": "^10.1.0",
+    "git-rev-sync": "^3.0.2",
     "jsonfile": "^6.1.0",
     "rimraf": "^3.0.2"
   },

@@ -4,7 +4,15 @@
     "copyright": "Copyright (c) 2017-2022 MaysWind (i@mayswind.net)",
     "artifactName": "AriaNg_Native-${version}-Windows-x64.${ext}",
     "files": [
+        "!build.json",
         "!node_modules",
+        {
+            "from": "dist",
+            "to": "",
+            "filter": [
+                "build.json"
+            ]
+        },
         {
             "from": "dist/node_modules",
             "to": "node_modules",

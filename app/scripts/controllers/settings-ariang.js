@@ -106,6 +106,7 @@
 
         $scope.context = {
             currentTab: 'global',
+            ariaNgVerboseVersionCollapsed: true,
             ariaNgNativeVersion: ariaNgVersionService.getBuildVersion(),
             ariaNgVersion: ariaNgVersionService.getAriaNgVersion(),
             buildCommit: ariaNgVersionService.getBuildCommit(),

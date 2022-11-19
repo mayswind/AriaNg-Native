@@ -49,6 +49,8 @@ ipcMain.on('render-sync-get-global-setting', (event, key) => {
         event.returnValue = core.version;
     } else if (key === 'ariaNgVersion') {
         event.returnValue = core.ariaNgVersion;
+    } else if (key === 'buildCommit') {
+        event.returnValue = core.buildCommit;
     } else if (key === 'isDevMode') {
         event.returnValue = core.isDevMode;
     } else if (key === 'useCustomAppTitle') {

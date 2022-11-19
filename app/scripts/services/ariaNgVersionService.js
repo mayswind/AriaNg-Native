@@ -66,7 +66,7 @@
                 return ariaNgNativeElectronService.getAriaNgVersion();
             },
             getBuildCommit: function () {
-                return '';
+                return ariaNgNativeElectronService.getBuildCommit();
             },
             getTheLatestVersion: getTheLatestVersion,
             compareVersion: compareVersion

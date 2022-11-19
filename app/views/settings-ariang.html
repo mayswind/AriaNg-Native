@@ -23,12 +23,19 @@
                     <div class="row" ng-if="context.ariaNgVersion">
                         <div class="setting-key col-sm-4">
                             <span translate>AriaNg Version</span>
+                            <i class="icon-expand pointer-cursor fa"
+                               ng-class="{'fa-plus': context.ariaNgVerboseVersionCollapsed, 'fa-minus': !context.ariaNgVerboseVersionCollapsed}"
+                               ng-click="context.ariaNgVerboseVersionCollapsed = !context.ariaNgVerboseVersionCollapsed"
+                               title="{{(context.ariaNgVerboseVersionCollapsed ? 'Expand' : 'Collapse') | translate}}"></i>
                         </div>
                         <div class="setting-value col-sm-8">
-                            <span ng-bind="'AriaNg Native ' + context.ariaNgNativeVersion + ' (AriaNg ' + context.ariaNgVersion + ')'"></span>
+                            <span ng-bind="'AriaNg Native ' + context.ariaNgNativeVersion + (context.buildCommit ? ' (' + context.buildCommit + ')' : '')"></span>
                             <button class="btn btn-xs btn-default" ng-click="checkUpdate()" ng-disabled="context.isCurrentLatestVersion" promise-btn>
                                 <span ng-bind="(context.isCurrentLatestVersion ? 'Latest Version' : 'Check Update') | translate" translate>Check Update</span>
                             </button>
+                            <span class="multi-line" ng-if="!context.ariaNgVerboseVersionCollapsed">
+                                <span ng-bind="('Based on' | translate) + ' AriaNg ' + context.ariaNgVersion"></span>
+                            </span>
                         </div>
                     </div>
                     <div class="row" ng-if="context.runtimeEnvironment">

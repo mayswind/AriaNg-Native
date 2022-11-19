@@ -166,6 +166,7 @@ Export Command API=导出命令行 API
 Export=导出
 Copied=已复制
 Pause After Task Created=任务创建后暂停
+Based on=基于
 Check Update=检查更新
 Latest Version=最新版本
 You have installed the latest version!=您已经安装了最新的版本!
