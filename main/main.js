@@ -140,7 +140,22 @@ let main = function () {
     if (os.platform() === 'darwin') {
         app.on('will-finish-launching', () => {
             app.on('open-file', (event, filePath) => {
-                if (filePath) {
+                event.preventDefault();
+
+                if (!filePath) {
+                    return;
+                }
+
+                if (core.mainWindow && core.mainWindow.webContents) {
+                    let location = page.parseLocationFromFullUrl(core.mainWindow.webContents.getURL());
+
+                    if (location.indexOf('/new') === 0) {
+                        ipcRender.notifyRenderProcessNewTaskFromFile(filePath);
+                    } else {
+                        ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePath);
+                        ipcRender.notifyRenderProcessNavigateToNewTask();
+                    }
+                } else {
                     filePathInCommandLine = filePath;
                 }
             });
