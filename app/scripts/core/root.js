@@ -692,7 +692,9 @@
         });
 
         ariaNgNativeElectronService.onMainProcessChangeDevMode(function (event, devMode) {
-            ariaNgSettingService.setDebugMode(devMode);
+            $rootScope.$apply(function () {
+                ariaNgSettingService.setDebugMode(devMode);
+            });
         });
 
         ariaNgSettingService.setDebugMode(ariaNgNativeElectronService.isDevMode());
