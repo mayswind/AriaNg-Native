@@ -194,7 +194,7 @@ let main = function () {
                 let location = '';
 
                 if (core.mainWindow.webContents) {
-                    location = page.parseLocationFromFullUrl(core.mainWindow.webContents.getURL())
+                    location = page.parseLocationFromFullUrl(core.mainWindow.webContents.getURL());
                 }
 
                 if (location.indexOf('/new') === 0) {
