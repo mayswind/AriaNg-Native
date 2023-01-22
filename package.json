@@ -40,7 +40,7 @@
   "homepage": "http://ariang.mayswind.net/",
   "devDependencies": {
     "cli-truncate": "^2.1.0",
-    "electron": "^21.3.0",
+    "electron": "^22.0.3",
     "electron-builder": "^23.6.0",
     "fs-extra": "^10.1.0",
     "git-rev-sync": "^3.0.2",
