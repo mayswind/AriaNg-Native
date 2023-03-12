@@ -33,6 +33,11 @@
     -webkit-app-region: drag;
 }
 
+.custom-app-title.modal-open .main-header,
+.custom-app-title.stop-scrolling .main-header {
+    -webkit-app-region: no-drag !important;
+}
+
 .custom-app-title .main-header .current-rpc span, .custom-app-title .main-header .navbar-nav {
     -webkit-app-region: no-drag;
 }
