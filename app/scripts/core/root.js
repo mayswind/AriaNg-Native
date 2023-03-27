@@ -232,11 +232,21 @@
                     var latestVersion = response.data.tag_name;
 
                     if (ariaNgVersionService.compareVersion(ariaNgVersionService.getBuildVersionNumber(), latestVersion) < 0) {
-                        ariaNgNotificationService.notifyViaBrowser('AriaNg Native Updates', 'A new version has been released', {
-                            contentParams: {
-                                version: latestVersion
-                            }
-                        });
+                        if (ariaNgSettingService.getBrowserNotification()) {
+                            ariaNgNotificationService.notifyViaBrowser('AriaNg Native Updates', 'A new version has been released', {
+                                contentParams: {
+                                    version: latestVersion
+                                }
+                            });
+                        } else {
+                            ariaNgNotificationService.notifyInPage('', 'A new version has been released', {
+                                delay: false,
+                                type: 'info',
+                                contentParams: {
+                                    version: latestVersion
+                                }
+                            });
+                        }
                     }
                 }).catch(function onError(response) {
                     ariaNgLogService.error('[root.autoCheckUpdates] failed to get latest version', response);
