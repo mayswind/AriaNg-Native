@@ -132,7 +132,7 @@ let main = function () {
 
     app.setAppUserModelId(core.appid);
 
-    core.isDevMode = !app.isPackaged || cmd.argv.development;
+    core.isDevMode = !app.isPackaged || !!cmd.argv.development;
     core.useCustomAppTitle = os.platform() === 'win32' && !cmd.argv.classic;
 
     let filePathInCommandLine = cmd.argv.file;
