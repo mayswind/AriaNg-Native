@@ -41,6 +41,7 @@ Options:
   --help, -h                                                           [boolean]
   --development, -d  Enable Debug Mode                                 [boolean]
   --classic, -c      Use classic window title bar (for Windows only)   [boolean]
+  --minimal, -m      Hide the main window at startup                   [boolean]
 ```
 
 ## Installation

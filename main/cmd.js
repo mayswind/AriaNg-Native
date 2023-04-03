@@ -19,6 +19,11 @@ const argv = yargs(process.argv.slice(1))
         type: 'boolean',
         describe: 'Use classic window title bar (for Windows only)',
     })
+    .option('minimal', {
+        alias: 'm',
+        type: 'boolean',
+        describe: 'Hide the main window at startup',
+    })
     .command({
         command: '$0 [file]',
         aliases: ['new'],
