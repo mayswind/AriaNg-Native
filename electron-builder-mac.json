@@ -18,6 +18,7 @@
             "to": "node_modules",
             "filter": [
                 "**/*.js",
+                "**/*.cjs",
                 "**/*.json",
                 "**/*.css",
                 "**/*.woff",
