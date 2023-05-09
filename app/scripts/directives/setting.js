@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').directive('ngSetting', ['$timeout', '$q', 'ariaNgConstants', 'ariaNgLocalizationService', 'aria2SettingService', function ($timeout, $q, ariaNgConstants, ariaNgLocalizationService, aria2SettingService) {
+    angular.module('ariaNg').directive('ngSetting', ['$timeout', '$q', 'ariaNgConstants', 'ariaNgLocalizationService', 'ariaNgKeyboardService', 'aria2SettingService', function ($timeout, $q, ariaNgConstants, ariaNgLocalizationService, ariaNgKeyboardService, aria2SettingService) {
         return {
             restrict: 'E',
             templateUrl: 'views/setting.html',
@@ -11,12 +11,16 @@
                 option: '=',
                 ngModel: '=',
                 defaultValue: '=?',
+                fixedValue: '=?',
                 onChangeValue: '&'
             },
             link: function (scope, element, attrs, ngModel) {
                 var pendingSaveRequest = null;
                 var options = {
+                    showPlaceholderCount: false,
+                    deleteKeyAlwaysChangeValue: false,
                     lazySaveTimeout: ariaNgConstants.lazySaveTimeout,
+                    errorTooltipPlacement: 'top',
                     errorTooltipDelay: ariaNgConstants.errorTooltipDelay
                 };
 
@@ -47,9 +51,10 @@
                         }
 
                         angular.element(element).tooltip({
+                            animation: false,
                             title: ariaNgLocalizationService.getLocalizedText(cause, causeParams),
                             trigger: 'focus',
-                            placement: 'auto top',
+                            placement: 'auto ' + options.errorTooltipPlacement,
                             container: element,
                             template:
                             '<div class="tooltip' + (type ? ' tooltip-' + type : '') + '" role="tooltip">' +
@@ -78,6 +83,25 @@
                     }
 
                     return size + sizeUnits[unitIndex];
+                };
+
+                var getTotalCount = function (itemsText, separator, trim) {
+                    if (!itemsText || !separator || !angular.isString(itemsText)) {
+                        return 0;
+                    }
+
+                    var items = itemsText.split(separator);
+                    var totalCount = items.length;
+
+                    if (trim) {
+                        for (var i = 0; i < items.length; i++) {
+                            if (!items[i] || items[i] === '' || items[i].trim() === '') {
+                                totalCount--;
+                            }
+                        }
+                    }
+
+                    return totalCount;
                 };
 
                 var getHumanReadableValue = function (value) {
@@ -154,11 +178,14 @@
                 })();
 
                 scope.getTotalCount = function () {
-                    if (!scope.optionValue && !angular.isString(scope.optionValue)) {
-                        return 0;
+                    var fixedValueCount = getTotalCount(scope.fixedValue, scope.option.separator, scope.option.trimCount);
+                    var inputValueCount = getTotalCount(scope.optionValue, scope.option.separator, scope.option.trimCount);
+
+                    if (!scope.optionValue && scope.showPlaceholderCount && scope.placeholderItemCount) {
+                        inputValueCount = scope.placeholderItemCount;
                     }
 
-                    return scope.optionValue.split(scope.option.split).length;
+                    return fixedValueCount + inputValueCount;
                 };
 
                 scope.changeValue = function (optionValue, lazySave) {
@@ -237,6 +264,18 @@
                     }
                 };
 
+                scope.inputKeyUp = function (event, lazySave) {
+                    if (options.deleteKeyAlwaysChangeValue === true || options.deleteKeyAlwaysChangeValue === 'true') {
+                        if (ariaNgKeyboardService.isBackspacePressed(event) || ariaNgKeyboardService.isDeletePressed(event)) {
+                            if (scope.optionValue && scope.optionValue !== '') {
+                                return; // onChange event has been triggered
+                            }
+
+                            scope.changeValue('', lazySave);
+                        }
+                    }
+                };
+
                 scope.filterHistory = function (userInput) {
                     var result = [];
 
@@ -279,8 +318,15 @@
                     }
 
                     scope.placeholder = getHumanReadableValue(displayValue);
+
+                    if (scope.option) {
+                        scope.placeholderItemCount = getTotalCount(scope.placeholder, scope.option.separator, scope.option.trimCount);
+                    } else {
+                        scope.placeholderItemCount = 0;
+                    }
                 });
 
+                scope.showPlaceholderCount = options.showPlaceholderCount === true || options.showPlaceholderCount === 'true';
                 loadHistory();
             }
         };

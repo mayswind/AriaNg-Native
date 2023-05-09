@@ -749,7 +749,7 @@
         };
 
         $scope.setOption = function (key, value, optionStatus) {
-            if (value !== '') {
+            if (value !== '' || !aria2SettingService.isOptionKeyRequired(key)) {
                 $scope.context.options[key] = value;
             } else {
                 delete $scope.context.options[key];
