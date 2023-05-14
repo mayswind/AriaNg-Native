@@ -1,4 +1,13 @@
 /* bootstrap */
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus {
+    outline: none !important;
+}
+
 .btn-group + .btn {
     margin-left: 4px;
 }
@@ -110,6 +119,11 @@
 }
 
 /* awesome-bootstrap-checkbox extend */
+.checkbox input[type="checkbox"]:focus + label::before,
+.checkbox input[type="radio"]:focus + label::before {
+    outline: none !important;
+}
+
 .checkbox.checkbox-hide {
     padding-left: 0;
 }
