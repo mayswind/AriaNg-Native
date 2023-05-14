@@ -650,6 +650,11 @@
                 context.editable = false;
             }
 
+            if (angular.element(event.target).attr('data-support-force-delete-empty') === 'true'
+                && angular.element(event.target).val() === '') {
+                context.forceDeleteEmpty = true;
+            }
+
             if (event.target.nodeName.match(/^(input|textarea)$/i) || event.target.isContentEditable) {
                 ariaNgNativeElectronService.showTextboxContextMenu(context);
             }

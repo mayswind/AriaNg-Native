@@ -12,13 +12,13 @@
                 ngModel: '=',
                 defaultValue: '=?',
                 fixedValue: '=?',
+                supportForceDeleteEmpty: '=?',
                 onChangeValue: '&'
             },
             link: function (scope, element, attrs, ngModel) {
                 var pendingSaveRequest = null;
                 var options = {
                     showPlaceholderCount: false,
-                    deleteKeyAlwaysChangeValue: false,
                     lazySaveTimeout: ariaNgConstants.lazySaveTimeout,
                     errorTooltipPlacement: 'top',
                     errorTooltipDelay: ariaNgConstants.errorTooltipDelay

@@ -748,6 +748,18 @@
             };
         };
 
+        $scope.isSupportForceDeleteEmpty = function (option) {
+            if ($scope.context.options[option.key] || $scope.context.options[option.key] === '') {
+                return false;
+            }
+
+            if (option.overrideMode === 'append' || aria2SettingService.isOptionKeyRequired(option.key)) {
+                return false;
+            }
+
+            return !!($scope.context.globalOptions[option.key] && $scope.context.globalOptions[option.key].trim());
+        };
+
         $scope.setOption = function (key, value, optionStatus) {
             if (value !== '' || !aria2SettingService.isOptionKeyRequired(key)) {
                 $scope.context.options[key] = value;

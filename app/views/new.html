@@ -222,7 +222,7 @@
                             </div>
                         </div>
                         <ng-setting ng-repeat="option in context.availableOptions" ng-if="context.optionFilter[option.category]"
-                                    option="option" show-placeholder-count="true"
+                                    option="option" show-placeholder-count="true" support-force-delete-empty="isSupportForceDeleteEmpty(option)"
                                     lazy-save-timeout="0" delete-key-always-change-value="true"
                                     default-value="(option.overrideMode !== 'append' && !context.options[option.key] && context.options[option.key] !== '') ? context.globalOptions[option.key] : ''"
                                     fixed-value="option.overrideMode === 'append' ? context.globalOptions[option.key] : ''"

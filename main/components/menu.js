@@ -138,6 +138,20 @@ let buildTextboxContextMenu = function(context) {
             }
         }
 
+        if (item.role === 'delete') {
+            if (context.forceDeleteEmpty) {
+                item.role = '';
+                item.click = function () {
+                    core.mainWindow.webContents.sendInputEvent({
+                        type: 'keyUp',
+                        keyCode: 'Delete'
+                    });
+                }
+            } else if (context.selected === false) {
+                item.enabled = false;
+            }
+        }
+
         if (item.role === 'undo' || item.role === 'redo' || item.role === 'cut' || item.role === 'paste') {
             if (context.editable === false) {
                 item.enabled = false;
@@ -194,6 +208,10 @@ let setTextboxContextMenuTemplate = function (context) {
         {
             label: getMenuTitle(context, 'Paste', 'Paste'),
             role: 'paste'
+        },
+        {
+            label: getMenuTitle(context, 'Delete', 'Delete'),
+            role: 'delete'
         },
         {
             type: 'separator'
