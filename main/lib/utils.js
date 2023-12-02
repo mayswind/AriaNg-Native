@@ -8,6 +8,10 @@ let isArray = function (value) {
     return Array.isArray(value);
 }
 
+let isNumber = function (value) {
+    return typeof value === 'number';
+}
+
 let copyObjectTo = function (from, to) {
     if (!to) {
         return from;
@@ -36,5 +40,6 @@ let copyObjectTo = function (from, to) {
 module.exports = {
     isObject: isObject,
     isArray: isArray,
+    isNumber: isNumber,
     copyObjectTo: copyObjectTo
 }
