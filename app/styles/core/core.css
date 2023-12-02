@@ -105,6 +105,30 @@ td {
     overflow-x: hidden;
 }
 
+@media (min-height: 360px) {
+    .main-header .rpcselect-dropdown {
+        max-height: 260px;
+    }
+}
+
+@media (min-height: 480px) {
+    .main-header .rpcselect-dropdown {
+        max-height: 360px;
+    }
+}
+
+@media (min-height: 600px) {
+    .main-header .rpcselect-dropdown {
+        max-height: 480px;
+    }
+}
+
+@media (min-height: 720px) {
+    .main-header .rpcselect-dropdown {
+        max-height: 600px;
+    }
+}
+
 .main-sidebar {
     z-index: 1010;
 }
@@ -288,6 +312,10 @@ td {
     background-clip: padding-box;
     background-color: #c4d2db;
     min-height: 28px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #fff;
 }
 
 ::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-thumb:active {
