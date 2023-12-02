@@ -84,6 +84,14 @@
                                             <span ng-bind="context.newTaskInfo.length | readableVolume"></span>
                                         </div>
                                     </div>
+                                    <div class="row" ng-if="context.newTaskInfo.private">
+                                        <div class="setting-key col-sm-4">
+                                            <span translate>Private Torrent</span>
+                                        </div>
+                                        <div class="setting-value col-sm-8">
+                                            <span ng-bind="(context.newTaskInfo.private ? 'True' : 'False') | translate"></span>
+                                        </div>
+                                    </div>
                                     <div class="row" ng-if="context.newTaskInfo.created">
                                         <div class="setting-key col-sm-4">
                                             <span translate>Seed Creation Time</span>
@@ -106,6 +114,20 @@
                                         </div>
                                         <div class="setting-value col-sm-8">
                                             <span ng-bind="context.newTaskInfo.comment"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-if="context.newTaskInfo.announce && context.newTaskInfo.announce.length">
+                                        <div class="setting-key col-sm-4">
+                                            <span translate>BT Tracker Servers</span>
+                                            <em class="description-inline" ng-bind="'format.settings.total-count' | translate: {count: context.newTaskInfo.announce.length}"></em>
+                                            <i class="icon-expand pointer-cursor fa" ng-if="context.newTaskInfo.announce.length > 1"
+                                               ng-class="{'fa-plus': context.collapseTrackers, 'fa-minus': !context.collapseTrackers}"
+                                               ng-click="context.collapseTrackers = !context.collapseTrackers"
+                                               title="{{(context.collapseTrackers ? 'Expand' : 'Collapse') | translate}}"></i>
+                                        </div>
+                                        <div class="setting-value col-sm-8">
+                                            <span class="multi-line auto-ellipsis" ng-bind="serverAddress" title="{{serverAddress}}"
+                                                  ng-repeat="serverAddress in context.newTaskInfo.announce | limitTo: (context.collapseTrackers ? 1 : context.newTaskInfo.announce.length)"></span>
                                         </div>
                                     </div>
                                 </div>

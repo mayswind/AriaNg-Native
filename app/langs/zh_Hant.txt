@@ -115,6 +115,7 @@ Health Percentage=健康度
 Info Hash=特徵值
 Seeders=種子數
 Connections=連線數
+Private Torrent=私有種子
 Seed Creation Time=種子建立時間
 Download Url=下載位址
 Download Dir=下載路徑

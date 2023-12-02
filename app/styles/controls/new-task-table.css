@@ -41,3 +41,7 @@
 .settings-table .new-task-filter-title {
     padding-top: 6px;
 }
+
+.new-task-table .multi-line {
+    display: block;
+}
