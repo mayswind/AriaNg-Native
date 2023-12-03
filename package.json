@@ -89,9 +89,10 @@
   },
   "mainDependencies": [
     "axios",
+    "bencode",
     "electron-localshortcut",
     "electron-store",
-    "parse-torrent",
+    "simple-sha1",
     "ws",
     "yargs"
   ]
