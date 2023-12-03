@@ -113,7 +113,8 @@
                                             <span translate>Comment</span>
                                         </div>
                                         <div class="setting-value col-sm-8">
-                                            <span ng-bind="context.newTaskInfo.comment"></span>
+                                            <span class="multi-line" ng-bind="line.replace('\r', '')"
+                                                  ng-repeat="line in context.newTaskInfo.comment.split('\n')"></span>
                                         </div>
                                     </div>
                                     <div class="row" ng-if="context.newTaskInfo.announce && context.newTaskInfo.announce.length">
