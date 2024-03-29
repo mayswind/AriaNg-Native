@@ -119,6 +119,7 @@
             'Info Hash': 'Info Hash',
             'Seeders': 'Seeders',
             'Connections': 'Connections',
+            'Private Torrent': 'Private Torrent',
             'Seed Creation Time': 'Seed Creation Time',
             'Download Url': 'Download Url',
             'Download Dir': 'Download Dir',
