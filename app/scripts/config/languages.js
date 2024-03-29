@@ -15,6 +15,10 @@
             name: 'Traditional Chinese',
             displayName: '繁體中文',
             aliases: ['zh_CHT', 'zh_TW', 'zh_HK', 'zh_MO']
+        },
+        'it_IT': {
+            name: 'Italian',
+            displayName: 'Italiano'
         }
     });
 }());

@@ -61,5 +61,11 @@ Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.co
 
 The builds will be placed in the dist directory.
 
+## Translating
+
+Everyone is welcome to contribute translations. All translations files are put in `/app/langs/`. You can just modify and commit a new pull request.
+
+If you want to translate AriaNg to a new language, you can add language configuration to `/app/scripts/config/languages.js`, then copy `/i18n/en.sample.txt` to `/app/langs/` and rename it to the language code to be translated, then you can start the translation work.
+
 ## License
 [MIT](https://github.com/mayswind/AriaNg-Native/blob/master/LICENSE)
