@@ -257,11 +257,11 @@ Each Task List Page Uses Independent Display Order=Chaque page de liste de tâch
 Recently Used=Utilisé récemment
 RPC Alias=Alias RPC
 Import / Export AriaNg Settings=Importer / Exporter paramètres AriaNg
-Import / Export AriaNg Native Settings=
+Import / Export AriaNg Native Settings=Importer / Exporter paramètres AriaNg Native
 Import Settings=Importer les paramètres
 Export Settings=Exporter les paramètres
 AriaNg settings data=Paramètres données AriaNg
-AriaNg Native settings data=
+AriaNg Native settings data=Paramètres données AriaNg Native
 Confirm Import=Confirmer l'importation
 Are you sure you want to import all settings?=Êtes-vous sûr de vouloir importer tous les paramètres?
 Invalid settings data format!=Mauvais paramètrage format de données!
@@ -439,7 +439,7 @@ settings.total-count=(Nombre total: {{count}})
 debug.latest-logs=Derniers {{count}} logs
 
 [native.error]
-file-not-found=
+file-not-found=File {{filepath}} not found!
 
 [rpc.error]
 unauthorized=Autorisation incorrecte!

@@ -439,7 +439,7 @@ settings.total-count=(Totale: {{count}})
 debug.latest-logs=Ultimi {{count}} log
 
 [native.error]
-file-not-found=
+file-not-found=File {{filepath}} not found!
 
 [rpc.error]
 unauthorized=Autenticazione fallita!
