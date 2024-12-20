@@ -6,6 +6,10 @@
             name: 'English',
             displayName: 'English'
         },
+        'es': {
+            name: 'Spanish',
+            displayName: 'Español'
+        },
         'fr_FR': {
             name: 'French',
             displayName: 'Français'
