@@ -416,6 +416,7 @@
                 'checksum.failed': 'Checksum validation failed.'
             },
             'languages': {
+                'Czech': 'Czech',
                 'English': 'English',
                 'Spanish': 'Spanish',
                 'French': 'French',

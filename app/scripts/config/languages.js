@@ -2,6 +2,10 @@
     'use strict';
 
     angular.module('ariaNg').constant('ariaNgLanguages', {
+        'cz_CZ': {
+            name: 'Czech',
+            displayName: 'Čeština'
+        },
         'en': {
             name: 'English',
             displayName: 'English'
