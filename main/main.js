@@ -231,6 +231,8 @@ let main = function () {
             minWidth: 800,
             minHeight: 400,
             fullscreenable: false,
+            titleBarStyle: core.useCustomAppTitle ? 'hidden' : undefined,
+            titleBarOverlay: core.useCustomAppTitle,
             frame: !core.useCustomAppTitle,
             show: false,
             webPreferences: {
@@ -267,12 +269,10 @@ let main = function () {
 
         core.mainWindow.on('maximize', () => {
             config.maximized = core.mainWindow.isMaximized();
-            ipcRender.notifyRenderProcessWindowMaximized(core.mainWindow.isMaximized());
         });
 
         core.mainWindow.on('unmaximize', () => {
             config.maximized = core.mainWindow.isMaximized();
-            ipcRender.notifyRenderProcessWindowUnmaximized(core.mainWindow.isMaximized());
         });
 
         core.mainWindow.on('move', () => {

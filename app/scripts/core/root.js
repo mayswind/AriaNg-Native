@@ -28,14 +28,23 @@
             return false;
         };
 
+        var setTitleBarColor = function () {
+            var computedStyle = window.getComputedStyle(document.getElementById('window-title-bar'));
+            var backgroundColor = computedStyle.getPropertyValue('background-color');
+            var symbolColor = computedStyle.getPropertyValue('color');
+            ariaNgNativeElectronService.setTitleBarColor(backgroundColor, symbolColor);
+        };
+
         var setLightTheme = function () {
             $rootScope.currentTheme = 'light';
             angular.element('body').removeClass('theme-dark');
+            setTitleBarColor();
         };
 
         var setDarkTheme = function () {
             $rootScope.currentTheme = 'dark';
             angular.element('body').addClass('theme-dark');
+            setTitleBarColor();
         };
 
         var setThemeBySystemSettings = function () {
@@ -208,16 +217,6 @@
 
         var isSidebarShowInSmallScreen = function () {
             return angular.element('body').hasClass('sidebar-open');
-        };
-
-        var toggleMaximizeButton = function () {
-            angular.element('#native-title-maximize-icon').addClass('fa-window-maximize').removeClass('fa-window-restore');
-            angular.element('#native-title-maximize-btn').attr('title', ariaNgLocalizationService.getLocalizedText('Maximize'));
-        };
-
-        var toggleRestoreButton = function () {
-            angular.element('#native-title-maximize-icon').addClass('fa-window-restore').removeClass('fa-window-maximize');
-            angular.element('#native-title-maximize-btn').attr('title', ariaNgLocalizationService.getLocalizedText('Restore Down'));
         };
 
         var autoCheckUpdates = function () {
@@ -627,14 +626,6 @@
 
         $rootScope.useCustomAppTitle = ariaNgNativeElectronService.useCustomAppTitle();
 
-        ariaNgNativeElectronService.getWindowMaximizedAsync(function (maximized) {
-            if (maximized) {
-                toggleRestoreButton();
-            } else {
-                toggleMaximizeButton();
-            }
-        });
-
         $window.addEventListener('contextmenu', function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -685,14 +676,6 @@
                 });
             }
         }, true);
-
-        ariaNgNativeElectronService.onMainWindowMaximize(function () {
-            toggleRestoreButton();
-        });
-
-        ariaNgNativeElectronService.onMainWindowUnmaximize(function () {
-            toggleMaximizeButton();
-        });
 
         ariaNgNativeElectronService.onMainProcessNavigateTo(function (event, routeUrl) {
             angular.element('.modal.in:visible').modal('hide');

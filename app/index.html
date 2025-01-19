@@ -86,26 +86,8 @@
             </div>
         </div>
 
-        <nav class="navbar navbar-static-top" role="navigation">
-            <div class="navbar-app-title pull-right">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a id="native-title-minimize-btn" class="toolbar btn-title-minimize" title="{{'Minimize' | translate}}" ng-click="minimizeWindow()">
-                            <i id="native-title-minimize-icon" class="fa fa-window-minimize"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="native-title-maximize-btn" class="toolbar btn-title-maximize" title="{{'Maximize' | translate}}" ng-click="maximizeOrRestoreWindow()">
-                            <i id="native-title-maximize-icon" class="fa fa-window-maximize"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="native-title-close-btn" class="toolbar btn-title-close" title="{{'Close' | translate}}" ng-click="exitApp()">
-                            <i id="native-title-close-icon" class="fa fa-lg fa-close"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        <nav id="window-title-bar" class="navbar navbar-static-top" role="navigation">
+            <div class="navbar-app-title pull-right"></div>
             <div class="navbar-toolbar">
                 <ul class="nav navbar-nav">
                     <li>

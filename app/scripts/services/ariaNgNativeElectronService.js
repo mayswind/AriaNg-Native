@@ -73,25 +73,11 @@
             setNativeTheme: function (theme) {
                 invokeMainProcessMethod('render-set-native-theme', theme);
             },
-            getWindowMaximizedAsync: function (callback) {
-                return invokeMainProcessMethodAsync('render-get-native-window-maximized')
-                    .then(function onReceive(maximized) {
-                        if (callback) {
-                            callback(maximized);
-                        }
-                    });
-            },
-            minimizeWindow: function () {
-                invokeMainProcessMethod('render-minimize-native-window');
-            },
-            maximizeOrRestoreWindow: function () {
-                invokeMainProcessMethod('render-maximize-or-restore-native-window');
+            setTitleBarColor: function (titleBarBackgroundColor, titleBarSymbolColor) {
+                invokeMainProcessMethod('render-set-titlebar-color', titleBarBackgroundColor, titleBarSymbolColor);
             },
             reload: function () {
                 invokeMainProcessMethod('render-reload-native-window');
-            },
-            exitApp: function () {
-                invokeMainProcessMethod('render-exit-native-app');
             },
             showTextboxContextMenu: function (context) {
                 invokeMainProcessMethod('render-show-textbox-context-menu', context);
@@ -331,12 +317,6 @@
             },
             notifyMainProcessorNewDropText: function (message) {
                 invokeMainProcessMethod('on-render-new-drop-text', message);
-            },
-            onMainWindowMaximize: function (callback) {
-                onMainProcessEvent('on-main-window-maximized', callback);
-            },
-            onMainWindowUnmaximize: function (callback) {
-                onMainProcessEvent('on-main-window-unmaximized', callback);
             },
             onMainProcessChangeDevMode: function (callback) {
                 onMainProcessEvent('on-main-change-dev-mode', callback);

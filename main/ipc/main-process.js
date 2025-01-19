@@ -4,6 +4,7 @@ const electron = require('electron');
 
 const core = require('../core');
 const config = require('../config/config');
+const titlebar = require('../components/titlebar');
 const menu = require('../components/menu');
 const tray = require('../components/tray');
 const notification = require('../components/notification');
@@ -68,30 +69,14 @@ ipcMain.on('render-set-native-theme', (event, theme) => {
     } else {
         nativeTheme.themeSource = 'system';
     }
-})
-
-ipcMain.handle('render-get-native-window-maximized', (event) => {
-    return core.mainWindow.isMaximized();
 });
 
-ipcMain.on('render-minimize-native-window', (event) => {
-    core.mainWindow.minimize();
-});
-
-ipcMain.on('render-maximize-or-restore-native-window', (event) => {
-    if (!core.mainWindow.isMaximized()) {
-        core.mainWindow.maximize();
-    } else {
-        core.mainWindow.unmaximize();
-    }
+ipcMain.on('render-set-titlebar-color', (event, titleBarBackgroundColor, titleBarSymbolColor) => {
+    titlebar.updateWindowTitleBar(titleBarBackgroundColor, titleBarSymbolColor);
 });
 
 ipcMain.on('render-reload-native-window', (event) => {
     core.mainWindow.reload();
-});
-
-ipcMain.on('render-exit-native-app', (event) => {
-    core.mainWindow.close();
 });
 
 ipcMain.on('render-show-textbox-context-menu', (event, context) => {

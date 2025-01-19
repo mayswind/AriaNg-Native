@@ -443,18 +443,6 @@
             }
         };
 
-        $scope.minimizeWindow = function () {
-            ariaNgNativeElectronService.minimizeWindow();
-        };
-
-        $scope.maximizeOrRestoreWindow = function () {
-            ariaNgNativeElectronService.maximizeOrRestoreWindow();
-        };
-
-        $scope.exitApp = function () {
-            ariaNgNativeElectronService.exitApp();
-        };
-
         $scope.openProjectLink = function () {
             ariaNgNativeElectronService.openProjectLink();
         };
