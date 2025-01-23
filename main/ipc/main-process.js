@@ -35,7 +35,7 @@ ipcMain.on('render-sync-get-runtime-environment', (event) => {
             value: versions.node
         },
         {
-            name: 'Chrome',
+            name: 'Chromium',
             value: versions.chrome
         },
         {
