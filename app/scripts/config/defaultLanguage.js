@@ -418,6 +418,7 @@
                 'Spanish': 'Spanish',
                 'French': 'French',
                 'Italian': 'Italian',
+                'Polish': 'Polish',
                 'Russian': 'Russian',
                 'Simplified Chinese': 'Simplified Chinese',
                 'Traditional Chinese': 'Traditional Chinese'
