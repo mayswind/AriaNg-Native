@@ -48,6 +48,11 @@ Options:
 #### Prebuilt release
 Latest Release: [https://github.com/mayswind/AriaNg-Native/releases](https://github.com/mayswind/AriaNg-Native/releases)
 
+> **For mac with Apple silicon**  
+> Before starting to install, you need to execute the following command, otherwise the system will show you the file is damaged.
+> 
+>     $ xattr -r -d com.apple.quarantine AriaNg_Native-macOS-arm64.dmg
+
 #### Building from source
 Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.com/) installed. Then download the source code, and follow these steps.
 
