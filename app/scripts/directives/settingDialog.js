@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').directive('ngSettingDialog', ['ariaNgCommonService', 'aria2SettingService', function (ariaNgCommonService, aria2SettingService) {
+    angular.module('ariaNg').directive('ngSettingDialog', ['ariaNgCommonService', 'aria2SettingService', 'ariaNgNativeElectronService', function (ariaNgCommonService, aria2SettingService, ariaNgNativeElectronService) {
         return {
             restrict: 'E',
             templateUrl: 'views/setting-dialog.html',
@@ -48,6 +48,14 @@
                         }
                     });
                 };
+
+                angular.element(element).on('show.bs.modal', function () {
+                    ariaNgNativeElectronService.updateTitleBarBackgroundColorWithModalOverlay();
+                });
+
+                angular.element(element).on('hide.bs.modal', function () {
+                    ariaNgNativeElectronService.updateTitleBarBackgroundColor();
+                });
 
                 angular.element(element).on('hidden.bs.modal', function () {
                     scope.$apply(function () {

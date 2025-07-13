@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').directive('ngExportCommandApiDialog', ['clipboard', 'ariaNgCommonService', function (clipboard, ariaNgCommonService) {
+    angular.module('ariaNg').directive('ngExportCommandApiDialog', ['clipboard', 'ariaNgCommonService', 'ariaNgNativeElectronService', function (clipboard, ariaNgCommonService, ariaNgNativeElectronService) {
         return {
             restrict: 'E',
             templateUrl: 'views/export-command-api-dialog.html',
@@ -97,6 +97,14 @@
                     });
                     scope.context.isCopied = true;
                 };
+
+                angular.element(element).on('show.bs.modal', function () {
+                    ariaNgNativeElectronService.updateTitleBarBackgroundColorWithModalOverlay();
+                });
+
+                angular.element(element).on('hide.bs.modal', function () {
+                    ariaNgNativeElectronService.updateTitleBarBackgroundColor();
+                });
 
                 angular.element(element).on('hidden.bs.modal', function () {
                     scope.$apply(function () {

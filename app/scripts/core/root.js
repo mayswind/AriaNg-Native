@@ -28,23 +28,16 @@
             return false;
         };
 
-        var setTitleBarColor = function () {
-            var computedStyle = window.getComputedStyle(document.getElementById('window-title-bar'));
-            var backgroundColor = computedStyle.getPropertyValue('background-color');
-            var symbolColor = computedStyle.getPropertyValue('color');
-            ariaNgNativeElectronService.setTitleBarColor(backgroundColor, symbolColor);
-        };
-
         var setLightTheme = function () {
             $rootScope.currentTheme = 'light';
             angular.element('body').removeClass('theme-dark');
-            setTitleBarColor();
+            ariaNgNativeElectronService.updateTitleBarBackgroundColor();
         };
 
         var setDarkTheme = function () {
             $rootScope.currentTheme = 'dark';
             angular.element('body').addClass('theme-dark');
-            setTitleBarColor();
+            ariaNgNativeElectronService.updateTitleBarBackgroundColor();
         };
 
         var setThemeBySystemSettings = function () {

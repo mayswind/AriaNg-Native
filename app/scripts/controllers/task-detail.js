@@ -605,8 +605,13 @@
             updateAllDirNodesSelectedStatus();
         };
 
+        $('#custom-choose-file-modal').on('show.bs.modal', function (e) {
+            ariaNgNativeElectronService.updateTitleBarBackgroundColorWithModalOverlay();
+        });
+
         $('#custom-choose-file-modal').on('hide.bs.modal', function (e) {
             $scope.context.fileExtensions = null;
+            ariaNgNativeElectronService.updateTitleBarBackgroundColor();
         });
 
         $scope.setSelectedFile = function (updateNodeSelectedStatus) {

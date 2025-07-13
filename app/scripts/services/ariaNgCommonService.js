@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgCommonService', ['$window', '$location', '$timeout', 'base64', 'moment', 'SweetAlert', 'ariaNgConstants', 'ariaNgLocalizationService', function ($window, $location, $timeout, base64, moment, SweetAlert, ariaNgConstants, ariaNgLocalizationService) {
+    angular.module('ariaNg').factory('ariaNgCommonService', ['$window', '$location', '$timeout', 'base64', 'moment', 'SweetAlert', 'ariaNgConstants', 'ariaNgLocalizationService', 'ariaNgNativeElectronService', function ($window, $location, $timeout, base64, moment, SweetAlert, ariaNgConstants, ariaNgLocalizationService, ariaNgNativeElectronService) {
         var getTimeOption = function (time) {
             var name = '';
             var value = time;
@@ -29,12 +29,16 @@
 
         var showDialog = function (title, text, type, callback, options) {
             $timeout(function () {
+                ariaNgNativeElectronService.updateTitleBarBackgroundColorWithSweetAlertOverlay();
+
                 SweetAlert.swal({
                     title: title,
                     text: text,
                     type: type,
                     confirmButtonText: options && options.confirmButtonText || null
                 }, function () {
+                    ariaNgNativeElectronService.updateTitleBarBackgroundColor();
+
                     if (callback) {
                         callback();
                     }
@@ -58,7 +62,11 @@
                 options.confirmButtonColor = '#F39C12';
             }
 
+            ariaNgNativeElectronService.updateTitleBarBackgroundColorWithSweetAlertOverlay();
+
             SweetAlert.swal(options, function (isConfirm) {
+                ariaNgNativeElectronService.updateTitleBarBackgroundColor();
+
                 if (!isConfirm) {
                     return;
                 }

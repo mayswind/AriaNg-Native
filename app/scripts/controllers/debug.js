@@ -172,8 +172,13 @@
             angular.element('#log-detail-modal').modal();
         };
 
+        $('#log-detail-modal').on('show.bs.modal', function (e) {
+            ariaNgNativeElectronService.updateTitleBarBackgroundColorWithModalOverlay();
+        });
+
         $('#log-detail-modal').on('hide.bs.modal', function (e) {
             $scope.context.currentLog = null;
+            ariaNgNativeElectronService.updateTitleBarBackgroundColor();
         });
 
         $scope.executeAria2Method = function () {

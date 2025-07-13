@@ -468,8 +468,13 @@
             angular.element('#import-settings-modal').modal();
         };
 
+        $('#import-settings-modal').on('show.bs.modal', function (e) {
+            ariaNgNativeElectronService.updateTitleBarBackgroundColorWithModalOverlay();
+        });
+
         $('#import-settings-modal').on('hide.bs.modal', function (e) {
             $scope.context.importSettings = null;
+            ariaNgNativeElectronService.updateTitleBarBackgroundColor();
         });
 
         $scope.openAriaNgConfigFile = function () {
@@ -515,9 +520,14 @@
             angular.element('#export-settings-modal').modal();
         };
 
+        $('#export-settings-modal').on('show.bs.modal', function (e) {
+            ariaNgNativeElectronService.updateTitleBarBackgroundColorWithModalOverlay();
+        });
+
         $('#export-settings-modal').on('hide.bs.modal', function (e) {
             $scope.context.exportSettings = null;
             $scope.context.exportSettingsCopied = false;
+            ariaNgNativeElectronService.updateTitleBarBackgroundColor();
         });
 
         $scope.copyExportSettings = function () {

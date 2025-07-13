@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').factory('ariaNgNativeElectronService', ['$q', 'ariaNgLogService', 'ariaNgLocalizationService', function ($q, ariaNgLogService, ariaNgLocalizationService) {
+    angular.module('ariaNg').factory('ariaNgNativeElectronService', ['$window', '$q', 'ariaNgLogService', 'ariaNgLocalizationService', function ($window, $q, ariaNgLogService, ariaNgLocalizationService) {
         var electron = angular.isFunction(window.nodeRequire) ? nodeRequire('electron') : {};
         var ipcRenderer = electron.ipcRenderer || {};
 
@@ -73,8 +73,61 @@
             setNativeTheme: function (theme) {
                 invokeMainProcessMethod('render-set-native-theme', theme);
             },
-            setTitleBarColor: function (titleBarBackgroundColor, titleBarSymbolColor) {
-                invokeMainProcessMethod('render-set-titlebar-color', titleBarBackgroundColor, titleBarSymbolColor);
+            updateTitleBarBackgroundColor: function () {
+                var titleBar = angular.element('#window-title-bar');
+
+                if (!titleBar || !titleBar[0]) {
+                    return;
+                }
+
+                var computedStyle = $window.getComputedStyle(titleBar[0]);
+                var backgroundColor = computedStyle.getPropertyValue('background-color');
+                var symbolColor = computedStyle.getPropertyValue('color');
+                invokeMainProcessMethod('render-set-titlebar-color', backgroundColor, symbolColor);
+            },
+            updateTitleBarBackgroundColorWithSweetAlertOverlay: function () {
+                var titleBar = angular.element('#window-title-bar');
+
+                if (!titleBar || !titleBar[0]) {
+                    return;
+                }
+
+                var computedStyle = $window.getComputedStyle(titleBar[0]);
+                var backgroundColor = computedStyle.getPropertyValue('background-color');
+                var symbolColor = computedStyle.getPropertyValue('color');
+
+                // This electron version not support transparent title bar, so we set hard code color
+                var currentTheme = angular.element('body').hasClass('theme-dark') ? 'dark' : 'light';
+
+                if (currentTheme === 'light') {
+                    backgroundColor = 'rgb(148, 148, 148)';
+                } else if (currentTheme === 'dark') {
+                    backgroundColor = 'rgb(7, 7, 7)';
+                }
+
+                invokeMainProcessMethod('render-set-titlebar-color', backgroundColor, symbolColor);
+            },
+            updateTitleBarBackgroundColorWithModalOverlay: function () {
+                var titleBar = angular.element('#window-title-bar');
+
+                if (!titleBar || !titleBar[0]) {
+                    return;
+                }
+
+                var computedStyle = $window.getComputedStyle(titleBar[0]);
+                var backgroundColor = computedStyle.getPropertyValue('background-color');
+                var symbolColor = computedStyle.getPropertyValue('color');
+
+                // This electron version not support transparent title bar, so we set hard code color
+                var currentTheme = angular.element('body').hasClass('theme-dark') ? 'dark' : 'light';
+
+                if (currentTheme === 'light') {
+                    backgroundColor = 'rgb(86, 86, 86)';
+                } else if (currentTheme === 'dark') {
+                    backgroundColor = 'rgb(6, 6, 6)';
+                }
+
+                invokeMainProcessMethod('render-set-titlebar-color', backgroundColor, symbolColor);
             },
             reload: function () {
                 invokeMainProcessMethod('render-reload-native-window');
