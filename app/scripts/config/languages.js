@@ -6,6 +6,10 @@
             name: 'Czech',
             displayName: 'Čeština'
         },
+        'de_DE': {
+            name: 'German',
+            displayName: 'Deutsch'
+        },
         'en': {
             name: 'English',
             displayName: 'English'
