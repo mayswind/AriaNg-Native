@@ -49,7 +49,7 @@ Options:
 Latest Release: [https://github.com/mayswind/AriaNg-Native/releases](https://github.com/mayswind/AriaNg-Native/releases)
 
 > **For mac with Apple silicon**  
-> Before starting to install, you need to execute the following command, otherwise the system will show you the file is damaged. You should not open the .dmg file and if you did already, eject it before running the command.
+> Before opening the `.dmg` file, you need to run this command, otherwise the system will tell you the file is damaged. If you have opened the `.dmg` file already, eject it.
 > 
 >     $ xattr -r -d com.apple.quarantine AriaNg_Native-*-macOS-arm64.dmg
 
