@@ -1,6 +1,7 @@
 'use strict';
 
 const os = require('os');
+const path = require('path');
 const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 
@@ -224,8 +225,13 @@ let main = function () {
     });
 
     app.on('ready', () => {
+        const iconPath = os.platform() === 'linux'
+            ? path.join(__dirname, '../assets/AriaNg.png')
+            : undefined;
+
         core.mainWindow = new BrowserWindow({
             title: 'AriaNg Native',
+            icon: iconPath,
             width: config.width,
             height: config.height,
             minWidth: 800,
