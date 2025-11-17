@@ -1,0 +1,70 @@
+{
+  "appId": "net.mayswind.ariang",
+  "productName": "AriaNg Native",
+  "copyright": "Copyright (c) 2017-2022 MaysWind (i@mayswind.net)",
+  "artifactName": "AriaNg_Native-${version}-Linux-${arch}.${ext}",
+  "files": [
+    "!build.json",
+    "!node_modules",
+    {
+      "from": "dist",
+      "to": "",
+      "filter": ["build.json"]
+    },
+    {
+      "from": "dist/node_modules",
+      "to": "node_modules",
+      "filter": [
+        "**/*.js",
+        "**/*.cjs",
+        "**/*.json",
+        "**/*.css",
+        "**/*.woff",
+        "**/*.woff2",
+        "**/*.svg",
+        "**/*.eot",
+        "**/*.ttf"
+      ]
+    },
+    "app/**",
+    "assets/**",
+    "main/**",
+    "package.json"
+  ],
+  "linux": {
+    "category": "Network;FileTransfer;P2P",
+    "icon": "assets/AriaNg.png",
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": ["x64"]
+      }
+    ],
+    "fileAssociations": [
+      {
+        "ext": "torrent",
+        "description": "Bittorrent File",
+        "mimeType": "application/x-bittorrent",
+        "icon": "assets/AriaNg_Torrent.png"
+      },
+      {
+        "ext": "metalink",
+        "description": "Metalink File",
+        "mimeType": "application/metalink4+xml",
+        "icon": "assets/AriaNg_Metalink.png"
+      },
+      {
+        "ext": "meta4",
+        "description": "Metalink v4 File",
+        "mimeType": "application/metalink4+xml",
+        "icon": "assets/AriaNg_Metalink.png"
+      }
+    ],
+    "desktop": {
+      "StartupWMClass": "AriaNg Native"
+    }
+  },
+  "appImage": {
+    "license": "LICENSE"
+  }
+}
