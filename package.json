@@ -19,7 +19,8 @@
     "copy-app-dependencies": "node copy-app-modules.js -d dist -V",
     "publish:win": "npm run clean && npm run generate-build-json && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-windows-x86.json && electron-builder --config electron-builder-windows-x64.json",
     "publish:osx": "npm run clean && npm run generate-build-json && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-mac.json",
-    "publish:linux": "npm run clean && npm run generate-build-json && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-linux-x64.json && electron-builder --config electron-builder-linux-arm64.json"
+    "publish:linux": "npm run clean && npm run generate-build-json && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-linux-x64.json && electron-builder --config electron-builder-linux-arm64.json",
+    "build:linux": "npm run clean && npm run generate-build-json && npm run copy-main-dependencies && npm run copy-app-dependencies && electron-builder --config electron-builder-linux-x64.json --publish never && electron-builder --config electron-builder-linux-arm64.json --publish never"
   },
   "repository": {
     "type": "git",
