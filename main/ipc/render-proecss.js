@@ -87,9 +87,10 @@ let notifyRenderProcessNewTaskFromFile = function (filePath, async) {
     core.mainWindow.webContents.send('on-main-new-task-from-file', result);
 };
 
-let notifyRenderProcessNewTaskFromText = function (text, async) {
+let notifyRenderProcessNewTaskFromText = function (text, append, async) {
     let result = {
         text: text,
+        append: !!append,
         async: !!async
     };
 
@@ -112,7 +113,7 @@ let notifyRenderProcessNewNewTaskFromTextAfterViewLoaded = function (text) {
     }
 
     ipcMain.once('on-render-view-content-loaded', (event, arg) => {
-        notifyRenderProcessNewTaskFromText(text, true);
+        notifyRenderProcessNewTaskFromText(text, false, true);
     });
 };
 

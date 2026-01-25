@@ -168,7 +168,29 @@
         var openUrlViaElectron = function (event, result) {
             $scope.$apply(function () {
                 $scope.context.taskType = 'urls';
-                $scope.context.urls = result.text;
+
+                if (result.append && $scope.context.urls && $scope.context.urls.trim() !== '') {
+                    var urls = $scope.context.urls.split('\n');
+                    var alreadyExists = false;
+
+                    for (var i = 0; i < urls.length; i++) {
+                        if (urls[i] === result.text) {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!alreadyExists) {
+                        if ($scope.context.urls.charAt($scope.context.urls.length - 1) !== '\n') {
+                            $scope.context.urls += '\n';
+                        }
+
+                        $scope.context.urls += result.text;
+                    }
+                } else {
+                    $scope.context.urls = result.text;
+                }
+
                 $scope.context.uploadFile = null;
                 $scope.context.newTaskInfo = null;
                 $scope.context.collapseTrackers = true;

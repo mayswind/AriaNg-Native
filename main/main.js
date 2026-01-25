@@ -343,7 +343,7 @@ let main = function () {
             let location = arg.location;
 
             if (location.indexOf('/new') === 0) {
-                ipcRender.notifyRenderProcessNewTaskFromText(text);
+                ipcRender.notifyRenderProcessNewTaskFromText(text, true);
             } else {
                 ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(text);
                 ipcRender.notifyRenderProcessNavigateToNewTask();
