@@ -989,6 +989,11 @@
                 category: 'http'
             },
             {
+                key: 'continue',
+                category: 'http',
+                canUpdate: 'new|waiting|paused'
+            },
+            {
                 key: 'referer',
                 category: 'http',
                 canUpdate: 'new'
@@ -1029,6 +1034,11 @@
                 key: 'seed-time',
                 category: 'bittorrent',
                 canUpdate: 'new|waiting|paused'
+            },
+            {
+                key: 'pause-metadata',
+                category: 'bittorrent',
+                canUpdate: 'new'
             },
             {
                 key: 'conditional-get',
