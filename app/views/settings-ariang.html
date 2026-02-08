@@ -282,6 +282,35 @@
                     </div>
                     <div class="row">
                         <div class="setting-key setting-key-without-desc col-sm-4">
+                            <span translate>Handle magnet links</span>
+                        </div>
+                        <div class="setting-value col-sm-8">
+                            <div class="input-group" ng-if="context.magnetProtocolStatus">
+                                <select class="form-control" ng-model="context.nativeSettings.enableMagnetProtocol"
+                                        ng-change="setEnableMagnetProtocol(context.nativeSettings.enableMagnetProtocol)"
+                                        ng-options="option.value as (option.name | translate) for option in context.trueFalseOptions">
+                                </select>
+                                <span class="input-group-addon">
+                                    <span translate>Is default magnet handler</span>:
+                                    <span ng-if="context.magnetProtocolStatus.isDefault" translate>Yes</span>
+                                    <span ng-if="!context.magnetProtocolStatus.isDefault" translate>No</span>
+                                </span>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" ng-click="openSystemDefaultAppsSetting()"
+                                            ng-disabled="!context.nativeSettings.enableMagnetProtocol || context.magnetProtocolStatus.isDefault">
+                                        <span translate>Open default apps settings</span>
+                                    </button>
+                                </span>
+                            </div>
+                            <select class="form-control" style="width: 100%;" ng-if="!context.magnetProtocolStatus"
+                                    ng-model="context.nativeSettings.enableMagnetProtocol"
+                                    ng-change="setEnableMagnetProtocol(context.nativeSettings.enableMagnetProtocol)"
+                                    ng-options="option.value as (option.name | translate) for option in context.trueFalseOptions">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="setting-key setting-key-without-desc col-sm-4">
                             <span translate>RPC List Display Order</span>
                             <span class="asterisk">*</span>
                         </div>

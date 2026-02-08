@@ -807,3 +807,10 @@ stop.name=自动关闭时间
 stop.description=在此选项设置的时间(秒)后关闭应用. 如果设置为 0, 此功能将禁用.
 truncate-console-readout.name=缩短控制台输出内容
 truncate-console-readout.description=缩短控制台输出的内容在一行中.
+[global]
+Handle magnet links=处理磁力链接
+Open default apps settings=打开系统默认应用设置
+Magnet protocol is enabled but this app is not the default handler. Please update system settings.=磁力协议已启用，但当前应用不是默认处理器，请在系统设置中修改。
+Is default magnet handler=是否为默认磁力处理器
+Yes=是
+No=否

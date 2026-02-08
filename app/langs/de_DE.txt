@@ -807,3 +807,10 @@ stop.name=Automatische Abschaltzeit
 stop.description=Anwendung stoppen, nachdem SEC Sekunden vergangen sind. Bei 0 ist diese Funktion deaktiviert.
 truncate-console-readout.name=Konsolenausgabe kürzen
 truncate-console-readout.description=Konsolenausgabe kürzen, damit sie in eine Zeile passt.
+[global]
+Handle magnet links=Magnet-Links verarbeiten
+Open default apps settings=Systemeinstellungen für Standard-Apps öffnen
+Magnet protocol is enabled but this app is not the default handler. Please update system settings.=Das Magnet-Protokoll ist aktiviert, aber diese App ist nicht der Standard-Handler. Bitte die Systemeinstellungen aktualisieren.
+Is default magnet handler=Standard-Magnet-Handler
+Yes=Ja
+No=Nein

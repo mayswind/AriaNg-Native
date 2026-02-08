@@ -35,6 +35,9 @@ const userSettingsSchema = {
     execDetachedCommandOnStartup: {
         type: 'boolean'
     },
+    enableMagnetProtocol: {
+        type: 'boolean'
+    },
     lastCheckUpdatesTime: {
         type: 'number'
     }
@@ -54,6 +57,7 @@ let config = {
     execCommandOnStartup: userSettingsStore.get('execCommandOnStartup'),
     execCommandArgumentsOnStartup: userSettingsStore.get('execCommandArgumentsOnStartup'),
     execDetachedCommandOnStartup: userSettingsStore.get('execDetachedCommandOnStartup', false),
+    enableMagnetProtocol: userSettingsStore.get('enableMagnetProtocol', true),
     lastCheckUpdatesTime: userSettingsStore.get('lastCheckUpdatesTime') || 0,
     save: function (item) {
         if (item && this[item] !== undefined) {

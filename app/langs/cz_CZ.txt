@@ -807,3 +807,10 @@ stop.name=Automatické vypnutí
 stop.description=Zastaví aplikaci po uplynutí SEC sekund. Pokud je zadáno 0, tato funkce je zakázána.
 truncate-console-readout.name=Oříznout výstup v konzoli
 truncate-console-readout.description=Ořízne výstup do konzole tak, aby se vešel na jeden řádek.
+[global]
+Handle magnet links=Obsluhovat magnet odkazy
+Open default apps settings=Otevřít nastavení výchozích aplikací
+Magnet protocol is enabled but this app is not the default handler. Please update system settings.=Protokol magnet je povolen, ale tato aplikace není výchozí obsluhovač. Aktualizujte nastavení systému.
+Is default magnet handler=Výchozí obsluhovač magnet
+Yes=Ano
+No=Ne

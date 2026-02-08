@@ -807,3 +807,10 @@ stop.name=Automatyczne Zakończenie
 stop.description=Zakończ działanie programu po upływie SEC sekund. Jeśli 0, ta funkcja jest wyłączona.
 truncate-console-readout.name=Ostrzeżenia Konsoli
 truncate-console-readout.description=Przytnij wyjście konsoli do jednej linii.
+[global]
+Handle magnet links=Obsługa linków magnet
+Open default apps settings=Otwórz ustawienia domyślnych aplikacji
+Magnet protocol is enabled but this app is not the default handler. Please update system settings.=Protokół magnet jest włączony, ale ta aplikacja nie jest domyślnym obsługiwaczem. Zaktualizuj ustawienia systemu.
+Is default magnet handler=Domyślny obsługiwacz magnet
+Yes=Tak
+No=Nie

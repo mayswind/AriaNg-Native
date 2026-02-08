@@ -807,3 +807,10 @@ stop.name=Tiempo de apagado automático
 stop.description=Detener la aplicación después de que transcurran 10 segundos. Si se especifica 0, esta función se deshabilita.
 truncate-console-readout.name=Truncar la salida de la consola
 truncate-console-readout.description=Truncar la lectura de la consola para que quepa en una sola línea.
+[global]
+Handle magnet links=Gestionar enlaces magnet
+Open default apps settings=Abrir la configuración de aplicaciones predeterminadas
+Magnet protocol is enabled but this app is not the default handler. Please update system settings.=El protocolo magnet está habilitado, pero esta aplicación no es el manejador predeterminado. Actualiza la configuración del sistema.
+Is default magnet handler=Manejador magnet predeterminado
+Yes=Sí
+No=No

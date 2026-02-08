@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const os = require('os');
 const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
@@ -13,7 +14,7 @@ const tray = require('./components/tray');
 const file = require('./lib/file');
 const page = require('./lib/page');
 const websocket = require('./lib/websocket');
-const process = require('./lib/process');
+const processRunner = require('./lib/process');
 const ipcRender = require('./ipc/render-proecss');
 require('./ipc/main-process');
 
@@ -26,6 +27,65 @@ const singletonLock = app.requestSingleInstanceLock({
 
 let isEnableCloseToHide = function() {
     return (tray.isEnabled() || os.platform() === 'darwin') && config.minimizedToTray;
+};
+
+let pendingMagnetUrl = null;
+
+let isMagnetUrl = function (value) {
+    return typeof value === 'string' && /^magnet:\?/i.test(value);
+};
+
+let getMagnetUrlFromArgv = function (argv) {
+    if (!argv || argv.length < 1) {
+        return null;
+    }
+
+    for (let i = 0; i < argv.length; i++) {
+        if (isMagnetUrl(argv[i])) {
+            return argv[i];
+        }
+    }
+
+    return null;
+};
+
+let dispatchMagnetUrl = function (magnetUrl) {
+    if (!config.enableMagnetProtocol) {
+        return;
+    }
+
+    if (!isMagnetUrl(magnetUrl)) {
+        return;
+    }
+
+    if (core.mainWindow && core.mainWindow.webContents) {
+        let location = page.parseLocationFromFullUrl(core.mainWindow.webContents.getURL());
+
+        if (location.indexOf('/new') === 0) {
+            ipcRender.notifyRenderProcessNewTaskFromText(magnetUrl, false);
+        } else {
+            ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(magnetUrl);
+            ipcRender.notifyRenderProcessNavigateToNewTask();
+        }
+    } else {
+        pendingMagnetUrl = magnetUrl;
+    }
+};
+
+let registerMagnetProtocol = function () {
+    if (!config.enableMagnetProtocol) {
+        return;
+    }
+
+    try {
+        if (app.isPackaged) {
+            app.setAsDefaultProtocolClient('magnet');
+        } else if (process.defaultApp && process.argv.length > 1) {
+            app.setAsDefaultProtocolClient('magnet', process.execPath, [path.resolve(process.argv[1])]);
+        }
+    } catch (ex) {
+        // Do Nothing
+    }
 };
 
 let executeCustomCommand = function () {
@@ -76,7 +136,7 @@ let executeCustomCommand = function () {
         });
     };
 
-    process.execCommandAsync(options);
+    processRunner.execCommandAsync(options);
 };
 
 let setWindowPositionAndSize = function () {
@@ -137,6 +197,7 @@ let main = function () {
 
     const minimalWindow = !!cmd.argv.minimal;
     let filePathInCommandLine = cmd.argv.file;
+    let magnetUrlInCommandLine = getMagnetUrlFromArgv(process.argv);
 
     if (os.platform() === 'darwin') {
         app.on('will-finish-launching', () => {
@@ -162,6 +223,16 @@ let main = function () {
             });
         });
 
+        app.on('open-url', (event, url) => {
+            event.preventDefault();
+
+            if (!isMagnetUrl(url)) {
+                return;
+            }
+
+            dispatchMagnetUrl(url);
+        });
+
         app.on('before-quit', () => {
             core.isConfirmExit = true;
         });
@@ -176,6 +247,8 @@ let main = function () {
     if (config.execCommandOnStartup) {
         executeCustomCommand();
     }
+
+    registerMagnetProtocol();
 
     app.on('window-all-closed', () => {
         app.quit();
@@ -220,6 +293,12 @@ let main = function () {
                     ipcRender.notifyRenderProcessNavigateToNewTask();
                 }
             }
+
+            const secondInstanceMagnetUrl = getMagnetUrlFromArgv(argv);
+
+            if (secondInstanceMagnetUrl) {
+                dispatchMagnetUrl(secondInstanceMagnetUrl);
+            }
         }
     });
 
@@ -250,6 +329,9 @@ let main = function () {
 
         if (file.isContainsSupportedFileArg(filePathInCommandLine)) {
             ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathInCommandLine);
+            core.mainWindow.loadURL(page.getPageFullUrl(constants.ariaNgPageLocations.NewTask));
+        } else if (magnetUrlInCommandLine && config.enableMagnetProtocol) {
+            ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(magnetUrlInCommandLine);
             core.mainWindow.loadURL(page.getPageFullUrl(constants.ariaNgPageLocations.NewTask));
         } else {
             core.mainWindow.loadURL(page.getPageFullUrl());
@@ -349,6 +431,11 @@ let main = function () {
                 ipcRender.notifyRenderProcessNavigateToNewTask();
             }
         });
+
+        if (pendingMagnetUrl) {
+            dispatchMagnetUrl(pendingMagnetUrl);
+            pendingMagnetUrl = null;
+        }
     });
 }
 
