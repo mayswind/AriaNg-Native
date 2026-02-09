@@ -26,6 +26,10 @@
             name: 'Italian',
             displayName: 'Italiano'
         },
+        'ja_JP': {
+            name: 'Japanese',
+            displayName: '日本語'
+        },
         'pl_PL': {
             name: 'Polish',
             displayName: 'Polski'
