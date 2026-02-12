@@ -808,3 +808,10 @@ stop.name=Tempo di arresto automatico
 stop.description=
 truncate-console-readout.name=Tronca l'output della console
 truncate-console-readout.description=Tronca l'output della console su una singola riga.
+[global]
+Handle magnet links=Gestisci link magnet
+Open default apps settings=Apri le impostazioni delle app predefinite
+Magnet protocol is enabled but this app is not the default handler. Please update system settings.=Il protocollo magnet è abilitato, ma questa app non è il gestore predefinito. Aggiorna le impostazioni di sistema.
+Is default magnet handler=Gestore magnet predefinito
+Yes=Sì
+No=No

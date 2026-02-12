@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const electron = require('electron');
 
 const core = require('../core');
@@ -14,9 +15,54 @@ const localfs = require('../lib/localfs');
 const bittorrent = require('../lib/bittorrent');
 
 const shell = electron.shell;
+const app = electron.app;
 const nativeTheme = electron.nativeTheme;
 const dialog = electron.dialog;
 const ipcMain = electron.ipcMain;
+
+let setMagnetProtocolEnabled = function (enabled) {
+    try {
+        if (enabled) {
+            if (app.isPackaged) {
+                return app.setAsDefaultProtocolClient('magnet');
+            }
+
+            if (process.defaultApp && process.argv.length > 1) {
+                return app.setAsDefaultProtocolClient('magnet', process.execPath, [path.resolve(process.argv[1])]);
+            }
+
+            return app.setAsDefaultProtocolClient('magnet');
+        }
+
+        if (app.isPackaged) {
+            return app.removeAsDefaultProtocolClient('magnet');
+        }
+
+        if (process.defaultApp && process.argv.length > 1) {
+            return app.removeAsDefaultProtocolClient('magnet', process.execPath, [path.resolve(process.argv[1])]);
+        }
+
+        return app.removeAsDefaultProtocolClient('magnet');
+    } catch (ex) {
+        return false;
+    }
+};
+
+let isDefaultMagnetProtocol = function () {
+    try {
+        if (app.isPackaged) {
+            return app.isDefaultProtocolClient('magnet');
+        }
+
+        if (process.defaultApp && process.argv.length > 1) {
+            return app.isDefaultProtocolClient('magnet', process.execPath, [path.resolve(process.argv[1])]);
+        }
+
+        return app.isDefaultProtocolClient('magnet');
+    } catch (ex) {
+        return false;
+    }
+};
 
 ipcMain.on('render-sync-get-runtime-environment', (event) => {
     if (!process || !process.versions) {
@@ -116,7 +162,8 @@ ipcMain.on('render-sync-get-native-config', (event) => {
         minimizedToTray: config.minimizedToTray,
         execCommandOnStartup: config.execCommandOnStartup,
         execCommandArgumentsOnStartup: config.execCommandArgumentsOnStartup,
-        execDetachedCommandOnStartup: config.execDetachedCommandOnStartup
+        execDetachedCommandOnStartup: config.execDetachedCommandOnStartup,
+        enableMagnetProtocol: config.enableMagnetProtocol
     };
 });
 
@@ -143,6 +190,25 @@ ipcMain.on('render-set-native-config-exec-command-arguments-on-startup', (event,
 ipcMain.on('render-set-native-config-exec-detached-command-on-startup', (event, value) => {
     config.execDetachedCommandOnStartup = value;
     config.save('execDetachedCommandOnStartup');
+});
+
+ipcMain.on('render-set-native-config-enable-magnet-protocol', (event, value) => {
+    config.enableMagnetProtocol = !!value;
+    config.save('enableMagnetProtocol');
+    const registered = setMagnetProtocolEnabled(config.enableMagnetProtocol);
+
+    event.returnValue = {
+        enabled: config.enableMagnetProtocol,
+        isDefault: isDefaultMagnetProtocol(),
+        registered: registered
+    };
+});
+
+ipcMain.handle('render-get-native-config-magnet-protocol-status', () => {
+    return {
+        enabled: !!config.enableMagnetProtocol,
+        isDefault: isDefaultMagnetProtocol()
+    };
 });
 
 ipcMain.handle('render-get-native-config-last-check-updates-time', (event) => {
@@ -223,6 +289,24 @@ ipcMain.on('render-get-websocket-readystate', (event) => {
 
 ipcMain.on('render-open-external-url', (event, url) => {
     shell.openExternal(url);
+});
+
+ipcMain.handle('render-open-system-default-apps-setting', async () => {
+    try {
+        if (process.platform === 'win32') {
+            await shell.openExternal('ms-settings:defaultapps');
+            return true;
+        }
+
+        if (process.platform === 'darwin') {
+            await shell.openExternal('x-apple.systempreferences:com.apple.preference.general');
+            return true;
+        }
+
+        return false;
+    } catch (ex) {
+        return false;
+    }
 });
 
 ipcMain.on('render-sync-get-package-file-content', (event, path) => {

@@ -808,3 +808,10 @@ stop.name=Время автоматической остановки
 stop.description=Останавливает все активные загрузки и завершает работу aria2.
 truncate-console-readout.name=Обрезка вывода консоли
 truncate-console-readout.description=Обрезает вывод консоли до одной строки.
+[global]
+Handle magnet links=Обрабатывать magnet-ссылки
+Open default apps settings=Открыть настройки приложений по умолчанию
+Magnet protocol is enabled but this app is not the default handler. Please update system settings.=Протокол magnet включён, но это приложение не является обработчиком по умолчанию. Обновите настройки системы.
+Is default magnet handler=Обработчик magnet по умолчанию
+Yes=Да
+No=Нет
