@@ -32,7 +32,7 @@ let isEnableCloseToHide = function() {
 let pendingMagnetUrl = null;
 
 let isMagnetUrl = function (value) {
-    return typeof value === 'string' && /^magnet:\?/i.test(value);
+    return typeof value === 'string' && value.toLowerCase().startsWith('magnet:?');
 };
 
 let getMagnetUrlFromArgv = function (argv) {
@@ -221,16 +221,16 @@ let main = function () {
                     filePathInCommandLine = filePath;
                 }
             });
-        });
 
-        app.on('open-url', (event, url) => {
-            event.preventDefault();
+            app.on('open-url', (event, url) => {
+                event.preventDefault();
 
-            if (!isMagnetUrl(url)) {
-                return;
-            }
+                if (!isMagnetUrl(url)) {
+                    return;
+                }
 
-            dispatchMagnetUrl(url);
+                dispatchMagnetUrl(url);
+            });
         });
 
         app.on('before-quit', () => {

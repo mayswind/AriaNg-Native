@@ -292,8 +292,8 @@
                                 </select>
                                 <span class="input-group-addon">
                                     <span translate>Is default magnet handler</span>:
-                                    <span ng-if="context.magnetProtocolStatus.isDefault" translate>Yes</span>
-                                    <span ng-if="!context.magnetProtocolStatus.isDefault" translate>No</span>
+                                    <span class="label label-success" ng-if="context.magnetProtocolStatus.isDefault" translate>Yes</span>
+                                    <span class="label label-danger" ng-if="!context.magnetProtocolStatus.isDefault" translate>No</span>
                                 </span>
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" ng-click="openSystemDefaultAppsSetting()"
