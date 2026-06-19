@@ -57,7 +57,7 @@ let config = {
     execCommandOnStartup: userSettingsStore.get('execCommandOnStartup'),
     execCommandArgumentsOnStartup: userSettingsStore.get('execCommandArgumentsOnStartup'),
     execDetachedCommandOnStartup: userSettingsStore.get('execDetachedCommandOnStartup', false),
-    enableMagnetProtocol: userSettingsStore.get('enableMagnetProtocol', true),
+    enableMagnetProtocol: userSettingsStore.get('enableMagnetProtocol', false),
     lastCheckUpdatesTime: userSettingsStore.get('lastCheckUpdatesTime') || 0,
     save: function (item) {
         if (item && this[item] !== undefined) {

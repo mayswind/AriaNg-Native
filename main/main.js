@@ -14,7 +14,8 @@ const tray = require('./components/tray');
 const file = require('./lib/file');
 const page = require('./lib/page');
 const websocket = require('./lib/websocket');
-const processRunner = require('./lib/process');
+const childProcess = require('./lib/process');
+const utils = require('./lib/utils');
 const ipcRender = require('./ipc/render-proecss');
 require('./ipc/main-process');
 
@@ -27,49 +28,6 @@ const singletonLock = app.requestSingleInstanceLock({
 
 let isEnableCloseToHide = function() {
     return (tray.isEnabled() || os.platform() === 'darwin') && config.minimizedToTray;
-};
-
-let pendingMagnetUrl = null;
-
-let isMagnetUrl = function (value) {
-    return typeof value === 'string' && value.toLowerCase().startsWith('magnet:?');
-};
-
-let getMagnetUrlFromArgv = function (argv) {
-    if (!argv || argv.length < 1) {
-        return null;
-    }
-
-    for (let i = 0; i < argv.length; i++) {
-        if (isMagnetUrl(argv[i])) {
-            return argv[i];
-        }
-    }
-
-    return null;
-};
-
-let dispatchMagnetUrl = function (magnetUrl) {
-    if (!config.enableMagnetProtocol) {
-        return;
-    }
-
-    if (!isMagnetUrl(magnetUrl)) {
-        return;
-    }
-
-    if (core.mainWindow && core.mainWindow.webContents) {
-        let location = page.parseLocationFromFullUrl(core.mainWindow.webContents.getURL());
-
-        if (location.indexOf('/new') === 0) {
-            ipcRender.notifyRenderProcessNewTaskFromText(magnetUrl, false);
-        } else {
-            ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(magnetUrl);
-            ipcRender.notifyRenderProcessNavigateToNewTask();
-        }
-    } else {
-        pendingMagnetUrl = magnetUrl;
-    }
 };
 
 let registerMagnetProtocol = function () {
@@ -136,7 +94,7 @@ let executeCustomCommand = function () {
         });
     };
 
-    processRunner.execCommandAsync(options);
+    childProcess.execCommandAsync(options);
 };
 
 let setWindowPositionAndSize = function () {
@@ -196,8 +154,7 @@ let main = function () {
     core.useCustomAppTitle = os.platform() === 'win32' && !cmd.argv.classic;
 
     const minimalWindow = !!cmd.argv.minimal;
-    let filePathInCommandLine = cmd.argv.file;
-    let magnetUrlInCommandLine = getMagnetUrlFromArgv(process.argv);
+    let filePathOrUrlInCommandLine = cmd.argv['file/url'];
 
     if (os.platform() === 'darwin') {
         app.on('will-finish-launching', () => {
@@ -218,18 +175,29 @@ let main = function () {
                         ipcRender.notifyRenderProcessNavigateToNewTask();
                     }
                 } else {
-                    filePathInCommandLine = filePath;
+                    filePathOrUrlInCommandLine = filePath;
                 }
             });
 
             app.on('open-url', (event, url) => {
                 event.preventDefault();
 
-                if (!isMagnetUrl(url)) {
+                if (!url) {
                     return;
                 }
 
-                dispatchMagnetUrl(url);
+                if (core.mainWindow && core.mainWindow.webContents) {
+                    let location = page.parseLocationFromFullUrl(core.mainWindow.webContents.getURL());
+
+                    if (location.indexOf('/new') === 0) {
+                        ipcRender.notifyRenderProcessNewTaskFromText(url);
+                    } else {
+                        ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(url);
+                        ipcRender.notifyRenderProcessNavigateToNewTask();
+                    }
+                } else {
+                    filePathOrUrlInCommandLine = url;
+                }
             });
         });
 
@@ -279,7 +247,9 @@ let main = function () {
                 ipcRender.notifyRenderProcessChangeDevMode(core.isDevMode);
             }
 
-            if (secondInstanceArgv && secondInstanceArgv.file && file.isContainsSupportedFileArg(secondInstanceArgv.file)) {
+            const filePathOrUrlInSecondInstanceCommandLine = secondInstanceArgv ? secondInstanceArgv['file/url'] : null;
+
+            if (filePathOrUrlInSecondInstanceCommandLine && file.isContainsSupportedFileArg(filePathOrUrlInSecondInstanceCommandLine)) {
                 let location = '';
 
                 if (core.mainWindow.webContents) {
@@ -287,17 +257,24 @@ let main = function () {
                 }
 
                 if (location.indexOf('/new') === 0) {
-                    ipcRender.notifyRenderProcessNewTaskFromFile(secondInstanceArgv.file);
+                    ipcRender.notifyRenderProcessNewTaskFromFile(filePathOrUrlInSecondInstanceCommandLine);
                 } else {
-                    ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(secondInstanceArgv.file);
+                    ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathOrUrlInSecondInstanceCommandLine);
                     ipcRender.notifyRenderProcessNavigateToNewTask();
                 }
-            }
+            } else if (filePathOrUrlInSecondInstanceCommandLine && utils.isUrl(filePathOrUrlInSecondInstanceCommandLine)) {
+                let location = '';
 
-            const secondInstanceMagnetUrl = getMagnetUrlFromArgv(argv);
+                if (core.mainWindow.webContents) {
+                    location = page.parseLocationFromFullUrl(core.mainWindow.webContents.getURL());
+                }
 
-            if (secondInstanceMagnetUrl) {
-                dispatchMagnetUrl(secondInstanceMagnetUrl);
+                if (location.indexOf('/new') === 0) {
+                    ipcRender.notifyRenderProcessNewTaskFromText(filePathOrUrlInSecondInstanceCommandLine, true);
+                } else {
+                    ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(filePathOrUrlInSecondInstanceCommandLine);
+                    ipcRender.notifyRenderProcessNavigateToNewTask();
+                }
             }
         }
     });
@@ -327,11 +304,11 @@ let main = function () {
         menu.init();
         tray.init();
 
-        if (file.isContainsSupportedFileArg(filePathInCommandLine)) {
-            ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathInCommandLine);
+        if (file.isContainsSupportedFileArg(filePathOrUrlInCommandLine)) {
+            ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathOrUrlInCommandLine);
             core.mainWindow.loadURL(page.getPageFullUrl(constants.ariaNgPageLocations.NewTask));
-        } else if (magnetUrlInCommandLine && config.enableMagnetProtocol) {
-            ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(magnetUrlInCommandLine);
+        } else if (utils.isUrl(filePathOrUrlInCommandLine)) {
+            ipcRender.notifyRenderProcessNewNewTaskFromTextAfterViewLoaded(filePathOrUrlInCommandLine);
             core.mainWindow.loadURL(page.getPageFullUrl(constants.ariaNgPageLocations.NewTask));
         } else {
             core.mainWindow.loadURL(page.getPageFullUrl());
@@ -431,11 +408,6 @@ let main = function () {
                 ipcRender.notifyRenderProcessNavigateToNewTask();
             }
         });
-
-        if (pendingMagnetUrl) {
-            dispatchMagnetUrl(pendingMagnetUrl);
-            pendingMagnetUrl = null;
-        }
     });
 }
 

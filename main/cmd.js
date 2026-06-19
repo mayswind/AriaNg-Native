@@ -3,7 +3,7 @@
 const yargs = require('yargs');
 
 const argv = yargs(process.argv.slice(1))
-    .usage('Usage: $0 [file] [options]')
+    .usage('Usage: $0 [file/url] [options]')
     .help('help')
     .alias('version', 'v')
     .option('help', {
@@ -25,9 +25,9 @@ const argv = yargs(process.argv.slice(1))
         describe: 'Hide the main window at startup',
     })
     .command({
-        command: '$0 [file]',
+        command: '$0 [file/url]',
         aliases: ['new'],
-        desc: 'Create new download task from exist torrent/metalink file'
+        desc: 'Create new download task from exist torrent/metalink file or URL',
     })
     .argv;
 
@@ -47,7 +47,7 @@ function parseArguments(argv) {
     try {
         return yargs(actualArgv)
             .command({
-                command: '$0 [file] [options]'
+                command: '$0 [file/url] [options]'
             })
             .option('development', {
                 alias: 'd',

@@ -12,6 +12,15 @@ let isNumber = function (value) {
     return typeof value === 'number';
 }
 
+let isUrl = function (value) {
+    try {
+        new URL(value);
+        return true;
+    } catch (ex) {
+        return false;
+    }
+}
+
 let copyObjectTo = function (from, to) {
     if (!to) {
         return from;
@@ -41,5 +50,6 @@ module.exports = {
     isObject: isObject,
     isArray: isArray,
     isNumber: isNumber,
+    isUrl: isUrl,
     copyObjectTo: copyObjectTo
 }
