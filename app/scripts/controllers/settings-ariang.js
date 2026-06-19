@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('AriaNgSettingsController', ['$rootScope', '$scope', '$routeParams', '$window', '$interval', '$timeout', '$filter', 'clipboard', 'ariaNgLanguages', 'ariaNgSupportedAudioFileTypes', 'ariaNgCommonService', 'ariaNgVersionService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $window, $interval, $timeout, $filter, clipboard, ariaNgLanguages, ariaNgSupportedAudioFileTypes, ariaNgCommonService, ariaNgVersionService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2SettingService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').controller('AriaNgSettingsController', ['$rootScope', '$scope', '$routeParams', '$window', '$interval', '$timeout', '$q', '$filter', 'clipboard', 'ariaNgLanguages', 'ariaNgSupportedAudioFileTypes', 'ariaNgCommonService', 'ariaNgVersionService', 'ariaNgKeyboardService', 'ariaNgNotificationService', 'ariaNgLocalizationService', 'ariaNgLogService', 'ariaNgFileService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $routeParams, $window, $interval, $timeout, $q, $filter, clipboard, ariaNgLanguages, ariaNgSupportedAudioFileTypes, ariaNgCommonService, ariaNgVersionService, ariaNgKeyboardService, ariaNgNotificationService, ariaNgLocalizationService, ariaNgLogService, ariaNgFileService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2SettingService, ariaNgNativeElectronService) {
         var extendType = $routeParams.extendType;
         var lastRefreshPageNotification = null;
 
@@ -48,6 +48,8 @@
                 config.execCommandOptionsOnStartup = 'as-detached-process';
             }
 
+            config.enableMagnetProtocol = !!originalConfig.enableMagnetProtocol;
+
             return config;
         };
 
@@ -70,6 +72,7 @@
             importNativeSetting(settings, 'execCommandOnStartup', $scope.setExecCommandOnStartup);
             importNativeSetting(settings, 'execCommandArgumentsOnStartup', $scope.setExecCommandArgumentsOnStartup);
             importNativeSetting(settings, 'execCommandOptionsOnStartup', $scope.setExecCommandOptionsOnStartup);
+            importNativeSetting(settings, 'enableMagnetProtocol', $scope.setEnableMagnetProtocol);
             ariaNgSettingService.importAllOptions(settings);
         };
 
@@ -149,6 +152,7 @@
             isSupportReconnect: aria2SettingService.canReconnect(),
             isSupportBlob: ariaNgFileService.isSupportBlob(),
             isSupportDarkMode: ariaNgSettingService.isBrowserSupportDarkMode(),
+            magnetProtocolStatus: null,
             importSettings: null,
             exportSettings: null,
             exportSettingsCopied: false,
@@ -439,6 +443,28 @@
             }
         };
 
+        $scope.setEnableMagnetProtocol = function (value) {
+            var status = ariaNgNativeElectronService.setEnableMagnetProtocol(value);
+
+            if (status) {
+                $scope.context.magnetProtocolStatus = status;
+            }
+
+            if (value && status && !status.isDefault) {
+                ariaNgCommonService.showInfo('Default magnet app', 'Magnet protocol is enabled but this app is not the default handler. Please update system settings.');
+            }
+        };
+
+        $scope.openSystemDefaultAppsSetting = function () {
+            ariaNgNativeElectronService.openSystemDefaultAppsSetting().then(function (success) {
+                if (!success) {
+                    ariaNgCommonService.showError('This feature is not supported on your system.');
+                }
+            }).catch(function () {
+                ariaNgCommonService.showError('Failed to open system settings.');
+            });
+        };
+
         $scope.browseAndSetExecCommandOnStartup = function () {
             ariaNgNativeElectronService.showOpenFileDialogAsync([{
                 name: ariaNgLocalizationService.getLocalizedText('All Files'),
@@ -612,6 +638,13 @@
 
         angular.element('[data-toggle="popover"]').popover();
 
-        $rootScope.loadPromise = $timeout(function () {}, 100);
+        $rootScope.loadPromise = $q.all([
+            $timeout(function () {}, 100),
+            ariaNgNativeElectronService.getMagnetProtocolStatusAsync().then(function (status) {
+                if (status) {
+                    $scope.context.magnetProtocolStatus = status;
+                }
+            })
+        ]);
     }]);
 }());
