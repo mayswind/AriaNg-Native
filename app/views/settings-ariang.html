@@ -30,7 +30,8 @@
                         </div>
                         <div class="setting-value col-sm-8">
                             <span ng-bind="'AriaNg Native ' + context.ariaNgNativeVersion + (context.buildCommit ? ' (' + context.buildCommit + ')' : '')"></span>
-                            <button class="btn btn-xs btn-default" ng-click="checkUpdate()" ng-disabled="context.isCurrentLatestVersion" promise-btn>
+                            <button class="btn btn-xs btn-default" ng-class="{'btn-disabled': context.isCurrentLatestVersion}"
+                                    ng-disabled="context.isCurrentLatestVersion" ng-click="checkUpdate()" promise-btn>
                                 <span ng-bind="(context.isCurrentLatestVersion ? 'Latest Version' : 'Check Update') | translate" translate>Check Update</span>
                             </button>
                             <span class="multi-line" ng-if="!context.ariaNgVerboseVersionCollapsed">
@@ -173,6 +174,7 @@
                                         <span translate>Browse</span>
                                     </button>
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            ng-class="{'btn-disabled': !context.settings.playSoundAfterDownloadFinished}"
                                             ng-disabled="!context.settings.playSoundAfterDownloadFinished">
                                         <span class="caret"></span>
                                     </button>
