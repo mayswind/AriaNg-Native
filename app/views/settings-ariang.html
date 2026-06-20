@@ -391,31 +391,21 @@
                     </div>
                     <div class="row">
                         <div class="setting-key setting-key-without-desc col-sm-4">
-                            <span translate>Handle magnet links</span>
+                            <span translate>Set as Default Magnet Link Downloader</span>
                         </div>
                         <div class="setting-value col-sm-8">
-                            <div class="input-group" ng-if="context.magnetProtocolStatus">
-                                <select class="form-control" ng-model="context.nativeSettings.enableMagnetProtocol"
-                                        ng-change="setEnableMagnetProtocol(context.nativeSettings.enableMagnetProtocol)"
-                                        ng-options="option.value as (option.name | translate) for option in context.trueFalseOptions">
+                            <div ng-class="{'input-group': context.nativeSettings.defaultMagnetProtocolClient && (!context.magnetProtocolStatus || !context.magnetProtocolStatus.isDefault)}">
+                                <select class="form-control" style="width: 100%;" ng-model="context.nativeSettings.defaultMagnetProtocolClient"
+                                        ng-change="setDefaultMagnetProtocolClient(context.nativeSettings.defaultMagnetProtocolClient)">
+                                    <option ng-value="true" ng-bind="((context.nativeSettings.defaultMagnetProtocolClient && (!context.magnetProtocolStatus || !context.magnetProtocolStatus.isDefault)) ? 'True (Not the system\'s default downloader)' : 'True') | translate">True</option>
+                                    <option ng-value="false" translate>False</option>
                                 </select>
-                                <span class="input-group-addon">
-                                    <span translate>Is default magnet handler</span>:
-                                    <span class="label label-success" ng-if="context.magnetProtocolStatus.isDefault" translate>Yes</span>
-                                    <span class="label label-danger" ng-if="!context.magnetProtocolStatus.isDefault" translate>No</span>
-                                </span>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" ng-click="openSystemDefaultAppsSetting()"
-                                            ng-disabled="!context.nativeSettings.enableMagnetProtocol || context.magnetProtocolStatus.isDefault">
-                                        <span translate>Open default apps settings</span>
+                                <div class="input-group-btn" ng-if="context.nativeSettings.defaultMagnetProtocolClient && (!context.magnetProtocolStatus || !context.magnetProtocolStatus.isDefault)">
+                                    <button type="button" class="btn btn-default" ng-click="openSystemDefaultAppsSetting()">
+                                        <span translate>Open System Settings</span>
                                     </button>
-                                </span>
+                                </div>
                             </div>
-                            <select class="form-control" style="width: 100%;" ng-if="!context.magnetProtocolStatus"
-                                    ng-model="context.nativeSettings.enableMagnetProtocol"
-                                    ng-change="setEnableMagnetProtocol(context.nativeSettings.enableMagnetProtocol)"
-                                    ng-options="option.value as (option.name | translate) for option in context.trueFalseOptions">
-                            </select>
                         </div>
                     </div>
                     <div class="row">

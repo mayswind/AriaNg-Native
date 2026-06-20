@@ -26,6 +26,9 @@ const userSettingsSchema = {
     pos_y: {
         type: 'number'
     },
+    defaultMagnetProtocolClient: {
+        type: 'boolean'
+    },
     execCommandOnStartup: {
         type: 'string'
     },
@@ -33,9 +36,6 @@ const userSettingsSchema = {
         type: 'string'
     },
     execDetachedCommandOnStartup: {
-        type: 'boolean'
-    },
-    enableMagnetProtocol: {
         type: 'boolean'
     },
     lastCheckUpdatesTime: {
@@ -54,10 +54,10 @@ let config = {
     maximized: !!userSettingsStore.get('maximized'),
     defaultPosition: userSettingsStore.get('defaultPosition') || 'last-position',
     minimizedToTray: userSettingsStore.get('minimizedToTray', true),
+    defaultMagnetProtocolClient: userSettingsStore.get('defaultMagnetProtocolClient', false),
     execCommandOnStartup: userSettingsStore.get('execCommandOnStartup'),
     execCommandArgumentsOnStartup: userSettingsStore.get('execCommandArgumentsOnStartup'),
     execDetachedCommandOnStartup: userSettingsStore.get('execDetachedCommandOnStartup', false),
-    enableMagnetProtocol: userSettingsStore.get('enableMagnetProtocol', false),
     lastCheckUpdatesTime: userSettingsStore.get('lastCheckUpdatesTime') || 0,
     save: function (item) {
         if (item && this[item] !== undefined) {

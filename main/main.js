@@ -31,7 +31,7 @@ let isEnableCloseToHide = function() {
 };
 
 let registerMagnetProtocol = function () {
-    if (!config.enableMagnetProtocol) {
+    if (!config.defaultMagnetProtocolClient) {
         return;
     }
 

@@ -39,6 +39,7 @@
                 config.afterMainWindowClosed = 'minimize-to-tray';
             }
 
+            config.defaultMagnetProtocolClient = !!originalConfig.defaultMagnetProtocolClient;
             config.execCommandOnStartup = originalConfig.execCommandOnStartup;
             config.execCommandArgumentsOnStartup = originalConfig.execCommandArgumentsOnStartup;
 
@@ -47,8 +48,6 @@
             } else {
                 config.execCommandOptionsOnStartup = 'as-detached-process';
             }
-
-            config.enableMagnetProtocol = !!originalConfig.enableMagnetProtocol;
 
             return config;
         };
@@ -69,10 +68,10 @@
         var importAllSettings = function (settings) {
             importNativeSetting(settings, 'defaultPosition', $scope.setDefaultPosition);
             importNativeSetting(settings, 'afterMainWindowClosed', $scope.setAfterMainWindowClosed);
+            importNativeSetting(settings, 'defaultMagnetProtocolClient', $scope.setDefaultMagnetProtocolClient);
             importNativeSetting(settings, 'execCommandOnStartup', $scope.setExecCommandOnStartup);
             importNativeSetting(settings, 'execCommandArgumentsOnStartup', $scope.setExecCommandArgumentsOnStartup);
             importNativeSetting(settings, 'execCommandOptionsOnStartup', $scope.setExecCommandOptionsOnStartup);
-            importNativeSetting(settings, 'enableMagnetProtocol', $scope.setEnableMagnetProtocol);
             ariaNgSettingService.importAllOptions(settings);
         };
 
@@ -427,6 +426,18 @@
             ariaNgNativeElectronService.setDefaultPosition(value);
         }
 
+        $scope.setDefaultMagnetProtocolClient = function (value) {
+            var status = ariaNgNativeElectronService.setDefaultMagnetProtocolClient(value);
+
+            if (status) {
+                $scope.context.magnetProtocolStatus = status;
+            }
+
+            if (value && status && !status.isDefault) {
+                ariaNgCommonService.showInfo('Default Magnet Link Downloader', 'AriaNg Native settings have been enabled, but it is not currently set as the system\'s default magnet link downloader. Please open your system settings to complete the setup.');
+            }
+        };
+
         $scope.setExecCommandOnStartup = function (value) {
             ariaNgNativeElectronService.setExecCommandOnStartup(value);
         };
@@ -440,18 +451,6 @@
                 ariaNgNativeElectronService.setExecDetachedCommandOnStartup(false);
             } else if (value === 'as-detached-process') {
                 ariaNgNativeElectronService.setExecDetachedCommandOnStartup(true);
-            }
-        };
-
-        $scope.setEnableMagnetProtocol = function (value) {
-            var status = ariaNgNativeElectronService.setEnableMagnetProtocol(value);
-
-            if (status) {
-                $scope.context.magnetProtocolStatus = status;
-            }
-
-            if (value && status && !status.isDefault) {
-                ariaNgCommonService.showInfo('Default magnet app', 'Magnet protocol is enabled but this app is not the default handler. Please update system settings.');
             }
         };
 
@@ -640,7 +639,7 @@
 
         $rootScope.loadPromise = $q.all([
             $timeout(function () {}, 100),
-            ariaNgNativeElectronService.getMagnetProtocolStatusAsync().then(function (status) {
+            ariaNgNativeElectronService.getSystemMagnetProtocolStatusAsync().then(function (status) {
                 if (status) {
                     $scope.context.magnetProtocolStatus = status;
                 }
