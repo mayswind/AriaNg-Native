@@ -48,7 +48,8 @@
                 <span translate>Operations</span>
             </div>
             <div class="setting-value col-sm-8">
-                <button class="btn btn-sm btn-primary" ng-if="context.isSupportReconnect"
+                <button class="btn btn-sm btn-primary" ng-class="{'btn-disabled': taskContext.rpcStatus !== 'Disconnected' && taskContext.rpcStatus !== 'Waiting to reconnect'}"
+                        ng-if="context.isSupportReconnect"
                         ng-disabled="taskContext.rpcStatus !== 'Disconnected' && taskContext.rpcStatus !== 'Waiting to reconnect'"
                         ng-click="reconnect()" promise-btn><span translate>Reconnect</span></button>
                 <button class="btn btn-sm btn-primary" ng-if="context.serverStatus"

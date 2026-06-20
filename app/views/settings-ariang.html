@@ -590,7 +590,8 @@
                     <div class="row tip no-background no-hover">
                         <span class="asterisk">*</span>
                         <span translate>Changes to the settings take effect after refreshing page.</span>
-                        <button class="btn btn-xs btn-default" ng-disabled="setting.isDefault" ng-click="setDefaultRpcSetting(setting)">
+                        <button class="btn btn-xs btn-default" ng-class="{'btn-disabled': setting.isDefault}"
+                                ng-disabled="setting.isDefault" ng-click="setDefaultRpcSetting(setting)">
                             <span translate>Activate</span>
                         </button>
                     </div>
@@ -621,7 +622,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-disabled="!context.importSettings || !context.importSettings.length"
+                    <button type="button" class="btn btn-primary" ng-class="{'btn-disabled': !context.importSettings || !context.importSettings.length}"
+                            ng-disabled="!context.importSettings || !context.importSettings.length"
                             ng-click="importSettings(context.importSettings)" translate>Import</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" translate>Cancel</button>
                 </div>

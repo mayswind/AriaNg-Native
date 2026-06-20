@@ -242,7 +242,8 @@
                                     <i class="fa fa-filter"></i>
                                     <span translate>Custom</span>
                                 </button>
-                                <button class="btn btn-xs btn-success" ng-click="saveChoosedFiles()" ng-disabled="!isAnyFileSelected()" translate>Confirm</button>
+                                <button class="btn btn-xs btn-success" ng-class="{'btn-disabled': !isAnyFileSelected()}"
+                                        ng-disabled="!isAnyFileSelected()" ng-click="saveChoosedFiles()" translate>Confirm</button>
                                 <button class="btn btn-xs btn-default" ng-click="cancelChooseFiles()" translate>Cancel</button>
                             </div>
                         </div>

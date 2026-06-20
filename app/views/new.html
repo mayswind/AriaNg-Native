@@ -23,11 +23,11 @@
                         </ul>
                     </div><div class="btn-group">
                         <button type="submit" class="btn btn-sm"
-                                ng-class="{'btn-default': !isNewTaskValid(), 'btn-success': isNewTaskValid()}"
+                                ng-class="{'btn-default': !isNewTaskValid(), 'btn-success': isNewTaskValid(), 'btn-disabled': !isNewTaskValid()}"
                                 ng-disabled="!isNewTaskValid()" translate>Download Now
                         </button>&nbsp;
                         <button type="button" class="btn btn-sm dropdown-toggle"
-                                ng-class="{'btn-default': !isNewTaskValid(), 'btn-success': isNewTaskValid()}"
+                                ng-class="{'btn-default': !isNewTaskValid(), 'btn-success': isNewTaskValid(), 'btn-disabled': !isNewTaskValid()}"
                                 ng-disabled="!isNewTaskValid()" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>

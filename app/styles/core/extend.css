@@ -21,6 +21,10 @@
     margin-left: -21px;
 }
 
+.btn-disabled {
+    pointer-events: none !important;
+}
+
 .progress-bar {
     -webkit-transition: initial !important;
     -moz-transition: initial !important;

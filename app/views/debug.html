@@ -168,7 +168,8 @@
                         <div class="row">
                             <div class="setting-key setting-key-without-desc col-sm-4"></div>
                             <div class="setting-value col-sm-8">
-                                <button class="btn btn-sm btn-primary" ng-disabled="!executeMethodForm.$valid"
+                                <button class="btn btn-sm btn-primary" ng-class="{'btn-disabled': !executeMethodForm.$valid}"
+                                        ng-disabled="!executeMethodForm.$valid"
                                         ng-click="executeAria2Method()" promise-btn>
                                     <span translate>Execute</span>
                                 </button>
