@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+            user-select: none;
+        }
+
+        .infobox-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+
+        .infobox-card {
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 30, 30, 0.85);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .infobox-card:active {
+            cursor: grabbing;
+        }
+
+        .infobox-card:hover {
+            background: rgba(45, 45, 45, 0.9);
+        }
+
+        .infobox-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            line-height: 1.2;
+        }
+
+        .infobox-line + .infobox-line {
+            margin-top: 0;
+        }
+
+        .infobox-label {
+            font-size: 8px;
+            color: #aaa;
+        }
+
+        .infobox-value {
+            font-size: 11px;
+            font-weight: bold;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .infobox-value.color-active {
+            color: #2196f3;
+        }
+
+        .infobox-value.color-waiting {
+            color: #ff9800;
+        }
+
+        .infobox-value.color-completed {
+            color: #4caf50;
+        }
+
+        .infobox-value.color-stopped {
+            color: #f44336;
+        }
+
+        .infobox-value.color-download-speed {
+            color: #2196f3;
+        }
+
+        .infobox-value.color-upload-speed {
+            color: #ff9800;
+        }
+
+        .infobox-arrow {
+            font-size: 8px;
+            color: #666;
+        }
+
+        .infobox-arrow.down { color: #2196f3; }
+        .infobox-arrow.up { color: #ff9800; }
+
+        .infobox-switch-hint {
+            font-size: 7px;
+            color: rgba(255, 255, 255, 0.15);
+            position: absolute;
+            bottom: 1px;
+            right: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="infobox-container">
+    <div class="infobox-card" id="infobox-card">
+        <!-- Task count view (default) -->
+        <div id="view-task" class="infobox-view">
+            <div class="infobox-line">
+                <span class="infobox-label" id="label-active">Active</span>
+                <span class="infobox-value color-active" id="val-active">0</span>
+                <span class="infobox-label" id="label-waiting">Waiting</span>
+                <span class="infobox-value color-waiting" id="val-waiting">0</span>
+            </div>
+            <div class="infobox-line">
+                <span class="infobox-label" id="label-completed">Done</span>
+                <span class="infobox-value color-completed" id="val-completed">0</span>
+                <span class="infobox-label" id="label-stopped">Stop</span>
+                <span class="infobox-value color-stopped" id="val-stopped">0</span>
+            </div>
+        </div>
+        <!-- Speed view (hidden by default) -->
+        <div id="view-speed" class="infobox-view" style="display: none;">
+            <div class="infobox-line">
+                <span class="infobox-arrow down">&#9660;</span>
+                <span class="infobox-value color-download-speed" id="val-download-speed">0 KB/s</span>
+            </div>
+            <div class="infobox-line">
+                <span class="infobox-arrow up">&#9650;</span>
+                <span class="infobox-value color-upload-speed" id="val-upload-speed">0 KB/s</span>
+            </div>
+        </div>
+        <span class="infobox-switch-hint">&#9881;</span>
+    </div>
+</div>
+
+<script>
+    const { ipcRenderer } = require('electron');
+
+    var currentView = 'task';
+    var isDragging = false;
+    var hasMoved = false;
+    var lastScreenX = 0;
+    var lastScreenY = 0;
+    var wheelCooldown = false;
+
+    // Default labels — overwritten when the renderer pushes localized strings
+    // via the on-infobox-stat-update payload (if labels field is present).
+    function applyLabels(labels) {
+        if (!labels) return;
+        if (labels.active)    document.getElementById('label-active').textContent    = labels.active;
+        if (labels.waiting)   document.getElementById('label-waiting').textContent   = labels.waiting;
+        if (labels.completed) document.getElementById('label-completed').textContent = labels.completed;
+        if (labels.stopped)   document.getElementById('label-stopped').textContent   = labels.stopped;
+    }
+
+    function showView(viewName) {
+        document.getElementById('view-task').style.display = (viewName === 'task') ? '' : 'none';
+        document.getElementById('view-speed').style.display = (viewName === 'speed') ? '' : 'none';
+        currentView = viewName;
+    }
+
+    function formatSpeed(bytesPerSec) {
+        if (!bytesPerSec || bytesPerSec === 0) {
+            return '0 KB/s';
+        }
+
+        if (bytesPerSec >= 1048576) {
+            return (bytesPerSec / 1048576).toFixed(2) + ' MB/s';
+        } else {
+            return Math.round(bytesPerSec / 1024) + ' KB/s';
+        }
+    }
+
+    function onStatUpdate(event, data) {
+        if (!data) return;
+
+        document.getElementById('val-active').textContent = data.activeCount || 0;
+        document.getElementById('val-waiting').textContent = data.waitingCount || 0;
+        document.getElementById('val-completed').textContent = data.completedCount || 0;
+        document.getElementById('val-stopped').textContent = data.stoppedCount || 0;
+
+        document.getElementById('val-download-speed').textContent = formatSpeed(data.downloadSpeed);
+        document.getElementById('val-upload-speed').textContent = formatSpeed(data.uploadSpeed);
+
+        if (data.labels) {
+            applyLabels(data.labels);
+        }
+    }
+
+    ipcRenderer.on('on-infobox-stat-update', onStatUpdate);
+
+    var card = document.getElementById('infobox-card');
+
+    function onCardMouseDown(e) {
+        isDragging = true;
+        hasMoved = false;
+        lastScreenX = e.screenX;
+        lastScreenY = e.screenY;
+        ipcRenderer.send('infobox-drag-start');
+    }
+
+    function onDocMouseMove(e) {
+        if (!isDragging) return;
+        var dx = e.screenX - lastScreenX;
+        var dy = e.screenY - lastScreenY;
+        if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+            hasMoved = true;
+            ipcRenderer.send('infobox-drag-move', { dx: dx, dy: dy });
+            lastScreenX = e.screenX;
+            lastScreenY = e.screenY;
+        }
+    }
+
+    function onDocMouseUp() {
+        if (!isDragging) return;
+
+        if (!hasMoved) {
+            // It was a click, not a drag — show main window
+            ipcRenderer.send('infobox-show-main-window');
+        }
+        isDragging = false;
+        ipcRenderer.send('infobox-drag-end');
+    }
+
+    function onWindowBlur() {
+        // Drag may end outside the window without us seeing mouseup;
+        // reset state so the next click isn't misinterpreted.
+        if (isDragging) {
+            isDragging = false;
+            ipcRenderer.send('infobox-drag-end');
+        }
+    }
+
+    function onCardWheel(e) {
+        e.preventDefault();
+        if (wheelCooldown) return;
+        wheelCooldown = true;
+        setTimeout(function () { wheelCooldown = false; }, 250);
+
+        // Direction: down → speed, up → task. Both work as a toggle either way.
+        if (e.deltaY > 0) {
+            showView(currentView === 'task' ? 'speed' : 'task');
+        } else if (e.deltaY < 0) {
+            showView(currentView === 'task' ? 'speed' : 'task');
+        }
+    }
+
+    function onContextMenu(e) {
+        e.preventDefault();
+    }
+
+    card.addEventListener('mousedown', onCardMouseDown);
+    document.addEventListener('mousemove', onDocMouseMove);
+    document.addEventListener('mouseup', onDocMouseUp);
+    window.addEventListener('blur', onWindowBlur);
+    card.addEventListener('wheel', onCardWheel);
+    document.addEventListener('contextmenu', onContextMenu);
+
+    // Cleanup on reload/unload — prevents listener accumulation if the renderer reloads
+    // (Ctrl+R, devtools reload, etc.) while nodeIntegration is enabled.
+    window.addEventListener('beforeunload', function () {
+        ipcRenderer.removeListener('on-infobox-stat-update', onStatUpdate);
+        card.removeEventListener('mousedown', onCardMouseDown);
+        document.removeEventListener('mousemove', onDocMouseMove);
+        document.removeEventListener('mouseup', onDocMouseUp);
+        window.removeEventListener('blur', onWindowBlur);
+        card.removeEventListener('wheel', onCardWheel);
+        document.removeEventListener('contextmenu', onContextMenu);
+    });
+</script>
+</body>
+</html>

@@ -29,6 +29,7 @@
 
         var getNativeSettings = function () {
             var originalConfig = ariaNgNativeElectronService.getNativeConfig();
+            var infoboxConfig = ariaNgNativeElectronService.getInfoboxConfig() || {};
             var config = {};
 
             config.defaultPosition = originalConfig.defaultPosition || 'last-position';
@@ -48,6 +49,10 @@
             } else {
                 config.execCommandOptionsOnStartup = 'as-detached-process';
             }
+
+            config.infoboxEnabled = !!infoboxConfig.enabled;
+            config.infoboxOpacity = infoboxConfig.opacity || 0.7;
+            config.infoboxOpacityRaw = Math.round(config.infoboxOpacity * 100);
 
             return config;
         };
@@ -72,6 +77,11 @@
             importNativeSetting(settings, 'execCommandOnStartup', $scope.setExecCommandOnStartup);
             importNativeSetting(settings, 'execCommandArgumentsOnStartup', $scope.setExecCommandArgumentsOnStartup);
             importNativeSetting(settings, 'execCommandOptionsOnStartup', $scope.setExecCommandOptionsOnStartup);
+            importNativeSetting(settings, 'infoboxEnabled', $scope.setInfoboxEnabled);
+            importNativeSetting(settings, 'infoboxOpacity', $scope.setInfoboxOpacity);
+            // infoboxOpacityRaw is a derived UI-only field (0-100 slider integer).
+            // Drop it from the imported payload so it doesn't pollute exports later.
+            delete settings.infoboxOpacityRaw;
             ariaNgSettingService.importAllOptions(settings);
         };
 
@@ -81,6 +91,11 @@
             if ($scope.context.nativeSettings) {
                 for (const key in $scope.context.nativeSettings) {
                     if (!$scope.context.nativeSettings.hasOwnProperty(key)) {
+                        continue;
+                    }
+
+                    // Skip UI-only derived fields (e.g. opacity slider integer 0-100)
+                    if (key === 'infoboxOpacityRaw') {
                         continue;
                     }
 
@@ -452,6 +467,17 @@
             } else if (value === 'as-detached-process') {
                 ariaNgNativeElectronService.setExecDetachedCommandOnStartup(true);
             }
+        };
+
+        $scope.setInfoboxEnabled = function (value) {
+            ariaNgNativeElectronService.setInfoboxEnabled(value);
+        };
+
+        $scope.setInfoboxOpacity = function (value) {
+            var opacity = parseFloat(value);
+            ariaNgNativeElectronService.setInfoboxOpacity(opacity);
+            $scope.context.nativeSettings.infoboxOpacity = opacity;
+            $scope.context.nativeSettings.infoboxOpacityRaw = Math.round(opacity * 100);
         };
 
         $scope.openSystemDefaultAppsSetting = function () {

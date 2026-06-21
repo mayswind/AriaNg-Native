@@ -3,6 +3,15 @@
 
     angular.module('ariaNg').controller('DownloadListController', ['$rootScope', '$scope', '$window', '$location', '$route', '$interval', 'dragulaService', 'aria2RpcErrors', 'ariaNgCommonService', 'ariaNgSettingService', 'aria2TaskService', function ($rootScope, $scope, $window, $location, $route, $interval, dragulaService, aria2RpcErrors, ariaNgCommonService, ariaNgSettingService, aria2TaskService) {
         var location = $location.path().substring(1);
+        // /completed and /stopped both fetch via tellStopped, then filter by status.
+        // aria2 emits three terminal statuses in tellStopped: 'complete', 'error', 'removed'.
+        var fetchType = (location === 'completed') ? 'stopped' : location;
+        var statusFilter = null;
+        if (location === 'completed') {
+            statusFilter = function (task) { return task.status === 'complete'; };
+        } else if (location === 'stopped') {
+            statusFilter = function (task) { return task.status === 'error' || task.status === 'removed'; };
+        }
         var downloadTaskRefreshPromise = null;
         var pauseDownloadTaskRefresh = false;
         var needRequestWholeInfo = true;
@@ -12,7 +21,7 @@
                 return;
             }
 
-            return aria2TaskService.getTaskList(location, needRequestWholeInfo, function (response) {
+            return aria2TaskService.getTaskList(fetchType, needRequestWholeInfo, function (response) {
                 if (pauseDownloadTaskRefresh) {
                     return;
                 }
@@ -28,9 +37,17 @@
                 var isRequestWholeInfo = response.context.requestWholeInfo;
                 var taskList = response.data;
 
+                // Apply status filter for /completed and /stopped
+                if (statusFilter && angular.isArray(taskList)) {
+                    taskList = taskList.filter(statusFilter);
+                }
+
                 if (isRequestWholeInfo) {
                     $rootScope.taskContext.list = taskList;
-                    needRequestWholeInfo = false;
+                    // For filtered routes, keep requesting full info so we always have
+                    // complete status to filter against — avoids stale cross-contamination
+                    // between /completed and /stopped.
+                    needRequestWholeInfo = !!statusFilter;
                 } else {
                     if ($rootScope.taskContext.list && $rootScope.taskContext.list.length > 0) {
                         for (var i = 0; i < $rootScope.taskContext.list.length; i++) {

@@ -400,6 +400,18 @@
             },
             removeMainProcessNewTaskFromTextCallback: function (callback) {
                 removeMainProcessEvent('on-main-new-task-from-text',  callback);
+            },
+            getInfoboxConfig: function () {
+                return invokeMainProcessMethodSync('render-sync-get-infobox-config');
+            },
+            setInfoboxEnabled: function (value) {
+                invokeMainProcessMethod('render-set-infobox-enabled', value);
+            },
+            setInfoboxOpacity: function (value) {
+                invokeMainProcessMethod('render-set-infobox-opacity', value);
+            },
+            sendInfoboxStat: function (data) {
+                invokeMainProcessMethod('render-send-infobox-stat', data);
             }
         };
     }]);

@@ -1,14 +1,18 @@
 (function () {
     'use strict';
 
-    angular.module('ariaNg').controller('MainController', ['$rootScope', '$scope', '$route', '$window', '$location', '$document', '$interval', 'clipboard', 'aria2RpcErrors', 'ariaNgCommonService', 'ariaNgVersionService', 'ariaNgNotificationService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $route, $window, $location, $document, $interval, clipboard, aria2RpcErrors, ariaNgCommonService, ariaNgVersionService, ariaNgNotificationService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
+    angular.module('ariaNg').controller('MainController', ['$rootScope', '$scope', '$route', '$window', '$location', '$document', '$interval', 'clipboard', 'aria2RpcErrors', 'ariaNgCommonService', 'ariaNgVersionService', 'ariaNgNotificationService', 'ariaNgSettingService', 'ariaNgMonitorService', 'ariaNgTitleService', 'ariaNgLocalizationService', 'aria2TaskService', 'aria2SettingService', 'ariaNgNativeElectronService', function ($rootScope, $scope, $route, $window, $location, $document, $interval, clipboard, aria2RpcErrors, ariaNgCommonService, ariaNgVersionService, ariaNgNotificationService, ariaNgSettingService, ariaNgMonitorService, ariaNgTitleService, ariaNgLocalizationService, aria2TaskService, aria2SettingService, ariaNgNativeElectronService) {
         var pageTitleRefreshPromise = null;
         var globalStatRefreshPromise = null;
+        // Tracks an in-flight tellStopped to serialize sendInfoboxStat calls —
+        // prevents racing responses from overwriting $scope.infoboxCounts out of order
+        // and avoids hammering aria2 with duplicate requests.
+        var infoboxStatInFlight = false;
 
         var getTaskListPageType = function () {
             var location = $location.path().substring(1);
 
-            if (location === 'downloading' || location === 'waiting' || location === 'stopped') {
+            if (location === 'downloading' || location === 'waiting' || location === 'stopped' || location === 'completed') {
                 return location;
             } else {
                 return '';
@@ -35,12 +39,72 @@
                 if (response.success) {
                     $scope.globalStat = response.data;
                     ariaNgMonitorService.recordGlobalStat(response.data);
+
+                    // Push infobox right after globalStat updates — avoids interval drift,
+                    // makes active/waiting/speed visibly refresh as fast as main window.
+                    sendInfoboxStat();
                 }
 
                 if (callback) {
                     callback(response);
                 }
             }, silent);
+        };
+
+        var sendInfoboxStat = function () {
+            // Serialize: drop if a previous request hasn't completed yet.
+            if (infoboxStatInFlight) {
+                return;
+            }
+
+            var stat = $scope.globalStat || {};
+
+            // active/waiting counts from globalStat (always correct)
+            var activeCount = stat.numActive || 0;
+            var waitingCount = stat.numWaiting || 0;
+
+            infoboxStatInFlight = true;
+
+            // stopped/completed counts need tellStopped to separate them.
+            // Note: tellStopped is capped (default ~1000) so counts may undercount for huge stopped lists.
+            aria2TaskService.getTaskList('stopped', false, function (response) {
+                infoboxStatInFlight = false;
+
+                var stoppedCount = 0;
+                var completedCount = 0;
+
+                if (response.success && angular.isArray(response.data)) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        var status = response.data[i].status;
+                        if (status === 'complete') {
+                            completedCount++;
+                        } else if (status === 'error' || status === 'removed') {
+                            stoppedCount++;
+                        }
+                    }
+                }
+
+                // Expose to sidebar via $scope (used by index.html bindings)
+                $scope.infoboxCounts = {
+                    completedCount: completedCount,
+                    stoppedCount: stoppedCount
+                };
+
+                ariaNgNativeElectronService.sendInfoboxStat({
+                    activeCount: activeCount,
+                    waitingCount: waitingCount,
+                    completedCount: completedCount,
+                    stoppedCount: stoppedCount,
+                    downloadSpeed: stat.downloadSpeed || 0,
+                    uploadSpeed: stat.uploadSpeed || 0,
+                    labels: {
+                        active: ariaNgLocalizationService.getLocalizedText('infobox.Active'),
+                        waiting: ariaNgLocalizationService.getLocalizedText('infobox.Waiting'),
+                        completed: ariaNgLocalizationService.getLocalizedText('infobox.Completed'),
+                        stopped: ariaNgLocalizationService.getLocalizedText('infobox.Stopped')
+                    }
+                });
+            }, true);
         };
 
         var getCurrentRPCProfile = function () {
@@ -459,6 +523,9 @@
             }, ariaNgSettingService.getGlobalStatRefreshInterval());
         }
 
+        // sendInfoboxStat is driven by the refreshGlobalStat callback (1 RPC per globalStat tick).
+        // No separate fallback interval — globalStatRefreshPromise already provides one.
+
         $scope.$on('$destroy', function () {
             if (pageTitleRefreshPromise) {
                 $interval.cancel(pageTitleRefreshPromise);
@@ -471,6 +538,8 @@
 
         refreshGlobalStat(true, function () {
             refreshPageTitle();
+            // sendInfoboxStat already fires from inside refreshGlobalStat's success branch;
+            // don't double-call here.
         });
     }]);
 }());

@@ -70,6 +70,11 @@ Seeding=正在做种
 Waiting=正在等待
 Paused=已暂停
 Completed=已完成
+Stopped=已停止
+infobox.Active=下载
+infobox.Waiting=等待
+infobox.Completed=完成
+infobox.Stopped=停止
 Error Occurred=发生错误
 Removed=已删除
 Finished / Stopped=已完成 / 已停止
@@ -359,6 +364,8 @@ A new version has been released=新的版本 {{version}} 已经发布
 Runtime Environment=运行环境
 Reload AriaNg Native=重新加载 AriaNg Native
 Create New Task=创建新任务
+Download Info Box=下载信息小窗
+Info Box Opacity=小窗透明度
 
 [menu]
 AboutAriaNgNative=关于 AriaNg Native

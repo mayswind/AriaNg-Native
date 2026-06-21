@@ -11,6 +11,7 @@ const config = require('./config/config');
 const constants = require('./config/constants');
 const menu = require('./components/menu');
 const tray = require('./components/tray');
+const infobox = require('./components/infobox');
 const file = require('./lib/file');
 const page = require('./lib/page');
 const websocket = require('./lib/websocket');
@@ -203,6 +204,7 @@ let main = function () {
 
         app.on('before-quit', () => {
             core.isConfirmExit = true;
+            infobox.destroy();
         });
 
         app.on('activate', () => {
@@ -219,6 +221,8 @@ let main = function () {
     registerMagnetProtocol();
 
     app.on('window-all-closed', () => {
+        core.isConfirmExit = true;
+        infobox.destroy();
         app.quit();
     });
 
@@ -303,6 +307,7 @@ let main = function () {
 
         menu.init();
         tray.init();
+        infobox.init();
 
         if (file.isContainsSupportedFileArg(filePathOrUrlInCommandLine)) {
             ipcRender.notifyRenderProcessNewNewTaskFromFileAfterViewLoaded(filePathOrUrlInCommandLine);

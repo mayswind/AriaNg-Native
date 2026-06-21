@@ -40,10 +40,34 @@ const userSettingsSchema = {
     },
     lastCheckUpdatesTime: {
         type: 'number'
+    },
+    infoboxEnabled: {
+        type: 'boolean'
+    },
+    infoboxOpacity: {
+        type: 'number',
+        minimum: 0.1,
+        maximum: 1.0
+    },
+    infoboxX: {
+        type: 'number'
+    },
+    infoboxY: {
+        type: 'number'
     }
 };
 
 const userSettingsStore = new Store({userSettingsSchema});
+
+// Clamp opacity to a safe range — protects against corrupted store values (schema
+// validation isn't actually wired up; see B2 in code review).
+let rawOpacity = userSettingsStore.get('infoboxOpacity', 0.7);
+let safeOpacity = parseFloat(rawOpacity);
+if (isNaN(safeOpacity) || safeOpacity < 0.1) {
+    safeOpacity = 0.1;
+} else if (safeOpacity > 1.0) {
+    safeOpacity = 1.0;
+}
 
 let config = {
     lang: userSettingsStore.get('lang'),
@@ -59,6 +83,10 @@ let config = {
     execCommandArgumentsOnStartup: userSettingsStore.get('execCommandArgumentsOnStartup'),
     execDetachedCommandOnStartup: userSettingsStore.get('execDetachedCommandOnStartup', false),
     lastCheckUpdatesTime: userSettingsStore.get('lastCheckUpdatesTime') || 0,
+    infoboxEnabled: userSettingsStore.get('infoboxEnabled', false),
+    infoboxOpacity: safeOpacity,
+    infoboxX: userSettingsStore.get('infoboxX'),
+    infoboxY: userSettingsStore.get('infoboxY'),
     save: function (item) {
         if (item && this[item] !== undefined) {
             userSettingsStore.set(item, this[item]);
