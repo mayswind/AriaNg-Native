@@ -9,6 +9,10 @@ const userAgent = 'AriaNg-Native/' + pkgfile.version;
 axios.interceptors.request.use(function (config) {
     config.headers['User-Agent'] = userAgent;
 
+    if (!config.headers['Accept-Encoding']) {
+        config.headers['Accept-Encoding'] = 'gzip';
+    }
+
     return config;
 }, function (error) {
     return Promise.reject(error);
