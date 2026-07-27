@@ -1,6 +1,7 @@
 # AriaNg Native
 [![License](https://img.shields.io/github/license/mayswind/AriaNg-Native.svg?style=flat)](https://github.com/mayswind/AriaNg-Native/blob/master/LICENSE)
 [![Lastest Release](https://img.shields.io/github/release/mayswind/AriaNg-Native.svg?style=flat)](https://github.com/mayswind/AriaNg-Native/releases)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmayswind%2FAriaNg-Native.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmayswind%2FAriaNg-Native?ref=badge_shield)
 
 ## Introduction
 AriaNg Native is a desktop application built by [Electron](https://github.com/electron/electron), with all features of [AriaNg](https://github.com/mayswind/AriaNg). You can run AriaNg Native on Windows or macOS without any browser. In addition, AriaNg Native also has many features that [AriaNg](https://github.com/mayswind/AriaNg) cannot implement.
@@ -75,3 +76,6 @@ If you want to translate AriaNg to a new language, you can add language configur
 
 ## License
 [MIT](https://github.com/mayswind/AriaNg-Native/blob/master/LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmayswind%2FAriaNg-Native.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmayswind%2FAriaNg-Native?ref=badge_large)
