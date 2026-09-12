@@ -60,7 +60,10 @@
                 "icon": "assets/AriaNg_Metalink.icns"
             }
         ],
-        "darkModeSupport": true
+        "darkModeSupport": true,
+        "extendInfo": {
+            "NSLocalNetworkUsageDescription": "AriaNg Native needs local network access to connect to your aria2 RPC server."
+        }
     },
     "dmg": {
         "icon": "assets/AriaNg.icns"
