@@ -96,5 +96,52 @@
     "simple-sha1",
     "ws",
     "yargs"
-  ]
+  ],
+  "overrides": {
+    "admin-lte": {
+      "cipher-base": "1.0.5"
+    },
+    "browserify": {
+      "cipher-base": "1.0.5"
+    },
+    "browserify-aes": {
+      "cipher-base": "1.0.5"
+    },
+    "browserify-cipher": {
+      "cipher-base": "1.0.5"
+    },
+    "browserify-des": {
+      "cipher-base": "1.0.5"
+    },
+    "browserify-sign": {
+      "cipher-base": "1.0.5"
+    },
+    "cipher-base": {
+      "cipher-base": "1.0.5"
+    },
+    "create-hash": {
+      "cipher-base": "1.0.5"
+    },
+    "create-hmac": {
+      "cipher-base": "1.0.5"
+    },
+    "crypto-browserify": {
+      "cipher-base": "1.0.5"
+    },
+    "domhelper": {
+      "cipher-base": "1.0.5"
+    },
+    "parse-asn1": {
+      "cipher-base": "1.0.5"
+    },
+    "pbkdf2": {
+      "cipher-base": "1.0.5"
+    },
+    "public-encrypt": {
+      "cipher-base": "1.0.5"
+    },
+    "slimscroll": {
+      "cipher-base": "1.0.5"
+    }
+  }
 }
