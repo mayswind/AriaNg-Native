@@ -626,7 +626,7 @@
 
         $scope.clearHistory = function () {
             ariaNgCommonService.confirm('Confirm Clear', 'Are you sure you want to clear all settings history?', 'warning', function () {
-                aria2SettingService.clearSettingsHistorys();
+                ariaNgSettingService.clearAllRpcSettingsHistory();
                 $window.location.reload();
             });
         };
