@@ -1,0 +1,126 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+jobs:
+  build-windows-package:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Build Windows packages
+        run: |
+          npm run publish:win
+
+      - name: Rename Windows packages
+        shell: bash
+        env:
+          PACKAGE_FILE_PREFIX: AriaNg_Native-${{ github.ref_name }}
+        run: |
+          mv dist/AriaNg_Native-*-Windows-x64.exe "dist/${PACKAGE_FILE_PREFIX}-Windows-x64.exe"
+          mv dist/AriaNg_Native-*-Windows-x64.7z "dist/${PACKAGE_FILE_PREFIX}-Windows-x64.7z"
+          mv dist/AriaNg_Native-*-Windows-x86.exe "dist/${PACKAGE_FILE_PREFIX}-Windows-x86.exe"
+          mv dist/AriaNg_Native-*-Windows-x86.7z "dist/${PACKAGE_FILE_PREFIX}-Windows-x86.7z"
+
+      - name: Upload Windows x64 installer artifact
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: dist/AriaNg_Native-${{ github.ref_name }}-Windows-x64.exe
+          if-no-files-found: error
+
+      - name: Upload Windows x64 archive artifact
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: dist/AriaNg_Native-${{ github.ref_name }}-Windows-x64.7z
+          if-no-files-found: error
+
+      - name: Upload Windows x86 installer artifact
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: dist/AriaNg_Native-${{ github.ref_name }}-Windows-x86.exe
+          if-no-files-found: error
+
+      - name: Upload Windows x86 archive artifact
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: dist/AriaNg_Native-${{ github.ref_name }}-Windows-x86.7z
+          if-no-files-found: error
+
+  build-macos-package:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Build macOS packages
+        run: |
+          npm run publish:osx
+
+      - name: Rename macOS packages
+        env:
+          PACKAGE_FILE_PREFIX: AriaNg_Native-${{ github.ref_name }}
+        run: |
+          mv dist/AriaNg_Native-*-macOS-arm64.dmg "dist/${PACKAGE_FILE_PREFIX}-macOS-arm64.dmg"
+          mv dist/AriaNg_Native-*-macOS-x64.dmg "dist/${PACKAGE_FILE_PREFIX}-macOS-x64.dmg"
+
+      - name: Upload macOS arm64 artifact
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: dist/AriaNg_Native-${{ github.ref_name }}-macOS-arm64.dmg
+          if-no-files-found: error
+
+      - name: Upload macOS x64 artifact
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: dist/AriaNg_Native-${{ github.ref_name }}-macOS-x64.dmg
+          if-no-files-found: error
+
+  publish-release:
+    runs-on: ubuntu-latest
+    needs:
+      - build-windows-package
+      - build-macos-package
+    steps:
+      - name: Download all packaged files
+        uses: actions/download-artifact@v8
+        with:
+          pattern: AriaNg_Native-${{ github.ref_name }}-*
+          merge-multiple: true
+          skip-decompress: true
+          path: release-files
+
+      - name: Publish Release ${{ github.ref_name }}
+        uses: softprops/action-gh-release@v3
+        with:
+          name: AriaNg Native ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: ./release-files/*
+          draft: true

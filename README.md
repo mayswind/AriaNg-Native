@@ -1,5 +1,6 @@
 # AriaNg Native
 [![License](https://img.shields.io/github/license/mayswind/AriaNg-Native.svg?style=flat)](https://github.com/mayswind/AriaNg-Native/blob/master/LICENSE)
+[![Lastest Build](https://img.shields.io/github/actions/workflow/status/mayswind/AriaNg-Native/build-snapshot.yml?branch=master)](https://github.com/mayswind/AriaNg-Native/actions)
 [![Lastest Release](https://img.shields.io/github/release/mayswind/AriaNg-Native.svg?style=flat)](https://github.com/mayswind/AriaNg-Native/releases)
 
 ## Introduction
