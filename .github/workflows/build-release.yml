@@ -26,14 +26,14 @@ jobs:
           npm run publish:win
 
       - name: Rename Windows packages
-        shell: bash
+        shell: pwsh
         env:
           PACKAGE_FILE_PREFIX: AriaNg_Native-${{ github.ref_name }}
         run: |
-          mv dist/AriaNg_Native-*-Windows-x64.exe "dist/${PACKAGE_FILE_PREFIX}-Windows-x64.exe"
-          mv dist/AriaNg_Native-*-Windows-x64.7z "dist/${PACKAGE_FILE_PREFIX}-Windows-x64.7z"
-          mv dist/AriaNg_Native-*-Windows-x86.exe "dist/${PACKAGE_FILE_PREFIX}-Windows-x86.exe"
-          mv dist/AriaNg_Native-*-Windows-x86.7z "dist/${PACKAGE_FILE_PREFIX}-Windows-x86.7z"
+          Rename-Item -Path "dist/AriaNg_Native-*-Windows-x64.exe" -NewName "$env:PACKAGE_FILE_PREFIX-Windows-x64.exe"
+          Rename-Item -Path "dist/AriaNg_Native-*-Windows-x64.7z" -NewName "$env:PACKAGE_FILE_PREFIX-Windows-x64.7z"
+          Rename-Item -Path "dist/AriaNg_Native-*-Windows-x86.exe" -NewName "$env:PACKAGE_FILE_PREFIX-Windows-x86.exe"
+          Rename-Item -Path "dist/AriaNg_Native-*-Windows-x86.7z" -NewName "$env:PACKAGE_FILE_PREFIX-Windows-x86.7z"
 
       - name: Upload Windows x64 installer artifact
         uses: actions/upload-artifact@v7
