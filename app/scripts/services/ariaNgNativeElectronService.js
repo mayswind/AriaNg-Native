@@ -334,8 +334,8 @@
                         }
                     });
             },
-            getLocalFSExistsAsync: function (fullpath, callback) {
-                return invokeMainProcessMethodAsync('render-get-localfs-exists', fullpath)
+            getLocalFSDirectoryExistsAsync: function (fullpath, callback) {
+                return invokeMainProcessMethodAsync('render-get-localfs-dir-exists', fullpath)
                     .then(function onReceive(exists) {
                         if (callback) {
                             callback(exists);

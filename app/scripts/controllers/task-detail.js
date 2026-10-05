@@ -86,7 +86,7 @@
             }
 
             if (angular.isUndefined($scope.nativeContext.directoryExists)) {
-                ariaNgNativeElectronService.getLocalFSExistsAsync(task.dir, function (exists) {
+                ariaNgNativeElectronService.getLocalFSDirectoryExistsAsync(task.dir, function (exists) {
                     $scope.$apply(function () {
                         $scope.nativeContext.directoryExists = exists;
                     });

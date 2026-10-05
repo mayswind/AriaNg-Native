@@ -317,8 +317,8 @@ ipcMain.handle('render-get-localfs-file-buffer', (event, fullpath) => {
     return localfs.getLocalFSFileBuffer(fullpath);
 });
 
-ipcMain.handle('render-get-localfs-exists', (event, fullpath) => {
-    return localfs.isExists(fullpath);
+ipcMain.handle('render-get-localfs-dir-exists', (event, fullpath) => {
+    return localfs.isDirectoryExists(fullpath);
 });
 
 ipcMain.on('render-open-local-directory', (event, dir, filename) => {
@@ -326,7 +326,7 @@ ipcMain.on('render-open-local-directory', (event, dir, filename) => {
 
     if (localfs.isExists(fullpath)) {
         shell.showItemInFolder(fullpath);
-    } else {
+    } else if (localfs.isDirectoryExists(dir)) {
         shell.openPath(dir);
     }
 });

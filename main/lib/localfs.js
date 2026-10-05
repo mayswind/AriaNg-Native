@@ -11,6 +11,14 @@ let isExists = function (fullPath) {
     return fs.existsSync(fullPath);
 };
 
+let isDirectoryExists = function (fullPath) {
+    try {
+        return fs.statSync(fullPath).isDirectory();
+    } catch (ex) {
+        return false;
+    }
+};
+
 let getPackageIconPath = function (iconName) {
     return path.join(__dirname, '../../assets/', iconName);
 };
@@ -44,6 +52,7 @@ let getLocalFSFileBase64Content = function (fullpath) {
 module.exports = {
     getFullPath: getFullPath,
     isExists: isExists,
+    isDirectoryExists: isDirectoryExists,
     getPackageIconPath: getPackageIconPath,
     readPackageFile: readPackageFile,
     getLocalFSFileBuffer: getLocalFSFileBuffer,
