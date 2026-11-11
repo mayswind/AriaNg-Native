@@ -102,3 +102,43 @@ jobs:
           archive: false
           path: dist/AriaNg_Native-dev-${{ github.run_id }}-macOS-x64.dmg
           if-no-files-found: error
+
+  build-linux-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Build Linux packages
+        run: |
+          npm run publish:linux
+
+      - name: Rename Linux packages
+        env:
+          PACKAGE_FILE_PREFIX: AriaNg_Native-dev-${{ github.run_id }}
+        run: |
+          mv dist/AriaNg_Native-*-Linux-x86_64.AppImage "dist/${PACKAGE_FILE_PREFIX}-Linux-x64.AppImage"
+          mv dist/AriaNg_Native-*-Linux-arm64.AppImage "dist/${PACKAGE_FILE_PREFIX}-Linux-arm64.AppImage"
+
+      - name: Upload Linux x64 artifact
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: dist/AriaNg_Native-dev-${{ github.run_id }}-Linux-x64.AppImage
+          if-no-files-found: error
+
+      - name: Upload Linux arm64 artifact
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: dist/AriaNg_Native-dev-${{ github.run_id }}-Linux-arm64.AppImage
+          if-no-files-found: error

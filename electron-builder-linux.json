@@ -1,0 +1,67 @@
+{
+    "appId": "net.mayswind.ariang",
+    "productName": "AriaNg Native",
+    "copyright": "Copyright (c) 2017-2026 MaysWind (i@mayswind.net)",
+    "artifactName": "AriaNg_Native-${version}-Linux-${arch}.${ext}",
+    "files": [
+        "!build.json",
+        "!node_modules",
+        {
+            "from": "dist",
+            "to": "",
+            "filter": [
+                "build.json"
+            ]
+        },
+        {
+            "from": "dist/node_modules",
+            "to": "node_modules",
+            "filter": [
+                "**/*.js",
+                "**/*.cjs",
+                "**/*.json",
+                "**/*.css",
+                "**/*.woff",
+                "**/*.woff2",
+                "**/*.svg",
+                "**/*.eot",
+                "**/*.ttf"
+            ]
+        },
+        "app/**",
+        "assets/**",
+        "main/**",
+        "package.json"
+    ],
+    "linux": {
+        "executableName": "ariang-native",
+        "category": "Network",
+        "icon": "assets/linux",
+        "target": [
+            {
+                "target": "AppImage",
+                "arch": [
+                    "x64",
+                    "arm64"
+                ]
+            }
+        ],
+        "mimeTypes": [
+            "x-scheme-handler/magnet"
+        ],
+        "fileAssociations": [
+            {
+                "ext": "torrent",
+                "mimeType": "application/x-bittorrent"
+            },
+            {
+                "ext": "metalink",
+                "mimeType": "application/metalink+xml"
+            },
+            {
+                "ext": "meta4",
+                "mimeType": "application/metalink4+xml"
+            }
+        ]
+    }
+}
