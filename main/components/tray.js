@@ -11,10 +11,10 @@ const Menu = electron.Menu;
 const Tray = electron.Tray;
 
 let instance = null;
-let iconPath = path.join(__dirname, '../../', 'assets', 'AriaNg.ico');
+let iconPath = path.join(__dirname, '../../', 'assets', os.platform() === 'linux' ? 'linux/512x512.png' : 'AriaNg.ico');
 
 let init = function () {
-    if (instance === null && os.platform() === 'win32') {
+    if (instance === null && (os.platform() === 'win32' || os.platform() === 'linux')) {
         instance = new Tray(iconPath);
         instance.setToolTip('AriaNg Native');
         instance.setContextMenu(Menu.buildFromTemplate([

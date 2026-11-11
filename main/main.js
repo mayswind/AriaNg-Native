@@ -12,6 +12,7 @@ const constants = require('./config/constants');
 const menu = require('./components/menu');
 const tray = require('./components/tray');
 const file = require('./lib/file');
+const localfs = require('./lib/localfs');
 const page = require('./lib/page');
 const websocket = require('./lib/websocket');
 const childProcess = require('./lib/process');
@@ -290,6 +291,7 @@ let main = function () {
             titleBarStyle: core.useCustomAppTitle ? 'hidden' : undefined,
             titleBarOverlay: core.useCustomAppTitle,
             frame: !core.useCustomAppTitle,
+            icon: os.platform() === 'linux' ? localfs.getPackageIconPath('linux/512x512.png') : undefined,
             show: false,
             webPreferences: {
                 nodeIntegration: true,
