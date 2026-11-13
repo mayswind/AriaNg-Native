@@ -79,6 +79,8 @@ jobs:
           npm install
 
       - name: Build macOS packages
+        env:
+          MAC_ADHOC_SIGN: "true"
         run: |
           npm run publish:osx
 
