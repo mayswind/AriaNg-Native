@@ -3,6 +3,7 @@
     "productName": "AriaNg Native",
     "copyright": "Copyright (c) 2017-2026 MaysWind (i@mayswind.net)",
     "artifactName": "AriaNg_Native-${version}-macOS-${arch}.${ext}",
+    "afterPack": "./mac-adhoc-sign.js",
     "files": [
         "!build.json",
         "!node_modules",
